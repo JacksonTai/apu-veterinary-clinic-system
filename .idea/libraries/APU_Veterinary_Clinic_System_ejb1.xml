@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="APU_Veterinary_Clinic_System-ejb1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/build/APU_Veterinary_Clinic_System-ejb.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

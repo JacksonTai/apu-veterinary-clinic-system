@@ -5,6 +5,8 @@
  */
 package entity;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Entity;
 
 /**
@@ -12,6 +14,11 @@ import javax.persistence.Entity;
  * @author Jackson Tai
  */
 @Entity
+@NoArgsConstructor
 public class Vet extends ClinicUser {
-    
+
+    public Vet(String fullName, String email, String password, String phoneNumber) {
+        super(fullName, email, password, phoneNumber);
+    }
+
 }

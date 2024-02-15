@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/APU_Veterinary_Clinic_System.iml" filepath="$PROJECT_DIR$/.idea/APU_Veterinary_Clinic_System.iml" />
+      <module fileurl="file://$PROJECT_DIR$/APU_Veterinary_Clinic_System-ejb/src/APU_Veterinary_Clinic_System-ejb.iml" filepath="$PROJECT_DIR$/APU_Veterinary_Clinic_System-ejb/src/APU_Veterinary_Clinic_System-ejb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/APU_Veterinary_Clinic_System-war/APU_Veterinary_Clinic_System-war.iml" filepath="$PROJECT_DIR$/APU_Veterinary_Clinic_System-war/APU_Veterinary_Clinic_System-war.iml" />
+      <module fileurl="file://$PROJECT_DIR$/APU_Veterinary_Clinic_System-ejb/build/build.iml" filepath="$PROJECT_DIR$/APU_Veterinary_Clinic_System-ejb/build/build.iml" />
+    </modules>
+  </component>
+</project>

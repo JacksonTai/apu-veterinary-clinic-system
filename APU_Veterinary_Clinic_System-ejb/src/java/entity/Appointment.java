@@ -6,58 +6,38 @@
 package entity;
 
 import entity.constant.AppointmentStatus;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  *
  * @author Jackson Tai
  */
 @Entity
+@Table(name="APPOINTMENT")
+@Data
+@NoArgsConstructor
 public class Appointment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
-    private Date date; 
-    private AppointmentStatus appointmentStatus;    
- 
-    public String getId() {
-        return id;
+    @Column(name="APPOINTMENT_ID")
+    private String appointmentId;
+
+    @Column(name="APPOINTMENT_DATE")
+    private Date appointmentDate;
+
+    @Column(name="APPOINTMENT_STATUS")
+    private AppointmentStatus appointmentStatus;
+
+    public Appointment(Date appointmentDate, AppointmentStatus appointmentStatus) {
+        this.appointmentDate = appointmentDate;
+        this.appointmentStatus = appointmentStatus;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Appointment)) {
-            return false;
-        }
-        Appointment other = (Appointment) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entity.Appointment[ id=" + id + " ]";
-    }
-    
 }
