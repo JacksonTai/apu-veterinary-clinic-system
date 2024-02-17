@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -25,7 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import static constant.EndpointConstant.STAFF_REGISTER;
 import static constant.EndpointConstant.STAFF_REGISTRATION_SUCCESS;
 import static constant.GlobalConstant.*;
-import static constant.i18n.EN.*;
+import static constant.i18n.En.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * @author Jackson Tai
@@ -54,7 +54,7 @@ public class Register extends HttpServlet {
             List<String> errorMessages = new ArrayList<>();
 
             String fullName = request.getParameter("fullName").trim();
-            if (fullName == null || fullName.isEmpty()) {
+            if (fullName.isEmpty()) {
                 errorMessages.add(EMPTY_FULL_NAME_MESSAGE);
                 request.setAttribute("fullNameError", EMPTY_FULL_NAME_MESSAGE);
             } else if (!fullName.matches(FULL_NAME_REGEX)) {
@@ -63,7 +63,7 @@ public class Register extends HttpServlet {
             }
 
             String phoneNumber = request.getParameter("phoneNumber").trim();
-            if (phoneNumber == null || phoneNumber.isEmpty()) {
+            if (phoneNumber.isEmpty()) {
                 errorMessages.add(EMPTY_PHONE_NUMBER_MESSAGE);
                 request.setAttribute("phoneNumberError", EMPTY_PHONE_NUMBER_MESSAGE);
             } else if (!Pattern.matches(MY_PHONE_REGEX, phoneNumber)) {
@@ -72,7 +72,7 @@ public class Register extends HttpServlet {
             }
 
             String email = request.getParameter("email").trim();
-            if (email == null || email.isEmpty()) {
+            if (email.isEmpty()) {
                 errorMessages.add(EMPTY_EMAIL_MESSAGE);
                 request.setAttribute("emailError", EMPTY_EMAIL_MESSAGE);
             } else if (!email.matches(EMAIL_REGEX)) {
@@ -81,7 +81,7 @@ public class Register extends HttpServlet {
             }
 
             String password = request.getParameter("password").trim();
-            if (password == null || password.isEmpty()) {
+            if (password.isEmpty()) {
                 errorMessages.add(EMPTY_PASSWORD_MESSAGE);
                 request.setAttribute("passwordError", EMPTY_PASSWORD_MESSAGE);
             } else if (!password.matches(PASSWORD_REGEX)) {
@@ -113,7 +113,8 @@ public class Register extends HttpServlet {
                 return;
             }
 
-            Vet vet = new Vet(fullName, email, password, phoneNumber);
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+            Vet vet = new Vet(fullName, email, hashedPassword, phoneNumber);
             clinicUserFacade.create(vet);
             response.sendRedirect(request.getContextPath() + STAFF_REGISTRATION_SUCCESS);
         }

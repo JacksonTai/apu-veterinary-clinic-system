@@ -1,6 +1,6 @@
 package constant.i18n;
 
-public class EN {
+public class En {
 
     public static final String INVALID_EMAIL_MESSAGE = "Email is invalid.";
     public static final String INVALID_PASSWORD_MESSAGE = "Password must be at least 8 characters long and contain at least one digit, one lowercase letter, one uppercase letter, and one special character.";

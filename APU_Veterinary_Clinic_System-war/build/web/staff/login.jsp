@@ -14,7 +14,7 @@
     </head>
     <body>
         <%@ include file="/component/header.jsp" %>
-        <h1>Login</h1>
+        <h1>Staff Login</h1>
         <form action="Login" method="POST">
             <table>
                 <tr>
