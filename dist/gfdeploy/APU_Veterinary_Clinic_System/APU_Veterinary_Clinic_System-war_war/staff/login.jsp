@@ -1,29 +1,45 @@
-<%-- 
+<%--
     Document   : login
     Created on : Feb 6, 2024, 9:28:44 AM
     Author     : Jackson Tai
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <%@ include file="/component/head_source.jsp" %>
+        <%@ include file="/shared/component/head_source.jsp" %>
         <title>Staff Login</title>
     </head>
     <body>
-        <%@ include file="/component/header.jsp" %>
+        <%@ include file="/shared/component/header.jsp" %>
         <h1>Staff Login</h1>
-        <form action="Login" method="POST">
+        <form action="<c:url value='<%= EndpointConstant.STAFF_LOGIN %>'/>" method="POST">
             <table>
                 <tr>
-                    <td>Email</td>
-                    <td><input type="text" name="email" size="20"></td>
+                    <td>Staff Email: </td>
+                    <td>
+                        <input type="text" name="email" value="${not empty param.email ? param.email : ''}">
+                        <c:if test="${not empty emailError}">
+                            <span style="color: red;">${emailError}</span>
+                        </c:if>
+                    </td>
                 </tr>
                 <tr>
                     <td>Password: </td>
-                    <td><input type="text" name="password" size="20"></td>
+                    <td>
+                        <input type="password" name="password" value="${not empty param.password ? param.password : ''}">
+                        <c:if test="${not empty passwordError}">
+                            <span style="color: red;">${passwordError}</span>
+                        </c:if>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <c:if test="${not empty invalidLoginError}">
+                            <span style="color: red;">${invalidLoginError}</span>
+                        </c:if>
+                    </td>
                 </tr>
             </table>
             <p><input type="submit" value="Login"></p>

@@ -5,17 +5,16 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <%@ include file="/component/head_source.jsp" %>
+        <%@ include file="/shared/component/head_source.jsp" %>
         <title>Staff Registration</title>
     </head>
     <body>
-        <%@ include file="/component/header.jsp" %>
+        <%@ include file="/shared/component/header.jsp" %>
         <h1>Staff Registration</h1>
-        <form action="Register" method="POST">
+        <form action="<c:url value='<%= EndpointConstant.STAFF_REGISTER %>'/>" method="POST">
             <table>
                 <tr>
                     <td>Full Name</td>
@@ -36,7 +35,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Email</td>
+                    <td>Staff Email</td>
                     <td>
                         <input type="text" name="email" value="${not empty param.email ? param.email : ''}">
                         <c:if test="${not empty emailError}">

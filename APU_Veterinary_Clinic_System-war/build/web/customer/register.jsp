@@ -9,16 +9,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <%@ include file="/component/head_source.jsp" %>
+        <%@ include file="/shared/component/head_source.jsp" %>
         <title>Customer Registration - AVCS</title>
     </head>
     <body>
-        <%@ include file="/component/header.jsp" %>
+        <%@ include file="/shared/component/header.jsp" %>
         <h1>Customer Registration</h1>
         <form action="Register" method="POST">
             <table>
                 <tr>
-                    <td>Full Name</td>
+                    <td>Full Name: </td>
                     <td>
                         <input type="text" name="fullName">
                         <c:if test="${not empty fullNameError}">
@@ -27,7 +27,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Phone Number</td>
+                    <td>Phone Number: </td>
                     <td>
                         <input type="text" name="phoneNumber">
                         <c:if test="${not empty phoneNumberError}">
@@ -36,7 +36,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Email</td>
+                    <td>Email: </td>
                     <td>
                         <input type="text" name="email">
                         <c:if test="${not empty emailError}">

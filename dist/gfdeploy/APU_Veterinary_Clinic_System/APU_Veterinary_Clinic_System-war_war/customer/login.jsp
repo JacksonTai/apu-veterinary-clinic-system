@@ -9,11 +9,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <%@ include file="/component/head_source.jsp" %>
+        <%@ include file="/shared/component/head_source.jsp" %>
         <title>Customer Login - AVCS</title>
     </head>
     <body>
-        <%@ include file="/component/header.jsp" %>
+        <%@ include file="/shared/component/header.jsp" %>
         <h1>Customer Login</h1>
     </body>
 </html>

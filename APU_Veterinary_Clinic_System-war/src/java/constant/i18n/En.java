@@ -2,7 +2,7 @@ package constant.i18n;
 
 public class En {
 
-    public static final String INVALID_EMAIL_MESSAGE = "Email is invalid.";
+    public static final String INVALID_STAFF_EMAIL_MESSAGE = "Staff email is invalid.";
     public static final String INVALID_PASSWORD_MESSAGE = "Password must be at least 8 characters long and contain at least one digit, one lowercase letter, one uppercase letter, and one special character.";
     public static final String INVALID_FULL_NAME_MESSAGE = "Full Name cannot consists of numbers or more than one white space.";
     public static final String INVALID_PHONE_NUMBER_MESSAGE = "Please enter a valid Malaysia phone number.";
@@ -16,4 +16,5 @@ public class En {
     public static final String EMPTY_FULL_NAME_MESSAGE = "Full Name is required.";
     public static final String EMPTY_PHONE_NUMBER_MESSAGE = "Phone Number is required.";
 
+    public static final String INVALID_LOGIN_MESSAGE = "Invalid credentials. Please try again.";
 }

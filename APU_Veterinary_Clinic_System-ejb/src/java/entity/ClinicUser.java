@@ -5,8 +5,10 @@
  */
 package entity;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -33,6 +35,7 @@ public class ClinicUser implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="CLINIC_USER_ID")
+    @Setter(AccessLevel.NONE)
     private String clinicUserId;
     
     @Column(name="FULL_NAME")
@@ -46,6 +49,10 @@ public class ClinicUser implements Serializable {
     
     @Column(name="PHONE_NUMBER")
     private String phoneNumber;
+
+    @Column(name = "USER_TYPE", insertable = false, updatable = false)
+    @Setter(AccessLevel.NONE)
+    private String userType;
 
     public ClinicUser(String fullName, String email, String password, String phoneNumber) {
         this.fullName = fullName;
