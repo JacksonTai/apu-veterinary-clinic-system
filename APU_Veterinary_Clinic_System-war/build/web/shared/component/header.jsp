@@ -24,7 +24,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page"
-                           href="<c:url value='<%= EndpointConstant.PROFILE %>'/>">
+                           href="<c:url value='<%= EndpointConstant.VIEW_PROFILE %>'/>">
                             Profile
                         </a>
                     </li>

@@ -20,15 +20,18 @@ public class EndpointConstant {
     public static final String WORKING_ROTA = "/workingRota";
     public static final String REPORT = "/report";
     public static final String IAM = "/iam";
+    public static final String PROFILE = "/profile";
 
     // Shared
     public static final String LOGOUT = "/logout";
-    public static final String PROFILE = "/profile";
     public static final String REGISTRATION_SUCCESS = "/registrationSuccess";
+
+    public static final String VIEW_PROFILE = PROFILE + "/viewProfile";
+    public static final String UPDATE_PROFILE = PROFILE + "/updateProfile";
 
     // Staff
     public static final String STAFF_HOME = STAFF + "/home";
-    public static final String STAFF_LOGIN = "/staff/login";
+    public static final String STAFF_LOGIN = STAFF + "/login";
     public static final String STAFF_REGISTER = STAFF + "/register";
 
     public static final String VIEW_APPOINTMENT = APPOINTMENT + "/viewAppointment";
@@ -56,5 +59,6 @@ public class EndpointConstant {
     public static final String CUSTOMER_REGISTER = CUSTOMER + "/register";
     public static final String CUSTOMER_LOGIN = CUSTOMER + "/login";
     public static final String CUSTOMER_HOME = CUSTOMER + "/home";
+
 
 }

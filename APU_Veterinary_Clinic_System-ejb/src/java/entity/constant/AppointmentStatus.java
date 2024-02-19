@@ -5,12 +5,24 @@
  */
 package entity.constant;
 
+import lombok.Getter;
+
 /**
  *
  * @author Jackson Tai
  */
+@Getter
 public enum AppointmentStatus {
-    PENDING,
-    IN_PROGRESS,
-    COMPLETED
+    SCHEDULED("Scheduled"),
+    CONFIRMED("Confirmed"),
+    CANCELLED("Cancelled"),
+    IN_PROGRESS("In progress"),
+    COMPLETED("Completed");
+
+    private final String description;
+
+    AppointmentStatus(String description) {
+        this.description = description;
+    }
+
 }

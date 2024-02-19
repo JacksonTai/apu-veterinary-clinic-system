@@ -5,10 +5,20 @@
  */
 package entity;
 
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Entity;
+
 /**
  *
  * @author Jackson Tai
  */
-public class Customer {
-    
+@Entity
+@NoArgsConstructor
+public class Customer extends ClinicUser {
+
+    public Customer(String fullName, String email, String password, String phoneNumber) {
+        super(fullName, email, password, phoneNumber);
+    }
+
 }
