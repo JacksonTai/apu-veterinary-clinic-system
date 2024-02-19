@@ -7,7 +7,9 @@ package controller.staff;
 
 import entity.ClinicUser;
 import entity.ClinicUserFacade;
+
 import org.mindrot.jbcrypt.BCrypt;
+import validation.ClinicUserValidationSequence;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -19,11 +21,15 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static constant.EndpointConstant.STAFF_HOME;
 import static constant.EndpointConstant.STAFF_LOGIN;
-import static constant.GlobalConstant.STAFF_EMAIL_REGEX;
 import static constant.i18n.En.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 /**
  * @author Jackson Tai
@@ -59,31 +65,28 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<String> errorMessages = new ArrayList<>();
 
         String email = request.getParameter("email").trim();
-        if (email.isEmpty()) {
-            errorMessages.add(EMPTY_EMAIL_MESSAGE);
-            request.setAttribute("emailError", EMPTY_EMAIL_MESSAGE);
-        } else if (!email.matches(STAFF_EMAIL_REGEX)) {
-            errorMessages.add(INVALID_STAFF_EMAIL_MESSAGE);
-            request.setAttribute("emailError", INVALID_STAFF_EMAIL_MESSAGE);
-        }
-
         String password = request.getParameter("password").trim();
-        if (password.isEmpty()) {
-            errorMessages.add(EMPTY_PASSWORD_MESSAGE);
-            request.setAttribute("passwordError", EMPTY_PASSWORD_MESSAGE);
-        }
+        ClinicUser clinicUser = new ClinicUser(email, password);
 
-        if (!errorMessages.isEmpty()) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<ClinicUser>> violations = validator.validate(clinicUser);
+
+        if (!violations.isEmpty()) {
+            violations.forEach((violation) -> {
+                String fieldName = violation.getPropertyPath().toString();
+                String errorMessage = violation.getMessage();
+                System.out.println(fieldName + " " + errorMessage);
+                request.setAttribute(fieldName + "Error", errorMessage);
+            });
             request.getRequestDispatcher(STAFF_LOGIN + ".jsp").forward(request, response);
             return;
         }
 
         ClinicUser found = clinicUserFacade.findByEmail(email);
         if (found == null || !BCrypt.checkpw(password, found.getPassword())) {
-            errorMessages.add(INVALID_LOGIN_MESSAGE);
             request.setAttribute("invalidLoginError", INVALID_LOGIN_MESSAGE);
             request.getRequestDispatcher(STAFF_LOGIN + ".jsp").forward(request, response);
             return;

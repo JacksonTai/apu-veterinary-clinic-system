@@ -794,16 +794,24 @@ exists or setup the property manually. For example like this:
     <target depends="compile,-library-inclusion-in-archive-weblogic,-library-inclusion-in-archive-by-user" name="library-inclusion-in-archive"/>
     <target if="is.jars.in.ejbjar" name="-library-inclusion-in-archive-by-user">
         <copyfiles files="${file.reference.lombok-1.18.28.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.validation-api-2.0.1.Final.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.hibernate-validator-4.3.2.Final.jar}" todir="${build.classes.dir}"/>
     </target>
     <target if="is.server.weblogic" name="-library-inclusion-in-archive-weblogic">
         <basename file="${file.reference.lombok-1.18.28.jar}" property="manifest.file.reference.lombok-1.18.28.jar"/>
+        <basename file="${file.reference.validation-api-2.0.1.Final.jar}" property="manifest.file.reference.validation-api-2.0.1.Final.jar"/>
+        <basename file="${file.reference.hibernate-validator-4.3.2.Final.jar}" property="manifest.file.reference.hibernate-validator-4.3.2.Final.jar"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Extension-List" value="jar-1 "/>
+            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 "/>
             <attribute name="jar-1-Extension-Name" value="${manifest.file.reference.lombok-1.18.28.jar}"/>
+            <attribute name="jar-2-Extension-Name" value="${manifest.file.reference.validation-api-2.0.1.Final.jar}"/>
+            <attribute name="jar-3-Extension-Name" value="${manifest.file.reference.hibernate-validator-4.3.2.Final.jar}"/>
         </manifest>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
         <copyfiles files="${file.reference.lombok-1.18.28.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.validation-api-2.0.1.Final.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.hibernate-validator-4.3.2.Final.jar}" todir="${dist.ear.dir}/lib"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target name="-copy-meta-inf">

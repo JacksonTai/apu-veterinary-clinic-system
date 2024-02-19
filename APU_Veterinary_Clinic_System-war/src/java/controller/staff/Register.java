@@ -7,8 +7,8 @@ package controller.staff;
 
 import entity.ClinicUser;
 import entity.ClinicUserFacade;
-import entity.Vet;
-import org.mindrot.jbcrypt.BCrypt;
+import validation.ClinicUserValidationSequence;
+import validation.InvalidFields;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -17,13 +17,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import static constant.EndpointConstant.*;
-import static constant.GlobalConstant.*;
-import static constant.i18n.En.*;
 
 /**
  * @author Jackson Tai
@@ -61,72 +62,30 @@ public class Register extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        List<String> errorMessages = new ArrayList<>();
-
         String fullName = request.getParameter("fullName").trim();
-        if (fullName.isEmpty()) {
-            errorMessages.add(EMPTY_FULL_NAME_MESSAGE);
-            request.setAttribute("fullNameError", EMPTY_FULL_NAME_MESSAGE);
-        } else if (!fullName.matches(FULL_NAME_REGEX)) {
-            errorMessages.add(INVALID_FULL_NAME_MESSAGE);
-            request.setAttribute("fullNameError", INVALID_FULL_NAME_MESSAGE);
-        }
-
         String phoneNumber = request.getParameter("phoneNumber").trim();
-        if (phoneNumber.isEmpty()) {
-            errorMessages.add(EMPTY_PHONE_NUMBER_MESSAGE);
-            request.setAttribute("phoneNumberError", EMPTY_PHONE_NUMBER_MESSAGE);
-        } else if (!Pattern.matches(MY_PHONE_REGEX, phoneNumber)) {
-            errorMessages.add(INVALID_PHONE_NUMBER_MESSAGE);
-            request.setAttribute("phoneNumberError", INVALID_PHONE_NUMBER_MESSAGE);
-        }
-
         String email = request.getParameter("email").trim();
-        if (email.isEmpty()) {
-            errorMessages.add(EMPTY_EMAIL_MESSAGE);
-            request.setAttribute("emailError", EMPTY_EMAIL_MESSAGE);
-        } else if (!email.matches(STAFF_EMAIL_REGEX)) {
-            errorMessages.add(INVALID_STAFF_EMAIL_MESSAGE);
-            request.setAttribute("emailError", INVALID_STAFF_EMAIL_MESSAGE);
-        }
-
         String password = request.getParameter("password").trim();
-        if (password.isEmpty()) {
-            errorMessages.add(EMPTY_PASSWORD_MESSAGE);
-            request.setAttribute("passwordError", EMPTY_PASSWORD_MESSAGE);
-        } else if (!password.matches(PASSWORD_REGEX)) {
-            errorMessages.add(INVALID_PASSWORD_MESSAGE);
-            request.setAttribute("passwordError", INVALID_PASSWORD_MESSAGE);
+        ClinicUser clinicUser = new ClinicUser(fullName, email, password, phoneNumber);
+
+        System.out.println(clinicUser.toString());
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<ClinicUser>> violations = validator.validate(clinicUser);
+
+        System.out.println(violations.size());
+        if (!violations.isEmpty()) {
+            violations.forEach((violation) -> {
+                String fieldName = violation.getPropertyPath().toString();
+                String errorMessage = violation.getMessage();
+                System.out.println(fieldName + " " + errorMessage);
+                request.setAttribute(fieldName + "Error", errorMessage);
+            });
+            request.getRequestDispatcher(STAFF_REGISTER + ".jsp").include(request, response);
+        } else {
+            response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS + ".jsp");
         }
 
-        if (errorMessages.isEmpty()) {
-            ClinicUser clinicUser = clinicUserFacade.findByFullName(fullName);
-            if (clinicUser != null) {
-                errorMessages.add(DUPLICATE_FULL_NAME_MESSAGE);
-                request.setAttribute("fullNameError", DUPLICATE_FULL_NAME_MESSAGE);
-            }
-            clinicUser = clinicUserFacade.findByPhoneNumber(phoneNumber);
-            if (clinicUser != null) {
-                errorMessages.add(DUPLICATE_PHONE_NUMBER_MESSAGE);
-                request.setAttribute("phoneNumberError", DUPLICATE_PHONE_NUMBER_MESSAGE);
-            }
-            clinicUser = clinicUserFacade.findByEmail(email);
-            if (clinicUser != null) {
-                errorMessages.add(DUPLICATE_EMAIL_MESSAGE);
-                request.setAttribute("emailError", DUPLICATE_EMAIL_MESSAGE);
-            }
-        }
-
-        if (!errorMessages.isEmpty()) {
-            request.getRequestDispatcher(STAFF_REGISTER).forward(request, response);
-            return;
-        }
-
-        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        clinicUserFacade.create(new Vet(fullName, email, hashedPassword, phoneNumber));
-//        clinicUserFacade.create(new ManagingStaff(fullName, email, hashedPassword, phoneNumber));
-//        clinicUserFacade.create(new Receptionist(fullName, email, hashedPassword, phoneNumber));
-        response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS + ".jsp");
     }
 
     /**
