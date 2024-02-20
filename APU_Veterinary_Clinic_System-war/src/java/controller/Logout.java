@@ -39,7 +39,6 @@ public class Logout extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
-        System.out.println(session.getAttributeNames());
         response.sendRedirect(request.getContextPath() + INDEX);
     }
 

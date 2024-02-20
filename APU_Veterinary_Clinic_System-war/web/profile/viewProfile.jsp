@@ -20,6 +20,10 @@
                 <td>${clinicUser.clinicUserId}</td>
             </tr>
             <tr>
+                <td>User Type: </td>
+                <td>${clinicUser.userType}</td>
+            </tr>
+            <tr>
                 <td>Full Name: </td>
                 <td>${clinicUser.fullName}</td>
             </tr>

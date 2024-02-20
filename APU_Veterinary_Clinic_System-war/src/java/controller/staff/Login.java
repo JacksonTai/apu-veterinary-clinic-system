@@ -7,7 +7,8 @@ package controller.staff;
 
 import entity.ClinicUser;
 import entity.ClinicUserFacade;
-import org.mindrot.jbcrypt.BCrypt;
+import exception.InvalidLoginException;
+import validator.ClinicUserValidator;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -17,13 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 import static constant.EndpointConstant.STAFF_HOME;
 import static constant.EndpointConstant.STAFF_LOGIN;
-import static constant.GlobalConstant.STAFF_EMAIL_REGEX;
-import static constant.i18n.En.*;
 
 /**
  * @author Jackson Tai
@@ -59,39 +57,28 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<String> errorMessages = new ArrayList<>();
 
-        String email = request.getParameter("email").trim();
-        if (email.isEmpty()) {
-            errorMessages.add(EMPTY_EMAIL_MESSAGE);
-            request.setAttribute("emailError", EMPTY_EMAIL_MESSAGE);
-        } else if (!email.matches(STAFF_EMAIL_REGEX)) {
-            errorMessages.add(INVALID_STAFF_EMAIL_MESSAGE);
-            request.setAttribute("emailError", INVALID_STAFF_EMAIL_MESSAGE);
-        }
+        ClinicUserValidator validator = new ClinicUserValidator(clinicUserFacade);
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
 
-        String password = request.getParameter("password").trim();
-        if (password.isEmpty()) {
-            errorMessages.add(EMPTY_PASSWORD_MESSAGE);
-            request.setAttribute("passwordError", EMPTY_PASSWORD_MESSAGE);
-        }
-
-        if (!errorMessages.isEmpty()) {
+        Map<String, String> errorMessages = validator.validateLogin(email, password);
+        try {
+            if (!errorMessages.isEmpty()) {
+                errorMessages.entrySet().forEach((entry) -> {
+                    request.setAttribute(entry.getKey(), entry.getValue());
+                });
+                request.getRequestDispatcher(STAFF_LOGIN + ".jsp").forward(request, response);
+                return;
+            }
+            ClinicUser clinicUser = validator.validateLoginCredential(email, password);
+            HttpSession session = request.getSession();
+            session.setAttribute("clinicUser", clinicUser);
+            response.sendRedirect(request.getContextPath() + STAFF_HOME);
+        } catch (InvalidLoginException e) {
+             request.setAttribute("invalidLoginError", e.getMessage());
             request.getRequestDispatcher(STAFF_LOGIN + ".jsp").forward(request, response);
-            return;
         }
-
-        ClinicUser found = clinicUserFacade.findByEmail(email);
-        if (found == null || !BCrypt.checkpw(password, found.getPassword())) {
-            errorMessages.add(INVALID_LOGIN_MESSAGE);
-            request.setAttribute("invalidLoginError", INVALID_LOGIN_MESSAGE);
-            request.getRequestDispatcher(STAFF_LOGIN + ".jsp").forward(request, response);
-            return;
-        }
-
-        HttpSession session = request.getSession();
-        session.setAttribute("clinicUser", found);
-        response.sendRedirect(request.getContextPath() + STAFF_HOME);
     }
 
     /**
