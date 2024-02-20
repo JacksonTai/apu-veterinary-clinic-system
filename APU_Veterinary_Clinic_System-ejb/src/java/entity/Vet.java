@@ -21,8 +21,8 @@ public class Vet extends ClinicUser {
 //    @Column(name="EXPERTISE")
 //    private String expertise;
 
-    public Vet(String fullName, String email, String password, String phoneNumber) {
-        super(fullName, email, password, phoneNumber);
+    public Vet(String fullName, String email, String password, String phoneNumber, String userType) {
+        super(fullName, email, password, phoneNumber, userType);
     }
 
 }

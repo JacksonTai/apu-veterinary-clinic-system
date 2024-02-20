@@ -7,7 +7,6 @@ package controller.staff;
 
 import entity.ClinicUser;
 import entity.ClinicUserFacade;
-import exception.InvalidLoginException;
 import validator.ClinicUserValidator;
 
 import javax.ejb.EJB;
@@ -22,6 +21,7 @@ import java.util.Map;
 
 import static constant.EndpointConstant.STAFF_HOME;
 import static constant.EndpointConstant.STAFF_LOGIN;
+import static constant.i18n.En.INVALID_CREDENTIAL_MESSAGE;
 
 /**
  * @author Jackson Tai
@@ -58,27 +58,27 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        ClinicUserValidator validator = new ClinicUserValidator(clinicUserFacade);
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
+        ClinicUserValidator validator = new ClinicUserValidator(clinicUserFacade);
         Map<String, String> errorMessages = validator.validateLogin(email, password);
-        try {
-            if (!errorMessages.isEmpty()) {
-                errorMessages.entrySet().forEach((entry) -> {
-                    request.setAttribute(entry.getKey(), entry.getValue());
-                });
-                request.getRequestDispatcher(STAFF_LOGIN + ".jsp").forward(request, response);
-                return;
-            }
-            ClinicUser clinicUser = validator.validateLoginCredential(email, password);
-            HttpSession session = request.getSession();
-            session.setAttribute("clinicUser", clinicUser);
-            response.sendRedirect(request.getContextPath() + STAFF_HOME);
-        } catch (InvalidLoginException e) {
-             request.setAttribute("invalidLoginError", e.getMessage());
+
+        if (!errorMessages.isEmpty()) {
+            errorMessages.forEach(request::setAttribute);
             request.getRequestDispatcher(STAFF_LOGIN + ".jsp").forward(request, response);
+            return;
         }
+
+        ClinicUser clinicUser = validator.validateCredential(email, password);
+        if (clinicUser == null) {
+            request.setAttribute("invalidCredentialError", INVALID_CREDENTIAL_MESSAGE);
+            request.getRequestDispatcher(STAFF_LOGIN + ".jsp").forward(request, response);
+            return;
+        }
+        HttpSession session = request.getSession();
+        session.setAttribute("clinicUser", clinicUser);
+        response.sendRedirect(request.getContextPath() + STAFF_HOME);
     }
 
     /**

@@ -5,8 +5,7 @@
  */
 package controller.staff;
 
-import entity.ClinicUser;
-import entity.ClinicUserFacade;
+import entity.*;
 import org.mindrot.jbcrypt.BCrypt;
 import validator.ClinicUserValidator;
 
@@ -55,27 +54,27 @@ public class Register extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
 
         String fullName = request.getParameter("fullName").trim();
         String phoneNumber = request.getParameter("phoneNumber").trim();
         String email = request.getParameter("email").trim();
         String password = request.getParameter("password").trim();
+        String userType = Vet.class.getSimpleName();
+
+        ClinicUser clinicUser = new ClinicUser(fullName, email, password, phoneNumber, userType);
 
         ClinicUserValidator clinicUserValidatorValidator = new ClinicUserValidator(clinicUserFacade);
-        Map<String, String> errorMessages = clinicUserValidatorValidator.validateRegistration(
-                new ClinicUser(fullName, email, password, phoneNumber));
+        Map<String, String> errorMessages = clinicUserValidatorValidator.validateUserDetails(clinicUser);
 
         if (!errorMessages.isEmpty()) {
-            for (Map.Entry<String, String> entry : errorMessages.entrySet()) {
-                request.setAttribute(entry.getKey(), entry.getValue());
-            }
+            errorMessages.forEach(request::setAttribute);
             request.getRequestDispatcher(STAFF_REGISTER + ".jsp").forward(request, response);
         } else {
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-//        clinicUserFacade.create(new Vet(fullName, email, hashedPassword, phoneNumber));
-//        clinicUserFacade.create(new ManagingStaff(fullName, email, hashedPassword, phoneNumber));
-//        clinicUserFacade.create(new Receptionist(fullName, email, hashedPassword, phoneNumber));
+            clinicUserFacade.create(new Vet(fullName, email.toLowerCase(), hashedPassword, phoneNumber, userType));
+//            clinicUserFacade.create(new ManagingStaff(fullName, email.toLowerCase(), hashedPassword, phoneNumber, userType));
+//            clinicUserFacade.create(new Receptionist(fullName, email.toLowerCase(), hashedPassword, phoneNumber, userType));
+            request.getSession().setAttribute("clinicUser", clinicUser);
             response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS + ".jsp");
         }
     }

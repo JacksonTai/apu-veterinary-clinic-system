@@ -28,6 +28,7 @@ public class EndpointConstant {
 
     public static final String VIEW_PROFILE = PROFILE + "/viewProfile";
     public static final String UPDATE_PROFILE = PROFILE + "/updateProfile";
+    public static final String CHANGE_PASSWORD = PROFILE + "/changePassword";
 
     // Staff
     public static final String STAFF_HOME = STAFF + "/home";

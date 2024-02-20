@@ -6,15 +6,19 @@
 package controller.profile;
 
 import entity.ClinicUser;
+import entity.ClinicUserFacade;
+import validator.ClinicUserValidator;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static constant.EndpointConstant.UPDATE_PROFILE;
 import static constant.EndpointConstant.VIEW_PROFILE;
@@ -25,6 +29,11 @@ import static constant.EndpointConstant.VIEW_PROFILE;
  */
 @WebServlet(name = "UpdateProfile", urlPatterns = {UPDATE_PROFILE})
 public class UpdateProfile extends HttpServlet {
+
+    @EJB
+    private ClinicUserFacade clinicUserFacade;
+
+    private ClinicUser clinicUser;
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -38,7 +47,7 @@ public class UpdateProfile extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        ClinicUser clinicUser = (ClinicUser) session.getAttribute("clinicUser");
+        this.clinicUser = (ClinicUser) session.getAttribute("clinicUser");
         request.setAttribute("clinicUser", clinicUser);
         request.getRequestDispatcher(UPDATE_PROFILE + ".jsp").forward(request, response);
     }
@@ -48,6 +57,7 @@ public class UpdateProfile extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
+     *                 594064
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
@@ -55,6 +65,36 @@ public class UpdateProfile extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        String fullName = request.getParameter("fullName");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String phoneNumber = request.getParameter("phoneNumber");
+
+        ClinicUserValidator clinicUserValidatorValidator = new ClinicUserValidator(clinicUserFacade);
+        Map<String, String> errorMessages = new HashMap<>();
+
+        // check if it's other's data
+        if (!fullName.equals(clinicUser.getFullName())) {
+            errorMessages.putAll(clinicUserValidatorValidator.validateDuplicateFullName(fullName));
+        }
+        if (!email.equals(clinicUser.getEmail())) {
+            errorMessages.putAll(clinicUserValidatorValidator.validateDuplicateEmail(email));
+        }
+        if (!phoneNumber.equals(clinicUser.getPhoneNumber())) {
+            errorMessages.putAll(clinicUserValidatorValidator.validateDuplicatePhoneNumber(phoneNumber));
+        }
+
+        // if it's not repeated check if it's empty or invalid
+        errorMessages.putAll(ClinicUserValidator.validateFullName(fullName));
+        errorMessages.putAll(ClinicUserValidator.validateEmail(email));
+        errorMessages.putAll(ClinicUserValidator.validatePhoneNumber(phoneNumber));
+
+        if (!errorMessages.isEmpty()) {
+            errorMessages.forEach(request::setAttribute);
+            request.getRequestDispatcher(UPDATE_PROFILE + ".jsp").forward(request, response);
+        } else {
+            response.sendRedirect(request.getContextPath() + VIEW_PROFILE + ".jsp");
+        }
     }
 
     /**

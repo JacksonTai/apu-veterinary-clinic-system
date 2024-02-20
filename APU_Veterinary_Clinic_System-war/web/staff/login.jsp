@@ -17,7 +17,7 @@
         <form action="<c:url value='<%= EndpointConstant.STAFF_LOGIN %>'/>" method="POST">
             <table>
                 <tr>
-                    <td>Staff Email: </td>
+                    <td>Email: </td>
                     <td>
                         <input type="text" name="email" value="${not empty param.email ? param.email : ''}">
                         <c:if test="${not empty emailError}">
@@ -36,8 +36,8 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <c:if test="${not empty invalidLoginError}">
-                            <span style="color: red;">${invalidLoginError}</span>
+                        <c:if test="${not empty invalidCredentialError}">
+                            <span style="color: red;">${invalidCredentialError}</span>
                         </c:if>
                     </td>
                 </tr>

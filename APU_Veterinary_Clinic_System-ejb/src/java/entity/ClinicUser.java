@@ -50,15 +50,15 @@ public class ClinicUser implements Serializable {
     @Column(name="PHONE_NUMBER")
     private String phoneNumber;
 
-    @Column(name = "USER_TYPE", insertable = false, updatable = false)
-    @Setter(AccessLevel.NONE)
+    @Column(name = "USER_TYPE")
     private String userType;
 
-    public ClinicUser(String fullName, String email, String password, String phoneNumber) {
+    public ClinicUser(String fullName, String email, String password, String phoneNumber, String userType) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
+        this.userType = userType;
     }
 
 }

@@ -7,6 +7,7 @@ package entity;
 
 import lombok.NoArgsConstructor;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 /**
@@ -14,11 +15,12 @@ import javax.persistence.Entity;
  * @author Jackson Tai
  */
 @Entity
+@DiscriminatorValue("Receptionist")
 @NoArgsConstructor
 public class Receptionist extends ClinicUser {
 
-    public Receptionist(String fullName, String email, String password, String phoneNumber) {
-        super(fullName, email, password, phoneNumber);
+    public Receptionist(String fullName, String email, String password, String phoneNumber, String userType) {
+        super(fullName, email, password, phoneNumber, userType);
     }
 
 }

@@ -36,6 +36,7 @@
                 <td>${clinicUser.phoneNumber}</td>
             </tr>
         </table>
-        <a href="<c:url value='<%= EndpointConstant.UPDATE_PROFILE %>'/>">Edit Profile</a>
+        <a href="<c:url value='<%= EndpointConstant.UPDATE_PROFILE %>'/>">Update Profile</a>
+        <a href="<c:url value='<%= EndpointConstant.CHANGE_PASSWORD %>'/>">Change Password</a>
     </body>
 </html>
