@@ -62,33 +62,29 @@ public class ChangePassword extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
+        HttpSession session = request.getSession(false);
+        ClinicUser clinicUser = (ClinicUser) session.getAttribute("clinicUser");
+
         String currentPassword = request.getParameter("currentPassword").trim();
         String newPassword = request.getParameter("newPassword").trim();
         String confirmPassword = request.getParameter("confirmPassword").trim();
 
-        ClinicUserValidator validator = new ClinicUserValidator(clinicUserFacade);
+        ClinicUserValidator clinicUserValidator = new ClinicUserValidator(clinicUserFacade);
         Map<String, String> errorMessages = new HashMap<>();
 
-        HttpSession session = request.getSession(false);
-        ClinicUser clinicUser = (ClinicUser) session.getAttribute("clinicUser");
-
-        if (currentPassword.isEmpty()) {
-            errorMessages.put("currentPasswordError", CURRENT_PASSWORD_EMPTY_MESSAGE);
-        } else if (validator.validateCredential(clinicUser.getEmail(), currentPassword) == null) {
-            errorMessages.put("currentPasswordError", INVALID_CREDENTIAL_MESSAGE);
-        }
+        errorMessages.putAll(clinicUserValidator.validateCredentialDetails(clinicUser.getEmail(), currentPassword));
         Map<String, String> passwordErrorMessages = ClinicUserValidator.validatePassword(newPassword);
         if (!passwordErrorMessages.isEmpty()) {
             errorMessages.putAll(passwordErrorMessages);
         } else if (newPassword.equals(currentPassword)) {
             errorMessages.put("passwordError", NEW_PASSWORD_SAME_AS_CURRENT_MESSAGE);
         }
-
         if (confirmPassword.isEmpty()) {
-            errorMessages.put("confirmPasswordError", CONFIRM_PASSWORD_EMPTY_MESSAGE);
+            errorMessages.put("confirmPasswordError", EMPTY_CONFIRM_PASSWORD_MESSAGE);
         } else if (!newPassword.equals(confirmPassword)) {
-            errorMessages.put("confirmPasswordError", NEW_PASSWORD_UNMATCHED_MESSAGE);
+            errorMessages.put("confirmPasswordError", UNMATCHED_NEW_PASSWORD_MESSAGE);
         }
+
         if (!errorMessages.isEmpty()) {
             errorMessages.forEach(request::setAttribute);
             request.getRequestDispatcher(CHANGE_PASSWORD + ".jsp").forward(request, response);

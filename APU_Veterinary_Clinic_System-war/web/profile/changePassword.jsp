@@ -21,8 +21,8 @@
             <td>
                 <input type="password" name="currentPassword"
                        value="${not empty param.currentPassword ? param.currentPassword : ''}">
-                <c:if test="${not empty currentPasswordError}">
-                    <span style="color: red;">${currentPasswordError}</span>
+                <c:if test="${not empty invalidCredentialError}">
+                    <span style="color: red;">${invalidCredentialError}</span>
                 </c:if>
             </td>
         </tr>
@@ -43,13 +43,6 @@
                        value="${not empty param.confirmPassword ? param.confirmPassword : ''}">
                 <c:if test="${not empty confirmPasswordError}">
                     <span style="color: red;">${confirmPasswordError}</span>
-                </c:if>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <c:if test="${not empty invalidCredentialError}">
-                    <span style="color: red;">${invalidCredentialError}</span>
                 </c:if>
             </td>
         </tr>

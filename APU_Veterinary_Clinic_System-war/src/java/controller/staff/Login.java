@@ -61,8 +61,8 @@ public class Login extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        ClinicUserValidator validator = new ClinicUserValidator(clinicUserFacade);
-        Map<String, String> errorMessages = validator.validateLogin(email, password);
+        ClinicUserValidator clinicUserValidator = new ClinicUserValidator(clinicUserFacade);
+        Map<String, String> errorMessages = clinicUserValidator.validateCredentials(email, password);
 
         if (!errorMessages.isEmpty()) {
             errorMessages.forEach(request::setAttribute);
@@ -70,7 +70,7 @@ public class Login extends HttpServlet {
             return;
         }
 
-        ClinicUser clinicUser = validator.validateCredential(email, password);
+        ClinicUser clinicUser = clinicUserValidator.authenticateClinicUser(email, password);
         if (clinicUser == null) {
             request.setAttribute("invalidCredentialError", INVALID_CREDENTIAL_MESSAGE);
             request.getRequestDispatcher(STAFF_LOGIN + ".jsp").forward(request, response);

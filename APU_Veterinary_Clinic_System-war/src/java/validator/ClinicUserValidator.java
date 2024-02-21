@@ -33,39 +33,6 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
         return errorMessages;
     }
 
-    public static Map<String, String> validatePassword(String password) {
-        Map<String, String> errorMessages = new HashMap<>();
-        password = password.trim();
-        if (password.isEmpty()) {
-            errorMessages.put("passwordError", EMPTY_PASSWORD_MESSAGE);
-        } else if (!password.matches(PASSWORD_REGEX)) {
-            errorMessages.put("passwordError", INVALID_PASSWORD_MESSAGE);
-        }
-        return errorMessages;
-    }
-
-    public static Map<String, String> validateEmail(String email) {
-        Map<String, String> errorMessages = new HashMap<>();
-        email = email.trim();
-        if (email.isEmpty()) {
-            errorMessages.put("emailError", EMPTY_EMAIL_MESSAGE);
-        } else if (!email.matches(STAFF_EMAIL_REGEX)) {
-            errorMessages.put("emailError", INVALID_STAFF_EMAIL_MESSAGE);
-        }
-        return errorMessages;
-    }
-
-    public static Map<String, String> validatePhoneNumber(String phoneNumber) {
-        Map<String, String> errorMessages = new HashMap<>();
-        phoneNumber = phoneNumber.trim();
-        if (phoneNumber.isEmpty()) {
-            errorMessages.put("phoneNumberError", EMPTY_PHONE_NUMBER_MESSAGE);
-        } else if (!Pattern.matches(MY_PHONE_REGEX, phoneNumber)) {
-            errorMessages.put("phoneNumberError", INVALID_PHONE_NUMBER_MESSAGE);
-        }
-        return errorMessages;
-    }
-
     public static Map<String, String> validateFullName(String fullName) {
         Map<String, String> errorMessages = new HashMap<>();
         fullName = fullName.trim();
@@ -81,7 +48,40 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
         return errorMessages;
     }
 
-    public Map<String, String> validateLogin(String email, String password) {
+    public static Map<String, String> validatePhoneNumber(String phoneNumber) {
+        Map<String, String> errorMessages = new HashMap<>();
+        phoneNumber = phoneNumber.trim();
+        if (phoneNumber.isEmpty()) {
+            errorMessages.put("phoneNumberError", EMPTY_PHONE_NUMBER_MESSAGE);
+        } else if (!Pattern.matches(MY_PHONE_REGEX, phoneNumber)) {
+            errorMessages.put("phoneNumberError", INVALID_PHONE_NUMBER_MESSAGE);
+        }
+        return errorMessages;
+    }
+
+    public static Map<String, String> validateEmail(String email) {
+        Map<String, String> errorMessages = new HashMap<>();
+        email = email.trim();
+        if (email.isEmpty()) {
+            errorMessages.put("emailError", EMPTY_EMAIL_MESSAGE);
+        } else if (!email.matches(STAFF_EMAIL_REGEX)) {
+            errorMessages.put("emailError", INVALID_STAFF_EMAIL_MESSAGE);
+        }
+        return errorMessages;
+    }
+
+    public static Map<String, String> validatePassword(String password) {
+        Map<String, String> errorMessages = new HashMap<>();
+        password = password.trim();
+        if (password.isEmpty()) {
+            errorMessages.put("passwordError", EMPTY_PASSWORD_MESSAGE);
+        } else if (!password.matches(PASSWORD_REGEX)) {
+            errorMessages.put("passwordError", INVALID_PASSWORD_MESSAGE);
+        }
+        return errorMessages;
+    }
+
+    public Map<String, String> validateCredentials(String email, String password) {
         Map<String, String> errorMessages = new HashMap<>();
         email = email.trim();
         password = password.trim();
@@ -94,18 +94,27 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
         return errorMessages;
     }
 
-    public ClinicUser validateCredential(String email, String password) {
+    public Map<String, String> validateCredentialDetails(String email, String password) {
+        Map<String, String> errorMessages = new HashMap<>();
+        password = password.trim();
+        if (password.isEmpty()) {
+            errorMessages.put("invalidCredentialError", EMPTY_PASSWORD_MESSAGE);
+        } else if (authenticateClinicUser(email, password) == null) {
+            errorMessages.put("invalidCredentialError", INVALID_CREDENTIAL_MESSAGE);
+        }
+        return errorMessages;
+    }
+
+    public ClinicUser authenticateClinicUser(String email, String password) {
         ClinicUser clinicUser = clinicUserFacade.findByEmail(email.toLowerCase());
         return clinicUser != null && BCrypt.checkpw(password, clinicUser.getPassword()) ? clinicUser : null;
     }
 
-    public Map<String, String> validateUserDetails(ClinicUser clinicUser) {
+    public Map<String, String> validateClinicUserDetails(ClinicUser clinicUser) {
         Map<String, String> errorMessages = validate(clinicUser);
-        if (errorMessages.isEmpty()) {
-            errorMessages.putAll(validateDuplicateEmail(clinicUser.getEmail()));
-            errorMessages.putAll(validateDuplicatePhoneNumber(clinicUser.getPhoneNumber()));
-            errorMessages.putAll(validateDuplicateFullName(clinicUser.getFullName()));
-        }
+        errorMessages.putAll(validateDuplicateEmail(clinicUser.getEmail()));
+        errorMessages.putAll(validateDuplicatePhoneNumber(clinicUser.getPhoneNumber()));
+        errorMessages.putAll(validateDuplicateFullName(clinicUser.getFullName()));
         return errorMessages;
     }
 

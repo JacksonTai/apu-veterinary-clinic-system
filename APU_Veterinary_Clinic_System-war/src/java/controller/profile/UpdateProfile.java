@@ -24,7 +24,6 @@ import static constant.EndpointConstant.UPDATE_PROFILE;
 import static constant.EndpointConstant.VIEW_PROFILE;
 
 /**
- *
  * @author Jackson Tai
  */
 @WebServlet(name = "UpdateProfile", urlPatterns = {UPDATE_PROFILE})
@@ -38,10 +37,10 @@ public class UpdateProfile extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -55,46 +54,50 @@ public class UpdateProfile extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      *                 594064
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String fullName = request.getParameter("fullName");
+        String phoneNumber = request.getParameter("phoneNumber");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String phoneNumber = request.getParameter("phoneNumber");
 
-        ClinicUserValidator clinicUserValidatorValidator = new ClinicUserValidator(clinicUserFacade);
+        ClinicUserValidator clinicUserValidator = new ClinicUserValidator(clinicUserFacade);
         Map<String, String> errorMessages = new HashMap<>();
 
-        // check if it's other's data
+        errorMessages.putAll(ClinicUserValidator.validateFullName(fullName));
+        errorMessages.putAll(ClinicUserValidator.validatePhoneNumber(phoneNumber));
+        errorMessages.putAll(ClinicUserValidator.validateEmail(email));
+        errorMessages.putAll(clinicUserValidator.validateCredentialDetails(clinicUser.getEmail(), password));
+
         if (!fullName.equals(clinicUser.getFullName())) {
-            errorMessages.putAll(clinicUserValidatorValidator.validateDuplicateFullName(fullName));
+            errorMessages.putAll(clinicUserValidator.validateDuplicateFullName(fullName));
         }
         if (!email.equals(clinicUser.getEmail())) {
-            errorMessages.putAll(clinicUserValidatorValidator.validateDuplicateEmail(email));
+            errorMessages.putAll(clinicUserValidator.validateDuplicateEmail(email));
         }
         if (!phoneNumber.equals(clinicUser.getPhoneNumber())) {
-            errorMessages.putAll(clinicUserValidatorValidator.validateDuplicatePhoneNumber(phoneNumber));
+            errorMessages.putAll(clinicUserValidator.validateDuplicatePhoneNumber(phoneNumber));
         }
-
-        // if it's not repeated check if it's empty or invalid
-        errorMessages.putAll(ClinicUserValidator.validateFullName(fullName));
-        errorMessages.putAll(ClinicUserValidator.validateEmail(email));
-        errorMessages.putAll(ClinicUserValidator.validatePhoneNumber(phoneNumber));
 
         if (!errorMessages.isEmpty()) {
             errorMessages.forEach(request::setAttribute);
             request.getRequestDispatcher(UPDATE_PROFILE + ".jsp").forward(request, response);
-        } else {
-            response.sendRedirect(request.getContextPath() + VIEW_PROFILE + ".jsp");
+            return;
         }
+
+        clinicUser.setFullName(fullName);
+        clinicUser.setPhoneNumber(phoneNumber);
+        clinicUser.setEmail(email);
+        clinicUserFacade.edit(clinicUser);
+        response.sendRedirect(request.getContextPath() + VIEW_PROFILE + ".jsp");
     }
 
     /**

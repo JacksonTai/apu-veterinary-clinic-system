@@ -64,7 +64,7 @@ public class Register extends HttpServlet {
         ClinicUser clinicUser = new ClinicUser(fullName, email, password, phoneNumber, userType);
 
         ClinicUserValidator clinicUserValidatorValidator = new ClinicUserValidator(clinicUserFacade);
-        Map<String, String> errorMessages = clinicUserValidatorValidator.validateUserDetails(clinicUser);
+        Map<String, String> errorMessages = clinicUserValidatorValidator.validateClinicUserDetails(clinicUser);
 
         if (!errorMessages.isEmpty()) {
             errorMessages.forEach(request::setAttribute);
