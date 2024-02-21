@@ -12,7 +12,7 @@ public class EndpointConstant {
 
     public static final String INDEX = "/index.jsp";
 
-    // Subpath
+    // Sub-path
     public static final String STAFF = "/staff";
     public static final String CUSTOMER = "/customer";
     public static final String APPOINTMENT = "/appointment";
@@ -22,7 +22,6 @@ public class EndpointConstant {
     public static final String IAM = "/iam";
     public static final String PROFILE = "/profile";
 
-    // Shared
     public static final String LOGOUT = "/logout";
     public static final String REGISTRATION_SUCCESS = "/registrationSuccess";
 
@@ -30,7 +29,6 @@ public class EndpointConstant {
     public static final String UPDATE_PROFILE = PROFILE + "/updateProfile";
     public static final String CHANGE_PASSWORD = PROFILE + "/changePassword";
 
-    // Staff
     public static final String STAFF_HOME = STAFF + "/home";
     public static final String STAFF_LOGIN = STAFF + "/login";
     public static final String STAFF_REGISTER = STAFF + "/register";
@@ -55,11 +53,5 @@ public class EndpointConstant {
 
     public static final String REVENUE = "/revenue";
     public static final String CUSTOMER_REPORT = "/report";
-
-    // Customer
-    public static final String CUSTOMER_REGISTER = CUSTOMER + "/register";
-    public static final String CUSTOMER_LOGIN = CUSTOMER + "/login";
-    public static final String CUSTOMER_HOME = CUSTOMER + "/home";
-
 
 }

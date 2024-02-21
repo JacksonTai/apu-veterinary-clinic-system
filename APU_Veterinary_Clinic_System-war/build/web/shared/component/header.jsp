@@ -114,45 +114,17 @@
                             Home
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            Customer
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                           href="<c:url value='<%= EndpointConstant.STAFF_LOGIN %>'/>">
+                            Login
                         </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item"
-                                   href="<c:url value='<%= EndpointConstant.CUSTOMER_LOGIN %>'/>">
-                                    Login
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item"
-                                   href="<c:url value='<%= EndpointConstant.CUSTOMER_REGISTER %>'/>">
-                                    Register
-                                </a>
-                            </li>
-                        </ul>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            Staff
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                           href="<c:url value='<%= EndpointConstant.STAFF_REGISTER %>'/>">
+                            Register
                         </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item"
-                                   href="<c:url value='<%= EndpointConstant.STAFF_LOGIN %>'/>">
-                                    Login
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item"
-                                   href="<c:url value='<%= EndpointConstant.STAFF_REGISTER %>'/>">
-                                    Register
-                                </a>
-                            </li>
-                        </ul>
                     </li>
                 </c:if>
             </ul>
