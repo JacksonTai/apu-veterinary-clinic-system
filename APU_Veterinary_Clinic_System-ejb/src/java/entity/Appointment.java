@@ -5,7 +5,7 @@
  */
 package entity;
 
-import entity.constant.AppointmentStatus;
+import constant.AppointmentStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -34,6 +34,9 @@ public class Appointment implements Serializable {
 
     @Column(name="APPOINTMENT_STATUS")
     private AppointmentStatus appointmentStatus;
+
+//    @Column(name="CUSTOMER")
+//    private Customer customer;
 
     public Appointment(Date appointmentDate, AppointmentStatus appointmentStatus) {
         this.appointmentDate = appointmentDate;

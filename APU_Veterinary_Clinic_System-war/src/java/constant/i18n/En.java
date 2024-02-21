@@ -13,7 +13,8 @@ public class En {
     public static final String EMPTY_PASSWORD_MESSAGE = "Password is required.";
     public static final String INVALID_PASSWORD_MESSAGE = "Password must be at least 8 characters long and contain at least one digit, one lowercase letter, one uppercase letter, and one special character.";
     public static final String INVALID_CREDENTIAL_MESSAGE = "Invalid credentials. Please try again.";
-    public static final String UNMATCHED_NEW_PASSWORD_MESSAGE = "New passwords do not match";
+    public static final String EMPTY_NEW_PASSWORD_MESSAGE = "New password is required";
+    public static final String UNMATCHED_NEW_PASSWORD_MESSAGE = "New password do not match";
     public static final String EMPTY_CONFIRM_PASSWORD_MESSAGE = "Confirm password is required";
     public static final String NEW_PASSWORD_SAME_AS_CURRENT_MESSAGE = "New password cannot be the same as the current password.";
 

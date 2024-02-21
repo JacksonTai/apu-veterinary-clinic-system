@@ -18,26 +18,6 @@
     <input type="hidden" name="formSubmitted" value="true">
     <table>
         <tr>
-            <td>Full Name</td>
-            <td>
-                <input type="text" name="fullName"
-                       value="${param.formSubmitted != null ? param.fullName : clinicUser.fullName}">
-                <c:if test="${not empty fullNameError}">
-                    <span style="color: red;">${fullNameError}</span>
-                </c:if>
-            </td>
-        </tr>
-        <tr>
-            <td>Phone Number (+60)</td>
-            <td>
-                <input type="text" name="phoneNumber"
-                       value="${param.formSubmitted != null ? param.phoneNumber : clinicUser.phoneNumber}">
-                <c:if test="${not empty phoneNumberError}">
-                    <span style="color: red;">${phoneNumberError}</span>
-                </c:if>
-            </td>
-        </tr>
-        <tr>
             <td>Email</td>
             <td>
                 <input type="text" name="email" value="${param.formSubmitted != null ? param.email : clinicUser.email}">

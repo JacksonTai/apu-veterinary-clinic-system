@@ -10,11 +10,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
- *
  * @author Jackson Tai
  */
 @Entity
@@ -22,10 +21,8 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "USER_TYPE", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
-    @NamedQuery(name = "ClinicUser.findAll", query = "SELECT c FROM ClinicUser c"),
-    @NamedQuery(name = "ClinicUser.findByFullName", query = "SELECT c FROM ClinicUser c WHERE c.fullName = :fullName"),
-    @NamedQuery(name = "ClinicUser.findByEmail", query = "SELECT c FROM ClinicUser c WHERE c.email = :email"),
-    @NamedQuery(name = "ClinicUser.findByPhoneNumber", query = "SELECT c FROM ClinicUser c WHERE c.phoneNumber = :phoneNumber")
+        @NamedQuery(name = "ClinicUser.findAll", query = "SELECT c FROM ClinicUser c"),
+        @NamedQuery(name = "ClinicUser.findByEmail", query = "SELECT c FROM ClinicUser c WHERE c.email = :email"),
 })
 @Data
 @NoArgsConstructor
@@ -34,31 +31,22 @@ public class ClinicUser implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="CLINIC_USER_ID")
+    @Column(name = "CLINIC_USER_ID")
     @Setter(AccessLevel.NONE)
     private String clinicUserId;
-    
-    @Column(name="FULL_NAME")
-    private String fullName;
 
-    @Column(name="EMAIL")
+    @Column(name = "EMAIL")
     private String email;
-    
-    @Column(name="PASSWORD")
+
+    @Column(name = "PASSWORD")
     private String password;
-    
-    @Column(name="PHONE_NUMBER")
-    private String phoneNumber;
 
     @Column(name = "USER_TYPE")
     private String userType;
 
-    public ClinicUser(String fullName, String email, String password, String phoneNumber, String userType) {
-        this.fullName = fullName;
+    public ClinicUser(String email, String password) {
         this.email = email;
         this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.userType = userType;
     }
 
 }

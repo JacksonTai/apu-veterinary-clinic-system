@@ -24,16 +24,8 @@
                 <td>${clinicUser.userType}</td>
             </tr>
             <tr>
-                <td>Full Name: </td>
-                <td>${clinicUser.fullName}</td>
-            </tr>
-            <tr>
                 <td>Email: </td>
                 <td>${clinicUser.email}</td>
-            </tr>
-            <tr>
-                <td>Phone Number: </td>
-                <td>${clinicUser.phoneNumber}</td>
             </tr>
         </table>
         <a href="<c:url value='<%= EndpointConstant.UPDATE_PROFILE %>'/>">Update Profile</a>

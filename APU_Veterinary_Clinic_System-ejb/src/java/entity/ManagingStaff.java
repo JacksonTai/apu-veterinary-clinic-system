@@ -7,18 +7,22 @@ package entity;
 
 import lombok.NoArgsConstructor;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+
+import static constant.UserType.MANAGING_STAFF;
 
 /**
  *
  * @author Jackson Tai
  */
 @Entity
+@DiscriminatorValue(MANAGING_STAFF)
 @NoArgsConstructor
 public class ManagingStaff extends ClinicUser {
 
-    public ManagingStaff(String fullName, String email, String password, String phoneNumber, String userType) {
-        super(fullName, email, password, phoneNumber, userType);
+    public ManagingStaff(String email, String password) {
+        super(email, password);
     }
 
 }

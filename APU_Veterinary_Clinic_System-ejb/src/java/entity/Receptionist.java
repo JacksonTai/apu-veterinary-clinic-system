@@ -10,17 +10,19 @@ import lombok.NoArgsConstructor;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+import static constant.UserType.RECEPTIONIST;
+
 /**
  *
  * @author Jackson Tai
  */
 @Entity
-@DiscriminatorValue("Receptionist")
+@DiscriminatorValue(RECEPTIONIST)
 @NoArgsConstructor
 public class Receptionist extends ClinicUser {
 
-    public Receptionist(String fullName, String email, String password, String phoneNumber, String userType) {
-        super(fullName, email, password, phoneNumber, userType);
+    public Receptionist(String email, String password) {
+        super(email, password);
     }
 
 }

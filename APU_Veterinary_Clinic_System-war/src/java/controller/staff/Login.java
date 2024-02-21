@@ -6,7 +6,7 @@
 package controller.staff;
 
 import entity.ClinicUser;
-import entity.ClinicUserFacade;
+import repository.ClinicUserFacade;
 import validator.ClinicUserValidator;
 
 import javax.ejb.EJB;

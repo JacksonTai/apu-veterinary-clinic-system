@@ -7,6 +7,7 @@ package controller.staff;
 
 import entity.*;
 import org.mindrot.jbcrypt.BCrypt;
+import repository.ClinicUserFacade;
 import validator.ClinicUserValidator;
 
 import javax.ejb.EJB;
@@ -19,6 +20,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import static constant.EndpointConstant.*;
+import static constant.UserType.RECEPTIONIST;
+import static constant.UserType.VET;
 
 /**
  * @author Jackson Tai
@@ -55,28 +58,39 @@ public class Register extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String fullName = request.getParameter("fullName").trim();
-        String phoneNumber = request.getParameter("phoneNumber").trim();
         String email = request.getParameter("email").trim();
         String password = request.getParameter("password").trim();
-        String userType = Vet.class.getSimpleName();
+        String userType = request.getParameter("userType").trim();
 
-        ClinicUser clinicUser = new ClinicUser(fullName, email, password, phoneNumber, userType);
-
-        ClinicUserValidator clinicUserValidatorValidator = new ClinicUserValidator(clinicUserFacade);
-        Map<String, String> errorMessages = clinicUserValidatorValidator.validateClinicUserDetails(clinicUser);
-
-        if (!errorMessages.isEmpty()) {
-            errorMessages.forEach(request::setAttribute);
-            request.getRequestDispatcher(STAFF_REGISTER + ".jsp").forward(request, response);
-        } else {
-            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-            clinicUserFacade.create(new Vet(fullName, email.toLowerCase(), hashedPassword, phoneNumber, userType));
-//            clinicUserFacade.create(new ManagingStaff(fullName, email.toLowerCase(), hashedPassword, phoneNumber, userType));
-//            clinicUserFacade.create(new Receptionist(fullName, email.toLowerCase(), hashedPassword, phoneNumber, userType));
-            request.getSession().setAttribute("clinicUser", clinicUser);
-            response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS + ".jsp");
+        ClinicUser clinicUser = null;
+        switch (userType) {
+            case VET:
+                clinicUser = new Vet(email, password);
+                clinicUser.setUserType(VET);
+                break;
+            case RECEPTIONIST:
+                clinicUser = new Receptionist(email, password);
+                clinicUser.setUserType(RECEPTIONIST);
+                break;
         }
+
+        if (clinicUser != null) {
+            ClinicUserValidator clinicUserValidatorValidator = new ClinicUserValidator(clinicUserFacade);
+            Map<String, String> errorMessages = clinicUserValidatorValidator.validateClinicUserDetails(clinicUser);
+
+            if (!errorMessages.isEmpty()) {
+                errorMessages.forEach(request::setAttribute);
+                request.getRequestDispatcher(STAFF_REGISTER + ".jsp").forward(request, response);
+            } else {
+                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+                clinicUser.setEmail(email.toLowerCase());
+                clinicUser.setPassword(hashedPassword);
+                clinicUserFacade.create(clinicUser);
+                request.getSession().setAttribute("clinicUser", clinicUser);
+                response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS + ".jsp");
+            }
+        }
+
     }
 
     /**

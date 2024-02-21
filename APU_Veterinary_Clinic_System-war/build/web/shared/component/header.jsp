@@ -5,6 +5,10 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="constant.EndpointConstant" %>
+<%@ page import="constant.UserType" %>
+<c:set var="VET" value="<%= UserType.VET %>" />
+<c:set var="RECEPTIONIST" value="<%= UserType.RECEPTIONIST %>" />
+<c:set var="MANAGING_STAFF" value="<%= UserType.MANAGING_STAFF %>" />
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
@@ -28,7 +32,7 @@
                             Profile
                         </a>
                     </li>
-                    <c:if test="${sessionScope.clinicUser.userType eq 'Vet'}">
+                    <c:if test="${sessionScope.clinicUser.userType eq VET}">
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page"
                                href="<c:url value='<%= EndpointConstant.VIEW_PET %>'/>">
@@ -36,7 +40,7 @@
                             </a>
                         </li>
                     </c:if>
-                    <c:if test="${sessionScope.clinicUser.userType eq 'Receptionist'}">
+                    <c:if test="${sessionScope.clinicUser.userType eq RECEPTIONIST}">
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page"
                                href="<c:url value='<%= EndpointConstant.VIEW_CUSTOMER %>'/>">
@@ -44,8 +48,8 @@
                             </a>
                         </li>
                     </c:if>
-                    <c:if test="${sessionScope.clinicUser.userType eq 'Receptionist' ||
-                                    sessionScope.clinicUser.userType eq 'Vet'}">
+                    <c:if test="${sessionScope.clinicUser.userType eq RECEPTIONIST ||
+                                    sessionScope.clinicUser.userType eq VET}">
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page"
                                href="<c:url value='<%= EndpointConstant.VIEW_APPOINTMENT %>'/>">
@@ -53,7 +57,7 @@
                             </a>
                         </li>
                     </c:if>
-                    <c:if test="${sessionScope.clinicUser.userType eq 'ManagingStaff'}">
+                    <c:if test="${sessionScope.clinicUser.userType eq MANAGING_STAFF}">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button"
                                data-bs-toggle="dropdown"

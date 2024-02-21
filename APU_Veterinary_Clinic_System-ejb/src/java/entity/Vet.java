@@ -8,21 +8,26 @@ package entity;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+
+import static constant.UserType.MANAGING_STAFF;
+import static constant.UserType.VET;
 
 /**
  *
  * @author Jackson Tai
  */
 @Entity
+@DiscriminatorValue(VET)
 @NoArgsConstructor
 public class Vet extends ClinicUser {
 
 //    @Column(name="EXPERTISE")
 //    private String expertise;
 
-    public Vet(String fullName, String email, String password, String phoneNumber, String userType) {
-        super(fullName, email, password, phoneNumber, userType);
+    public Vet(String email, String password) {
+        super(email, password);
     }
 
 }

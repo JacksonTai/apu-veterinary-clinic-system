@@ -6,7 +6,7 @@
 package controller.profile;
 
 import entity.ClinicUser;
-import entity.ClinicUserFacade;
+import repository.ClinicUserFacade;
 import validator.ClinicUserValidator;
 
 import javax.ejb.EJB;
@@ -72,20 +72,20 @@ public class UpdateProfile extends HttpServlet {
         ClinicUserValidator clinicUserValidator = new ClinicUserValidator(clinicUserFacade);
         Map<String, String> errorMessages = new HashMap<>();
 
-        errorMessages.putAll(ClinicUserValidator.validateFullName(fullName));
-        errorMessages.putAll(ClinicUserValidator.validatePhoneNumber(phoneNumber));
+//        errorMessages.putAll(ClinicUserValidator.validateFullName(fullName));
+//        errorMessages.putAll(ClinicUserValidator.validatePhoneNumber(phoneNumber));
         errorMessages.putAll(ClinicUserValidator.validateEmail(email));
         errorMessages.putAll(clinicUserValidator.validateCredentialDetails(clinicUser.getEmail(), password));
 
-        if (!fullName.equals(clinicUser.getFullName())) {
-            errorMessages.putAll(clinicUserValidator.validateDuplicateFullName(fullName));
-        }
+//        if (!fullName.equals(clinicUser.getFullName())) {
+//            errorMessages.putAll(clinicUserValidator.validateDuplicateFullName(fullName));
+//        }
         if (!email.equals(clinicUser.getEmail())) {
             errorMessages.putAll(clinicUserValidator.validateDuplicateEmail(email));
         }
-        if (!phoneNumber.equals(clinicUser.getPhoneNumber())) {
-            errorMessages.putAll(clinicUserValidator.validateDuplicatePhoneNumber(phoneNumber));
-        }
+//        if (!phoneNumber.equals(clinicUser.getPhoneNumber())) {
+//            errorMessages.putAll(clinicUserValidator.validateDuplicatePhoneNumber(phoneNumber));
+//        }
 
         if (!errorMessages.isEmpty()) {
             errorMessages.forEach(request::setAttribute);
@@ -93,8 +93,6 @@ public class UpdateProfile extends HttpServlet {
             return;
         }
 
-        clinicUser.setFullName(fullName);
-        clinicUser.setPhoneNumber(phoneNumber);
         clinicUser.setEmail(email);
         clinicUserFacade.edit(clinicUser);
         response.sendRedirect(request.getContextPath() + VIEW_PROFILE + ".jsp");
