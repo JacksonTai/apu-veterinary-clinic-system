@@ -14,9 +14,9 @@
 <c:set var="DASH" value="<%= GlobalConstant.DASH %>"/>
 
 <header>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary mb-4">
         <div class="container-fluid">
-            <a class="navbar-brand" href="<c:url value='<%= EndpointConstant.INDEX %>'/>">AVCS</a>
+            <a class="navbar-brand" href="${pageContext.request.contextPath}">AVCS</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
                     aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -118,7 +118,7 @@
                     <c:if test="${empty sessionScope.clinicUser}">
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page"
-                               href="<c:url value='<%= EndpointConstant.INDEX %>'/>">
+                               href="${pageContext.request.contextPath}">
                                 Home
                             </a>
                         </li>

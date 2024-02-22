@@ -87,7 +87,6 @@ public class Register extends HttpServlet {
             clinicUser.setEmail(email.toLowerCase());
             clinicUser.setPassword(hashedPassword);
             clinicUserFacade.create(clinicUser);
-            request.getSession().setAttribute("clinicUser", clinicUser);
             response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS + ".jsp");
         }
 

@@ -13,36 +13,35 @@
 </head>
 <body>
 <%@ include file="/shared/component/header.jsp" %>
-<h1>Staff Login</h1>
-<form action="<c:url value='<%= EndpointConstant.STAFF_LOGIN %>'/>" method="POST">
-    <table>
-        <tr>
-            <td>Email:</td>
-            <td>
-                <input type="text" name="email" value="${not empty param.email ? param.email : ''}">
-                <c:if test="${not empty emailError}">
-                    <span style="color: red;">${emailError}</span>
-                </c:if>
-            </td>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td>
-                <input type="password" name="password" value="${not empty param.password ? param.password : ''}">
-                <c:if test="${not empty passwordError}">
-                    <span style="color: red;">${passwordError}</span>
-                </c:if>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <c:if test="${not empty invalidCredentialError}">
-                    <span style="color: red;">${invalidCredentialError}</span>
-                </c:if>
-            </td>
-        </tr>
-    </table>
-    <p><input type="submit" value="Login"></p>
-</form>
+<main class="w-75 my-2 mx-auto overflow-x-auto">
+    <h1 class="text-center">Staff Login</h1>
+    <form action="<c:url value='<%= EndpointConstant.STAFF_LOGIN %>'/>" method="POST" class="my-2 mx-auto"
+          style="width: 15rem;">
+        <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="text" class="form-control" id="email" name="email"
+                   value="${not empty param.email ? param.email : ''}">
+            <c:if test="${not empty emailError}">
+                <span style="color: red;">${emailError}</span>
+            </c:if>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" class="form-control" id="password" name="password"
+                   value="${not empty param.password ? param.password : ''}">
+            <c:if test="${not empty passwordError}">
+                <span style="color: red;">${passwordError}</span>
+            </c:if>
+        </div>
+        <div class="mb-3">
+            <c:if test="${not empty invalidCredentialError}">
+                <span style="color: red;">${invalidCredentialError}</span>
+            </c:if>
+        </div>
+        <button type="submit" class="btn btn-primary d-block mx-auto">Login</button>
+    </form>
+</main>
+
+
 </body>
 </html>

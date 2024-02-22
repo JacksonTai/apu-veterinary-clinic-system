@@ -22,7 +22,6 @@ import java.util.Map;
 import static constant.EndpointConstant.STAFF_HOME;
 import static constant.EndpointConstant.STAFF_LOGIN;
 import static constant.i18n.En.INVALID_CREDENTIAL_MESSAGE;
-import static util.HttpUtil.invalidateSessions;
 
 /**
  * @author Jackson Tai
@@ -44,7 +43,6 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        invalidateSessions(request);
         request.getRequestDispatcher(STAFF_LOGIN + ".jsp").forward(request, response);
     }
 

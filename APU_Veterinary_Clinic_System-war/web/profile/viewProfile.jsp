@@ -13,22 +13,33 @@
 </head>
 <body>
 <%@ include file="/shared/component/header.jsp" %>
-<h1>Profile</h1>
-<table>
-    <tr>
-        <td>User ID:</td>
-        <td>${clinicUser.clinicUserId}</td>
-    </tr>
-    <tr>
-        <td>User Type:</td>
-        <td>${clinicUser.userRole}</td>
-    </tr>
-    <tr>
-        <td>Email:</td>
-        <td>${clinicUser.email}</td>
-    </tr>
-</table>
-<a href="<c:url value='<%= EndpointConstant.UPDATE_PROFILE %>'/>">Update Profile</a>
-<a href="<c:url value='<%= EndpointConstant.CHANGE_PASSWORD %>'/>">Change Password</a>
+<main class="w-75 my-2 mx-auto overflow-x-auto">
+    <h1 class="text-center">Profile</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">User ID:</th>
+            <td>${clinicUser.clinicUserId}</td>
+        </tr>
+        <tr>
+            <th scope="row">User Role:</th>
+            <td>${clinicUser.userRole}</td>
+        </tr>
+        <tr>
+            <th scope="row">Email:</th>
+            <td>${clinicUser.email}</td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="<c:url value='<%= EndpointConstant.UPDATE_PROFILE %>'/>">Update Profile</a>
+    <a href="<c:url value='<%= EndpointConstant.CHANGE_PASSWORD %>'/>">Change Password</a>
+</main>
+
 </body>
 </html>

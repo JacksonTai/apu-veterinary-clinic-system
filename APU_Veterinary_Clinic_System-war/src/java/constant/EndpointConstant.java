@@ -10,8 +10,6 @@ package constant;/*
  */
 public class EndpointConstant {
 
-    public static final String INDEX = "/index.jsp";
-
     // Sub-path
     public static final String STAFF = "/staff";
     public static final String CUSTOMER = "/customer";

@@ -7,9 +7,7 @@ public class HttpUtil {
 
     public static void invalidateSessions(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
+        session.invalidate();
     }
 
 }
