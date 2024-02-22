@@ -64,36 +64,24 @@ public class UpdateProfile extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String fullName = request.getParameter("fullName");
-        String phoneNumber = request.getParameter("phoneNumber");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String email = request.getParameter("email").trim();
+        String password = request.getParameter("password").trim();
 
-        ClinicUserValidator clinicUserValidator = new ClinicUserValidator(clinicUserFacade);
         Map<String, String> errorMessages = new HashMap<>();
-
-//        errorMessages.putAll(ClinicUserValidator.validateFullName(fullName));
-//        errorMessages.putAll(ClinicUserValidator.validatePhoneNumber(phoneNumber));
+        ClinicUserValidator clinicUserValidator = new ClinicUserValidator(clinicUserFacade);
         errorMessages.putAll(ClinicUserValidator.validateEmail(email));
         errorMessages.putAll(clinicUserValidator.validateCredentialDetails(clinicUser.getEmail(), password));
 
-//        if (!fullName.equals(clinicUser.getFullName())) {
-//            errorMessages.putAll(clinicUserValidator.validateDuplicateFullName(fullName));
-//        }
         if (!email.equals(clinicUser.getEmail())) {
             errorMessages.putAll(clinicUserValidator.validateDuplicateEmail(email));
         }
-//        if (!phoneNumber.equals(clinicUser.getPhoneNumber())) {
-//            errorMessages.putAll(clinicUserValidator.validateDuplicatePhoneNumber(phoneNumber));
-//        }
-
         if (!errorMessages.isEmpty()) {
             errorMessages.forEach(request::setAttribute);
             request.getRequestDispatcher(UPDATE_PROFILE + ".jsp").forward(request, response);
             return;
         }
 
-        clinicUser.setEmail(email);
+        clinicUser.setEmail(email.toLowerCase());
         clinicUserFacade.edit(clinicUser);
         response.sendRedirect(request.getContextPath() + VIEW_PROFILE + ".jsp");
     }

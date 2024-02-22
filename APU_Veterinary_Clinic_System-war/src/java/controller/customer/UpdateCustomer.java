@@ -5,33 +5,34 @@
  */
 package controller.customer;
 
-import entity.Customer;
-import repository.CustomerFacade;
-import validator.CustomerValidator;
-
-import javax.ejb.EJB;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import static constant.EndpointConstant.CREATE_CUSTOMER;
-import static constant.EndpointConstant.VIEW_CUSTOMER;
+import javax.ejb.EJB;
+
+import entity.Customer;
+import repository.CustomerFacade;
+import validator.CustomerValidator;
+
+import static constant.EndpointConstant.*;
 import static constant.GlobalConstant.ISO_DATE_FORMAT;
 import static constant.i18n.En.INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE;
 
 /**
  * @author Jackson Tai
  */
-@WebServlet(name = "CreateCustomer", urlPatterns = {CREATE_CUSTOMER})
-public class CreateCustomer extends HttpServlet {
+@WebServlet(name = "UpdateCustomer", urlPatterns = {UPDATE_CUSTOMER})
+public class UpdateCustomer extends HttpServlet {
 
     @EJB
     private CustomerFacade customerFacade;
@@ -47,7 +48,15 @@ public class CreateCustomer extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher(CREATE_CUSTOMER + ".jsp").forward(request, response);
+
+        Customer customer = customerFacade.find(request.getParameter("id"));
+        if (customer == null) {
+            response.sendRedirect(request.getContextPath() + VIEW_CUSTOMER + ".jsp");
+            return;
+        }
+
+        request.setAttribute("customer", customer);
+        request.getRequestDispatcher(UPDATE_CUSTOMER + ".jsp").forward(request, response);
     }
 
     /**
@@ -87,7 +96,7 @@ public class CreateCustomer extends HttpServlet {
             request.getRequestDispatcher(CREATE_CUSTOMER + ".jsp").forward(request, response);
         } else {
             customer.setEmail(email.toLowerCase());
-            customerFacade.create(customer);
+            customerFacade.edit(customer);
             response.sendRedirect(request.getContextPath() + VIEW_CUSTOMER);
         }
 
