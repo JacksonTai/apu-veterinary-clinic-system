@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import static constant.UserType.RECEPTIONIST;
+import static constant.UserRole.RECEPTIONIST;
 
 /**
  *

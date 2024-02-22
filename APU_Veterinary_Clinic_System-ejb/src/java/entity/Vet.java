@@ -7,12 +7,10 @@ package entity;
 
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import static constant.UserType.MANAGING_STAFF;
-import static constant.UserType.VET;
+import static constant.UserRole.VET;
 
 /**
  *

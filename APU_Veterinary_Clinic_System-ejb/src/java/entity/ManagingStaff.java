@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import static constant.UserType.MANAGING_STAFF;
+import static constant.UserRole.MANAGING_STAFF;
 
 /**
  *

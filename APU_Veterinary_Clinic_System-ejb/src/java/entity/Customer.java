@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import javax.persistence.*;
 
 /**
@@ -27,8 +28,9 @@ public class Customer implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @Column(name = "CUSTOMER_ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private String customerId;
 
     @Column(name = "FULL_NAME")
     private String fullName;
@@ -39,14 +41,21 @@ public class Customer implements Serializable {
     @Column(name = "EMAIL")
     private String email;
 
+    @Column(name = "GENDER")
+    private String gender;
+
+    @Column(name = "DATE_OF_BIRTH")
+    private LocalDate dateOfBirth;
+
     @Column(name = "ADDRESS")
     private String address;
 
-    public Customer(String fullName, String phoneNumber, String email, String address) {
+    public Customer(String fullName, String phoneNumber, String email, String gender, LocalDate dateOfBirth, String address) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
         this.address = address;
     }
-
 }

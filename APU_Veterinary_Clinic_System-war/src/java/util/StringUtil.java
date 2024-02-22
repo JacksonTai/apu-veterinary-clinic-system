@@ -1,5 +1,11 @@
 package util;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.function.Predicate;
 
 public class StringUtil {
@@ -55,5 +61,17 @@ public class StringUtil {
             }
         }
         return false;
+    }
+
+    public static String toDateFormat(final Date date, final String format) {
+        return date == null ? null : new SimpleDateFormat(format).format(date);
+    }
+
+    public static String toLocalDateFormat(LocalDate localDate, String format) {
+        return localDate == null ? null : localDate.format(DateTimeFormatter.ofPattern(format));
+    }
+
+    public static String requireNonNullElse(String value, String replacement) {
+        return (value != null && !value.trim().isEmpty()) ? value : replacement;
     }
 }

@@ -5,74 +5,92 @@
  */
 package controller.customer;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import entity.Customer;
+import repository.CustomerFacade;
+import validator.CustomerValidator;
+
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static constant.EndpointConstant.CREATE_CUSTOMER;
+import static constant.EndpointConstant.VIEW_CUSTOMER;
+import static constant.GlobalConstant.ISO_DATE_FORMAT;
+import static constant.i18n.En.INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE;
 
 /**
- *
  * @author Jackson Tai
  */
-@WebServlet(name = "CreateCustomer", urlPatterns = {"/createCustomer"})
+@WebServlet(name = "CreateCustomer", urlPatterns = {CREATE_CUSTOMER})
 public class CreateCustomer extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CreateCustomer</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CreateCustomer at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
+    @EJB
+    private CustomerFacade customerFacade;
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher(CREATE_CUSTOMER + ".jsp").forward(request, response);
     }
 
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        Map<String, String> errorMessages = new HashMap<>();
+
+        String fullName = request.getParameter("fullName").trim();
+        String phoneNumber = request.getParameter("phoneNumber").trim();
+        String email = request.getParameter("email").trim();
+        String address = request.getParameter("address").trim();
+        String gender = request.getParameter("gender").trim();
+        String dateOfBirth = request.getParameter("dateOfBirth").trim();
+
+        LocalDate dateOfBirthLocalDate = null;
+        try {
+            dateOfBirthLocalDate = LocalDate.parse(dateOfBirth, DateTimeFormatter.ofPattern(ISO_DATE_FORMAT));
+        } catch (DateTimeParseException e) {
+            errorMessages.put("dateOfBirthError", INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE);
+        }
+
+        Customer customer = new Customer(fullName, phoneNumber, email, gender, dateOfBirthLocalDate, address);
+
+        CustomerValidator customerValidator = new CustomerValidator(customerFacade);
+        errorMessages.putAll(customerValidator.validateCustomerDetails(customer));
+        if (!errorMessages.isEmpty()) {
+            errorMessages.forEach(request::setAttribute);
+            request.getRequestDispatcher(CREATE_CUSTOMER + ".jsp").forward(request, response);
+        } else {
+            customer.setEmail(email.toLowerCase());
+            customerFacade.create(customer);
+            response.sendRedirect(request.getContextPath() + VIEW_CUSTOMER);
+        }
+
     }
 
     /**

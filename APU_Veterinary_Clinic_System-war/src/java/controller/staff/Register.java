@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import static constant.EndpointConstant.*;
-import static constant.UserType.RECEPTIONIST;
-import static constant.UserType.VET;
+import static constant.UserRole.RECEPTIONIST;
+import static constant.UserRole.VET;
 
 /**
  * @author Jackson Tai
@@ -60,17 +60,17 @@ public class Register extends HttpServlet {
 
         String email = request.getParameter("email").trim();
         String password = request.getParameter("password").trim();
-        String userType = request.getParameter("userType").trim();
+        String userRole = request.getParameter("userRole").trim();
 
         ClinicUser clinicUser = null;
-        switch (userType) {
+        switch (userRole) {
             case VET:
                 clinicUser = new Vet(email, password);
-                clinicUser.setUserType(VET);
+                clinicUser.setUserRole(VET);
                 break;
             case RECEPTIONIST:
                 clinicUser = new Receptionist(email, password);
-                clinicUser.setUserType(RECEPTIONIST);
+                clinicUser.setUserRole(RECEPTIONIST);
                 break;
         }
 
@@ -81,14 +81,14 @@ public class Register extends HttpServlet {
             if (!errorMessages.isEmpty()) {
                 errorMessages.forEach(request::setAttribute);
                 request.getRequestDispatcher(STAFF_REGISTER + ".jsp").forward(request, response);
-            } else {
-                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-                clinicUser.setEmail(email.toLowerCase());
-                clinicUser.setPassword(hashedPassword);
-                clinicUserFacade.create(clinicUser);
-                request.getSession().setAttribute("clinicUser", clinicUser);
-                response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS + ".jsp");
+                return;
             }
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+            clinicUser.setEmail(email.toLowerCase());
+            clinicUser.setPassword(hashedPassword);
+            clinicUserFacade.create(clinicUser);
+            request.getSession().setAttribute("clinicUser", clinicUser);
+            response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS + ".jsp");
         }
 
     }

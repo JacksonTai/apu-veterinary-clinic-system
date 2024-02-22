@@ -39,6 +39,8 @@ public class EndpointConstant {
     public static final String UPDATE_APPOINTMENT = APPOINTMENT + "/updateAppointment";
 
     public static final String VIEW_CUSTOMER = CUSTOMER + "/viewCustomer";
+    public static final String VIEW_CUSTOMERS = CUSTOMER + "/viewCustomers";
+    public static final String UPDATE_CUSTOMER = CUSTOMER + "/updateCustomer";
     public static final String DELETE_CUSTOMER = CUSTOMER + "/deleteCustomer";
     public static final String CREATE_CUSTOMER = CUSTOMER + "/createCustomer";
 

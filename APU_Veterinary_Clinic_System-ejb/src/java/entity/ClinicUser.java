@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "CLINIC_USER")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "USER_TYPE", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "USER_ROLE", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
         @NamedQuery(name = "ClinicUser.findAll", query = "SELECT c FROM ClinicUser c"),
         @NamedQuery(name = "ClinicUser.findByEmail", query = "SELECT c FROM ClinicUser c WHERE c.email = :email"),
@@ -41,8 +41,8 @@ public class ClinicUser implements Serializable {
     @Column(name = "PASSWORD")
     private String password;
 
-    @Column(name = "USER_TYPE")
-    private String userType;
+    @Column(name = "USER_ROLE")
+    private String userRole;
 
     public ClinicUser(String email, String password) {
         this.email = email;

@@ -1,6 +1,6 @@
 package constant;
 
-public class UserType {
+public class UserRole {
 
     public static final String RECEPTIONIST = "Receptionist";
     public static final String MANAGING_STAFF = "Managing Staff";

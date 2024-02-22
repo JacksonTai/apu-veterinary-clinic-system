@@ -34,7 +34,7 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
         if (email.isEmpty()) {
             errorMessages.put("emailError", EMPTY_EMAIL_MESSAGE);
         } else if (!email.matches(STAFF_EMAIL_REGEX)) {
-            errorMessages.put("emailError", INVALID_STAFF_EMAIL_MESSAGE);
+            errorMessages.put("emailError", INVALID_EMAIL_MESSAGE);
         }
         return errorMessages;
     }

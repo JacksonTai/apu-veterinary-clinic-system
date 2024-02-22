@@ -4,7 +4,6 @@
     Author     : Jackson Tai
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,8 +12,8 @@
 </head>
 <body>
 <%@ include file="/shared/component/header.jsp" %>
-<h1>Staff Registration</h1>
-<form action="<c:url value='<%= EndpointConstant.STAFF_REGISTER %>'/>" method="POST">
+<h1>Add Customer</h1>
+<form action="<c:url value='<%= EndpointConstant.CREATE_CUSTOMER %>'/>" method="POST">
     <table>
         <tr>
             <td>Full Name</td>
@@ -44,6 +43,29 @@
             </td>
         </tr>
         <tr>
+            <td>Gender</td>
+            <td>
+                <select name="gender">
+                    <option value="">Select Gender</option>
+                    <option value="Male" ${param.gender == 'Male' ? 'selected' : ''}>Male</option>
+                    <option value="Female" ${param.gender == 'Female' ? 'selected' : ''}>Female</option>
+                    <option value="Other" ${param.gender == 'Other' ? 'selected' : ''}>Other</option>
+                </select>
+                <c:if test="${not empty genderError}">
+                    <span style="color: red;">${genderError}</span>
+                </c:if>
+            </td>
+        </tr>
+        <tr>
+            <td>Date of Birth</td>
+            <td>
+                <input type="date" name="dateOfBirth" value="${not empty param.dateOfBirth ? param.dateOfBirth : ''}">
+                <c:if test="${not empty dateOfBirthError}">
+                    <span style="color: red;">${dateOfBirthError}</span>
+                </c:if>
+            </td>
+        </tr>
+        <tr>
             <td>Address</td>
             <td>
                 <input type="text" name="address" value="${not empty param.address ? param.address : ''}">
@@ -53,7 +75,8 @@
             </td>
         </tr>
     </table>
-    <p><input type="submit" value="Add"></p>
+    <p><input type="submit" value="Create"></p>
 </form>
+<a href="<c:url value='<%= EndpointConstant.VIEW_CUSTOMER %>'/>">Back to Customer Records</a>
 </body>
 </html>

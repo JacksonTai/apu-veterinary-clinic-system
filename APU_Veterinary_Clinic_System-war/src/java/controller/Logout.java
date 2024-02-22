@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import static constant.EndpointConstant.INDEX;
 import static constant.EndpointConstant.LOGOUT;
+import static util.HttpUtil.invalidateSessions;
 
 /**
  *
@@ -34,11 +35,7 @@ public class Logout extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
+        invalidateSessions(request);
         response.sendRedirect(request.getContextPath() + INDEX);
     }
 

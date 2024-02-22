@@ -36,12 +36,12 @@
             </td>
         </tr>
         <tr>
-            <td>User Type</td>
+            <td>User Role</td>
             <td>
-                <select name="userType">
-                    <option value=${RECEPTIONIST} ${param.userType eq RECEPTIONIST ? 'selected' : ''}>Receptionist
+                <select name="userRole">
+                    <option value=${RECEPTIONIST} ${param.userRole eq RECEPTIONIST ? 'selected' : ''}>Receptionist
                     </option>
-                    <option value="${VET}" ${param.userType eq VET ? 'selected' : ''}>Vet</option>
+                    <option value="${VET}" ${param.userRole eq VET ? 'selected' : ''}>Vet</option>
                 </select>
             </td>
         </tr>
