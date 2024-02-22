@@ -7,16 +7,20 @@
 <%@ page import="constant.EndpointConstant" %>
 <%@ page import="constant.GlobalConstant" %>
 <%@ page import="constant.UserRole" %>
-<c:set var="VET" value="<%= UserRole.VET %>" />
-<c:set var="RECEPTIONIST" value="<%= UserRole.RECEPTIONIST %>" />
-<c:set var="MANAGING_STAFF" value="<%= UserRole.MANAGING_STAFF %>" />
+<c:set var="VET" value="<%= UserRole.VET %>"/>
+<c:set var="RECEPTIONIST" value="<%= UserRole.RECEPTIONIST %>"/>
+<c:set var="MANAGING_STAFF" value="<%= UserRole.MANAGING_STAFF %>"/>
 <c:set var="DMY_SLASH_DATE_FORMAT" value="<%= GlobalConstant.DMY_SLASH_DATE_FORMAT %>"/>
 <c:set var="DASH" value="<%= GlobalConstant.DASH %>"/>
 
 <header>
     <nav class="navbar navbar-expand-lg bg-body-tertiary mb-4">
         <div class="container-fluid">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}">AVCS</a>
+            <a class="navbar-brand" href="#">
+                <img src="${pageContext.request.contextPath}/asset/image/logo.png" alt="Logo" width="30" height="24"
+                     class="d-inline-block align-text-top">
+                AVCS
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
                     aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

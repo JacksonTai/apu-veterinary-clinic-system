@@ -15,7 +15,7 @@
 <%@ include file="/shared/component/header.jsp" %>
 <main class="w-75 my-2 mx-auto overflow-x-auto">
     <h1 class="text-center">Profile</h1>
-    <table class="table">
+    <table class="table mx-auto" style="width: 30rem">
         <thead>
         <tr>
             <th scope="col"></th>
@@ -37,8 +37,12 @@
         </tr>
         </tbody>
     </table>
-    <a href="<c:url value='<%= EndpointConstant.UPDATE_PROFILE %>'/>">Update Profile</a>
-    <a href="<c:url value='<%= EndpointConstant.CHANGE_PASSWORD %>'/>">Change Password</a>
+    <div class="mx-auto d-flex justify-content-center">
+        <a class="btn btn-light me-2" href="<c:url value='<%= EndpointConstant.UPDATE_PROFILE %>'/>" role="button">
+            Update Profile</a>
+        <a class="btn btn-light" href="<c:url value='<%= EndpointConstant.CHANGE_PASSWORD %>'/>" role="button">
+            Change Password</a>
+    </div>
 </main>
 
 </body>

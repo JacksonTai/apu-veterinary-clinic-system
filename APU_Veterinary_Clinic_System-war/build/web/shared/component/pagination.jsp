@@ -1,4 +1,4 @@
-<nav aria-label="pagination navigation" class="my-2 mx-auto ">
+<nav aria-label="pagination navigation" class="my-2 mx-auto">
     <ul class="pagination justify-content-center">
         <li class="page-item ${previousDisabled ? 'disabled' : ''}">
             <a class="page-link"
