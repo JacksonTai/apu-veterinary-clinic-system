@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.function.Predicate;
 
@@ -67,8 +68,8 @@ public class StringUtil {
         return date == null ? null : new SimpleDateFormat(format).format(date);
     }
 
-    public static String toLocalDateFormat(LocalDate localDate, String format) {
-        return localDate == null ? null : localDate.format(DateTimeFormatter.ofPattern(format));
+    public static String convertDateFormat(String date, String format) {
+        return date == null || date.isEmpty() ? null : LocalDate.parse(date).format(DateTimeFormatter.ofPattern(format));
     }
 
     public static String requireNonNullElse(String value, String replacement) {

@@ -15,7 +15,7 @@
         const contextPath = "${pageContext.request.contextPath}";
     </script>
     <script src="${pageContext.request.contextPath}/asset/js/constant/endpointConstant.js"></script>
-    <script src="${pageContext.request.contextPath}/asset/js/customer/deleteCustomer.js"></script>
+    <script src="${pageContext.request.contextPath}/asset/js/shared/confirmDeleteModal.js"></script>
     <title>Customer Profile</title>
 </head>
 <body>
@@ -55,7 +55,11 @@
             <tr>
                 <th scope="row">Date of Birth:</th>
                 <td>${StringUtil.requireNonNullElse(
-                        StringUtil.toLocalDateFormat(customer.dateOfBirth, DMY_SLASH_DATE_FORMAT), DASH)}</td>
+                        StringUtil.convertDateFormat(customer.dateOfBirth, DMY_SLASH_DATE_FORMAT), DASH)}</td>
+            </tr>
+            <tr>
+                <th scope="row">Address:</th>
+                <td>${StringUtil.requireNonNullElse(customer.address, DASH)}</td>
             </tr>
             </tbody>
         </table>
@@ -64,7 +68,12 @@
         <a class="btn btn-secondary me-2"
            href="<c:url value='<%= EndpointConstant.UPDATE_CUSTOMER %>'/>?id=${customer.customerId}"
            role="button">Update</a>
-        <a class="btn btn-danger" onclick="confirmDelete('${customer.customerId}')" role="button">Delete</a>
+        <a class="btn btn-danger" onclick="confirmDelete({
+                entityId: '${customer.customerId}',
+                entityName: 'customer',
+                deleteEndpoint: endpoints.DELETE_CUSTOMER,
+                successRedirectEndpoint: endpoints.VIEW_CUSTOMER
+                })" role="button">Delete</a>
     </div>
 </main>
 </body>

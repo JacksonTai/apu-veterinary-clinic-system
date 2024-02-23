@@ -46,7 +46,7 @@
                         <td>${StringUtil.requireNonNullElse(customer.phoneNumber, DASH)}</td>
                         <td>${StringUtil.requireNonNullElse(customer.gender, DASH)}</td>
                         <td>${StringUtil.requireNonNullElse(
-                                StringUtil.toLocalDateFormat(customer.dateOfBirth, DMY_SLASH_DATE_FORMAT), DASH)}</td>
+                                StringUtil.convertDateFormat(customer.dateOfBirth, DMY_SLASH_DATE_FORMAT), DASH)}</td>
                         <td>${StringUtil.requireNonNullElse(customer.address, DASH)}</td>
                         <td>
                             <a class="btn btn-light btn-sm"
@@ -57,10 +57,9 @@
                 </c:forEach>
                 </tbody>
             </table>
+            <%@ include file="/shared/component/pagination.jsp" %>
         </c:otherwise>
     </c:choose>
-    <%@ include file="/shared/component/pagination.jsp" %>
 </main>
-
 </body>
 </html>

@@ -30,7 +30,7 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
 
     public static Map<String, String> validateEmail(String email) {
         Map<String, String> errorMessages = new HashMap<>();
-        email = email.trim();
+        email = email.trim().toLowerCase();
         if (email.isEmpty()) {
             errorMessages.put("emailError", EMPTY_EMAIL_MESSAGE);
         } else if (!email.matches(STAFF_EMAIL_REGEX)) {
@@ -52,7 +52,7 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
 
     public Map<String, String> validateCredentials(String email, String password) {
         Map<String, String> errorMessages = new HashMap<>();
-        email = email.trim();
+        email = email.trim().toLowerCase();
         password = password.trim();
         if (email.isEmpty()) {
             errorMessages.put("emailError", EMPTY_EMAIL_MESSAGE);
@@ -75,7 +75,7 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
     }
 
     public ClinicUser authenticateClinicUser(String email, String password) {
-        ClinicUser clinicUser = clinicUserFacade.findByEmail(email.toLowerCase());
+        ClinicUser clinicUser = clinicUserFacade.findByEmail(email.trim().toLowerCase());
         return clinicUser != null && BCrypt.checkpw(password, clinicUser.getPassword()) ? clinicUser : null;
     }
 

@@ -17,6 +17,7 @@
     <form action="<c:url value='<%= EndpointConstant.UPDATE_CUSTOMER %>'/>" method="POST" class="my-2 mx-auto"
           style="max-width: 30rem;">
         <input type="hidden" name="formSubmitted" value="true">
+        <input type="hidden" name="id" value="${customer.customerId ? customer.customerId : param.id}">
         <div class="mb-3">
             <label for="fullName" class="form-label">Full Name:</label>
             <input type="text" class="form-control" id="fullName" name="fullName"
@@ -45,15 +46,18 @@
             <label for="gender" class="form-label">Gender:</label>
             <select id="gender" name="gender" class="form-select">
                 <option value="Male"
-                ${param.formSubmitted != null ? (param.gender == 'Male' ? 'selected' : '') : (customer.gender == 'Male' ? 'selected' : '')}>
+                ${param.formSubmitted != null ? (param.gender == 'Male' ? 'selected' : '') :
+                        (customer.gender == 'Male' ? 'selected' : '')}>
                     Male
                 </option>
                 <option value="Female"
-                ${param.formSubmitted != null ? (param.gender == 'Female' ? 'selected' : '') : (customer.gender == 'Female' ? 'selected' : '')}>
+                ${param.formSubmitted != null ? (param.gender == 'Female' ? 'selected' : '') :
+                        (customer.gender == 'Female' ? 'selected' : '')}>
                     Female
                 </option>
                 <option value="Other"
-                ${param.formSubmitted != null ? (param.gender == 'Other' ? 'selected' : '') : (customer.gender == 'Other' ? 'selected' : '')}>
+                ${param.formSubmitted != null ? (param.gender == 'Other' ? 'selected' : '') :
+                        (customer.gender == 'Other' ? 'selected' : '')}>
                     Other
                 </option>
             </select>
@@ -79,8 +83,8 @@
         </div>
         <div class="mx-auto d-flex justify-content-center">
             <a class="btn btn-light d-block me-2"
-               href="<c:url value='<%= EndpointConstant.VIEW_CUSTOMER %>'/>?id=${customer.customerId}"
-               role="button">Cancel</a>
+               href="<c:url value='<%= EndpointConstant.VIEW_CUSTOMER %>'/>?id=${customer.customerId ?
+                customer.customerId : param.id}" role="button">Cancel</a>
             <button type="submit" class="btn btn-primary">Confirm</button>
         </div>
     </form>

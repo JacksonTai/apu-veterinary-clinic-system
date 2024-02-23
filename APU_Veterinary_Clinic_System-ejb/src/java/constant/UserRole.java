@@ -6,4 +6,6 @@ public class UserRole {
     public static final String MANAGING_STAFF = "Managing Staff";
     public static final String VET = "Vet";
 
+    private UserRole() {
+    }
 }

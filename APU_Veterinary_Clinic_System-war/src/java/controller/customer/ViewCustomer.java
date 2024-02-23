@@ -5,20 +5,21 @@
  */
 package controller.customer;
 
+import entity.Customer;
+import repository.CustomerFacade;
+import util.pagination.PaginationConfig;
+import util.pagination.PaginationUtil;
+
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 import static constant.EndpointConstant.VIEW_CUSTOMER;
 import static constant.EndpointConstant.VIEW_CUSTOMERS;
-import javax.ejb.EJB;
-
-import entity.Customer;
-import repository.CustomerFacade;
 
 /**
  * @author Jackson Tai
@@ -28,7 +29,7 @@ public class ViewCustomer extends HttpServlet {
 
     @EJB
     private CustomerFacade customerFacade;
-    
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -42,33 +43,20 @@ public class ViewCustomer extends HttpServlet {
             throws ServletException, IOException {
 
         String customerId = request.getParameter("id");
-
         if (customerId != null && !customerId.isEmpty()) {
             request.setAttribute("customer", customerFacade.find(customerId));
             request.getRequestDispatcher(VIEW_CUSTOMER + ".jsp").forward(request, response);
             return;
         }
 
-        String pageParam = request.getParameter("page");
-        int pageNumber = pageParam != null ? Integer.parseInt(pageParam) : 1;
-        int pageSize = 10;
-
-        int startIndex = (pageNumber - 1) * pageSize;
-        int endIndex = startIndex + pageSize - 1;
-
-        List<Customer> customers = customerFacade.findRange(new int[]{startIndex, endIndex});
-        int totalCustomers = customerFacade.count();
-        int totalPages = (int) Math.ceil((double) totalCustomers / pageSize);
-
-        boolean previousDisabled = pageNumber == 1;
-        boolean nextDisabled = pageNumber == totalPages;
-
-        request.setAttribute("customers", customers);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("currentPage", pageNumber);
-        request.setAttribute("previousDisabled", previousDisabled);
-        request.setAttribute("nextDisabled", nextDisabled);
-        request.getRequestDispatcher(VIEW_CUSTOMERS + ".jsp").include(request, response);
+        PaginationUtil.applyPagination(request, response, PaginationConfig.<Customer>builder()
+                .request(request)
+                .response(response)
+                .entityAttribute("customers")
+                .viewPageEndpoint(VIEW_CUSTOMER)
+                .viewJspPath(VIEW_CUSTOMERS)
+                .facade(customerFacade)
+                .build());
     }
 
     /**

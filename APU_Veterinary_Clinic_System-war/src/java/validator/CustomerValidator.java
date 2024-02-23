@@ -5,6 +5,8 @@ import repository.CustomerFacade;
 
 import javax.ejb.EJB;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -43,7 +45,7 @@ public class CustomerValidator implements Validator<Customer> {
             errorMessages.put("fullNameError", INVALID_FULL_NAME_LENGTH_MESSAGE);
         } else if (containsExcessiveWhitespace(fullName)) {
             errorMessages.put("fullNameError", EXCESSIVE_WHITESPACE_FULL_NAME_MESSAGE);
-        } else if (!containsAlphabetic(fullName)){
+        } else if (!containsAlphabetic(fullName)) { // TODO: containsAlphabetic(fullName) is not a valid check for full name
             errorMessages.put("fullNameError", INVALID_FULL_NAME_CHARACTER_MESSAGE);
         }
         return errorMessages;
@@ -83,14 +85,21 @@ public class CustomerValidator implements Validator<Customer> {
         return errorMessages;
     }
 
-    public static Map<String, String> validateDateOfBirth(LocalDate dateOfBirth) {
+    public static Map<String, String> validateDateOfBirth(String dateOfBirth) {
         Map<String, String> errorMessages = new HashMap<>();
-        if (dateOfBirth == null) {
+        dateOfBirth = dateOfBirth.trim();
+        if (dateOfBirth.isEmpty()) {
             errorMessages.put("dateOfBirthError", EMPTY_DATE_OF_BIRTH_MESSAGE);
         } else {
-            LocalDate today = LocalDate.now();
-            if (dateOfBirth.isAfter(today)) {
-                errorMessages.put("dateOfBirthError", FUTURE_DATE_OF_BIRTH_MESSAGE);
+            LocalDate dateOfBirthLocalDate;
+            try {
+                dateOfBirthLocalDate = LocalDate.parse(dateOfBirth, DateTimeFormatter.ofPattern(ISO_DATE_FORMAT));
+                LocalDate today = LocalDate.now();
+                if (dateOfBirthLocalDate.isAfter(today)) {
+                    errorMessages.put("dateOfBirthError", FUTURE_DATE_OF_BIRTH_MESSAGE);
+                }
+            } catch (DateTimeParseException e) {
+                errorMessages.put("dateOfBirthError", INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE);
             }
         }
         return errorMessages;

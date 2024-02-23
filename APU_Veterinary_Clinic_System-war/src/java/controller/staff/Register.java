@@ -58,7 +58,7 @@ public class Register extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String email = request.getParameter("email").trim();
+        String email = request.getParameter("email").trim().toLowerCase();
         String password = request.getParameter("password").trim();
         String userRole = request.getParameter("userRole").trim();
 
@@ -84,7 +84,6 @@ public class Register extends HttpServlet {
                 return;
             }
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-            clinicUser.setEmail(email.toLowerCase());
             clinicUser.setPassword(hashedPassword);
             clinicUserFacade.create(clinicUser);
             response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS + ".jsp");

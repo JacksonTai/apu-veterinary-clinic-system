@@ -6,10 +6,6 @@
 package controller.customer;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -22,11 +18,11 @@ import javax.ejb.EJB;
 
 import entity.Customer;
 import repository.CustomerFacade;
+import util.StringUtil;
 import validator.CustomerValidator;
 
 import static constant.EndpointConstant.*;
-import static constant.GlobalConstant.ISO_DATE_FORMAT;
-import static constant.i18n.En.INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE;
+import static constant.GlobalConstant.*;
 
 /**
  * @author Jackson Tai
@@ -54,7 +50,6 @@ public class UpdateCustomer extends HttpServlet {
             response.sendRedirect(request.getContextPath() + VIEW_CUSTOMER + ".jsp");
             return;
         }
-
         request.setAttribute("customer", customer);
         request.getRequestDispatcher(UPDATE_CUSTOMER + ".jsp").forward(request, response);
     }
@@ -71,44 +66,58 @@ public class UpdateCustomer extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        String id = request.getParameter("id");
+        Customer existingCustomer = customerFacade.find(id);
+        if (existingCustomer == null) {
+            response.sendRedirect(request.getContextPath() + VIEW_CUSTOMER);
+            return;
+        }
+
+        String email = request.getParameter("email").trim().toLowerCase();
         String fullName = request.getParameter("fullName").trim();
         String phoneNumber = request.getParameter("phoneNumber").trim();
-        String email = request.getParameter("email").trim();
         String address = request.getParameter("address").trim();
-        String gender = request.getParameter("gender").trim();
         String dateOfBirth = request.getParameter("dateOfBirth").trim();
-
-        Map<String, String> errorMessages = new HashMap<>();
-        LocalDate dateOfBirthLocalDate = null;
-        try {
-            dateOfBirthLocalDate = LocalDate.parse(dateOfBirth, DateTimeFormatter.ofPattern(ISO_DATE_FORMAT));
-        } catch (DateTimeParseException e) {
-            errorMessages.put("dateOfBirthError", INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE);
-        }
-
-        Customer customer = new Customer(fullName, phoneNumber, email, gender, dateOfBirthLocalDate, address);
+        String gender = request.getParameter("gender").trim();
 
         CustomerValidator customerValidator = new CustomerValidator(customerFacade);
-        errorMessages.putAll(customerValidator.validate(customer));
-        if (!email.equals(customer.getEmail())) {
+        Map<String, String> errorMessages = new HashMap<>();
+        if (!email.equals(existingCustomer.getEmail())) {
+            errorMessages.putAll(CustomerValidator.validateEmail(email));
             errorMessages.putAll(customerValidator.validateDuplicateEmail(email));
         }
-        if (!phoneNumber.equals(customer.getPhoneNumber())) {
+        if (!fullName.equals(existingCustomer.getFullName())) {
+            errorMessages.putAll(CustomerValidator.validateFullName(fullName));
+            errorMessages.putAll(customerValidator.validateDuplicateFullName(fullName));
+        }
+        if (!phoneNumber.equals(existingCustomer.getPhoneNumber())) {
+            errorMessages.putAll(CustomerValidator.validatePhoneNumber(phoneNumber));
             errorMessages.putAll(customerValidator.validateDuplicatePhoneNumber(phoneNumber));
         }
-        if (!fullName.equals(customer.getFullName())) {
-            errorMessages.putAll(customerValidator.validateDuplicateFullName(fullName));
+        if (!address.equals(existingCustomer.getAddress())) {
+            errorMessages.putAll(CustomerValidator.validateAddress(address));
+        }
+        if (!gender.equals(existingCustomer.getGender())) {
+            errorMessages.putAll(CustomerValidator.validateGender(gender));
+        }
+        if (!dateOfBirth.equals(existingCustomer.getDateOfBirth())) {
+            errorMessages.putAll(CustomerValidator.validateDateOfBirth(dateOfBirth));
         }
 
         if (!errorMessages.isEmpty()) {
             errorMessages.forEach(request::setAttribute);
-            request.getRequestDispatcher(UPDATE_CUSTOMER + ".jsp").forward(request, response);
+            String redirectUrl = UPDATE_CUSTOMER + ".jsp?id=" + existingCustomer.getCustomerId();
+            request.getRequestDispatcher(redirectUrl).forward(request, response);
         } else {
-            customer.setEmail(email.toLowerCase());
-            customerFacade.edit(customer);
-            response.sendRedirect(request.getContextPath() + VIEW_CUSTOMER + "?id=" + customer.getCustomerId());
+            existingCustomer.setEmail(email);
+            existingCustomer.setFullName(fullName);
+            existingCustomer.setPhoneNumber(phoneNumber);
+            existingCustomer.setAddress(address);
+            existingCustomer.setGender(gender);
+            existingCustomer.setDateOfBirth(StringUtil.convertDateFormat(dateOfBirth, ISO_DATE_FORMAT));
+            customerFacade.edit(existingCustomer);
+            response.sendRedirect(request.getContextPath() + VIEW_CUSTOMER + "?id=" + existingCustomer.getCustomerId());
         }
-
     }
 
     /**

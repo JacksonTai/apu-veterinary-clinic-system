@@ -14,6 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static constant.EndpointConstant.DELETE_PET;
+import javax.ejb.EJB;
+
+import entity.Customer;
+import entity.Pet;
+import repository.PetFacade;
 
 /**
  *
@@ -22,48 +27,22 @@ import static constant.EndpointConstant.DELETE_PET;
 @WebServlet(name = "DeletePet", urlPatterns = {DELETE_PET})
 public class DeletePet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+    @EJB
+    private PetFacade petFacade;
 
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+        String petId = request.getParameter("id");
+        Pet pet = petFacade.find(petId);
+
+        if (pet != null) {
+            petFacade.remove(pet);
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        } else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
     /**

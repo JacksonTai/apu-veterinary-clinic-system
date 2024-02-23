@@ -7,6 +7,7 @@ package controller.customer;
 
 import entity.Customer;
 import repository.CustomerFacade;
+import util.StringUtil;
 import validator.CustomerValidator;
 
 import javax.ejb.EJB;
@@ -64,33 +65,24 @@ public class CreateCustomer extends HttpServlet {
 
         String fullName = request.getParameter("fullName").trim();
         String phoneNumber = request.getParameter("phoneNumber").trim();
-        String email = request.getParameter("email").trim();
+        String email = request.getParameter("email").trim().toLowerCase();
         String address = request.getParameter("address").trim();
         String gender = request.getParameter("gender").trim();
         String dateOfBirth = request.getParameter("dateOfBirth").trim();
 
-        Map<String, String> errorMessages = new HashMap<>();
-        LocalDate dateOfBirthLocalDate = null;
-        try {
-            dateOfBirthLocalDate = LocalDate.parse(dateOfBirth, DateTimeFormatter.ofPattern(ISO_DATE_FORMAT));
-        } catch (DateTimeParseException e) {
-            errorMessages.put("dateOfBirthError", INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE);
-        }
-
-        Customer customer = new Customer(fullName, phoneNumber, email, gender, dateOfBirthLocalDate, address);
+        Customer customer = new Customer(fullName, phoneNumber, email, gender, dateOfBirth, address);
 
         CustomerValidator customerValidator = new CustomerValidator(customerFacade);
-        errorMessages.putAll(customerValidator.validateCustomerDetails(customer));
+        Map<String, String> errorMessages = new HashMap<>(customerValidator.validateCustomerDetails(customer));
 
         if (!errorMessages.isEmpty()) {
             errorMessages.forEach(request::setAttribute);
             request.getRequestDispatcher(CREATE_CUSTOMER + ".jsp").forward(request, response);
         } else {
-            customer.setEmail(email.toLowerCase());
+            customer.setDateOfBirth(StringUtil.convertDateFormat(customer.getDateOfBirth(), ISO_DATE_FORMAT));
             customerFacade.create(customer);
-            response.sendRedirect(request.getContextPath() + VIEW_CUSTOMER  + "?id=" + customer.getCustomerId());
+            response.sendRedirect(request.getContextPath() + VIEW_CUSTOMER);
         }
-
     }
 
     /**

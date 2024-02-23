@@ -45,12 +45,12 @@ public class Customer implements Serializable {
     private String gender;
 
     @Column(name = "DATE_OF_BIRTH")
-    private LocalDate dateOfBirth;
+    private String dateOfBirth;
 
     @Column(name = "ADDRESS")
     private String address;
 
-    public Customer(String fullName, String phoneNumber, String email, String gender, LocalDate dateOfBirth, String address) {
+    public Customer(String fullName, String phoneNumber, String email, String gender, String dateOfBirth, String address) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.email = email;

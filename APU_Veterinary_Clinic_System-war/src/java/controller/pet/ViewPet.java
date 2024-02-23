@@ -5,16 +5,21 @@
  */
 package controller.pet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import entity.Pet;
+import repository.PetFacade;
+import util.pagination.PaginationConfig;
+import util.pagination.PaginationUtil;
+
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-import static constant.EndpointConstant.STAFF_HOME;
 import static constant.EndpointConstant.VIEW_PET;
+import static constant.EndpointConstant.VIEW_PETS;
 
 /**
  *
@@ -23,21 +28,9 @@ import static constant.EndpointConstant.VIEW_PET;
 @WebServlet(name = "ViewPet", urlPatterns = {VIEW_PET})
 public class ViewPet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.getRequestDispatcher(VIEW_PET + ".jsp").include(request, response);
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    @EJB
+    private PetFacade petFacade;
+    
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -49,21 +42,22 @@ public class ViewPet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+        String petId = request.getParameter("id");
+        if (petId != null && !petId.isEmpty()) {
+            request.setAttribute("pet", petFacade.find(petId));
+            request.getRequestDispatcher(VIEW_PET + ".jsp").forward(request, response);
+            return;
+        }
+
+        PaginationUtil.applyPagination(request, response, PaginationConfig.<Pet>builder()
+                .request(request)
+                .response(response)
+                .entityAttribute("pets")
+                .viewPageEndpoint(VIEW_PET)
+                .viewJspPath(VIEW_PETS)
+                .facade(petFacade)
+                .build());
     }
 
     /**

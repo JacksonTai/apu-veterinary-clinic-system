@@ -1,5 +1,6 @@
 package constant.i18n;
 
+import static constant.GlobalConstant.DMY_SLASH_DATE_FORMAT;
 import static constant.GlobalConstant.ISO_DATE_FORMAT;
 
 public class En {
@@ -29,10 +30,15 @@ public class En {
     public static final String INVALID_ADDRESS_LENGTH_MESSAGE = "Address must be between 10 to 100 characters long.";
 
     public static final String EMPTY_DATE_OF_BIRTH_MESSAGE = "Date of Birth is required.";
-    public static final String INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE = "Invalid date of birth format. Please use the format " + ISO_DATE_FORMAT + ".";
-
+    public static final String INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE = "Invalid date of birth format. Please use the format " + DMY_SLASH_DATE_FORMAT + ".";
     public static final String FUTURE_DATE_OF_BIRTH_MESSAGE = "Date of Birth cannot be in the future.";
 
     public static final String EMPTY_GENDER_MESSAGE = "Gender is required.";
     public static final String INVALID_GENDER_MESSAGE = "Gender is invalid.";
+
+    public static final String EMPTY_SPECIES_MESSAGE = "Species cannot be empty.";
+    public static final String EMPTY_BREED_MESSAGE = "Breed cannot be empty.";
+    public static final String EMPTY_NAME_MESSAGE = "Name cannot be empty.";
+    public static final String EMPTY_HEALTH_STATUS_MESSAGE = "Health status cannot be empty.";
+    public static final String INVALID_HEALTH_STATUS_MESSAGE = "Invalid health status.";
 }

@@ -42,15 +42,14 @@ public class EndpointConstant {
     public static final String DELETE_CUSTOMER = CUSTOMER + "/deleteCustomer";
     public static final String CREATE_CUSTOMER = CUSTOMER + "/createCustomer";
 
-    public static final String VIEW_IAM = IAM + "/viewIam";
-
     public static final String VIEW_PET = PET + "/viewPet";
+    public static final String VIEW_PETS = PET + "/viewPets";
     public static final String DELETE_PET = PET + "/deletePet";
     public static final String CREATE_PET = PET + "/createPet";
     public static final String UPDATE_PET = PET + "/updatePet";
 
     public static final String VIEW_WORKING_ROTA = WORKING_ROTA + "/viewWorkingRota";
-
+    public static final String VIEW_IAM = IAM + "/viewIam";
     public static final String REVENUE = "/revenue";
     public static final String CUSTOMER_REPORT = "/report";
 

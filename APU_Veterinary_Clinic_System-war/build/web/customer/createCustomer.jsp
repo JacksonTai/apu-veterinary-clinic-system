@@ -69,8 +69,7 @@
         </div>
         <div class="mx-auto d-flex justify-content-center">
             <a class="btn btn-light d-block me-2"
-               href="<c:url value='<%= EndpointConstant.VIEW_CUSTOMER %>'/>?id=${customer.customerId}"
-               role="button">Cancel</a>
+               href="<c:url value='<%= EndpointConstant.VIEW_CUSTOMER %>'/>" role="button">Cancel</a>
             <button type="submit" class="btn btn-primary">Confirm</button>
         </div>
     </form>

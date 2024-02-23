@@ -1,6 +1,6 @@
-const confirmDelete = (customerId) => {
+const confirmDelete = ({entityId, entityName, deleteEndpoint, successRedirectEndpoint}) => {
     Swal.fire({
-        title: "Are you sure to delete this customer?",
+        title: `Are you sure to delete this ${entityName}?`,
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
@@ -9,22 +9,22 @@ const confirmDelete = (customerId) => {
         confirmButtonText: "Yes, delete it!"
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`${contextPath}${endpoints.DELETE_CUSTOMER}?id=${customerId}`, {
+            fetch(`${contextPath}${deleteEndpoint}?id=${entityId}`, {
                 method: 'DELETE'
             })
                 .then(response => {
                     if (response.ok) {
                         Swal.fire({
                             title: "Deleted!",
-                            text: "Customer has been deleted.",
+                            text: `${entityName} has been deleted.`,
                             icon: "success"
                         }).then(() => {
-                            window.location.href = `${contextPath}${endpoints.VIEW_CUSTOMER}`;
+                            window.location.href = `${contextPath}${successRedirectEndpoint}`;
                         });
                     } else {
                         Swal.fire({
                             title: "Error!",
-                            text: "Failed to delete the customer.",
+                            text: `Failed to delete the ${entityName}.`,
                             icon: "error"
                         });
                     }
@@ -33,7 +33,7 @@ const confirmDelete = (customerId) => {
                     console.error('Error:', error);
                     Swal.fire({
                         title: "Error!",
-                        text: "An error occurred while deleting the customer.",
+                        text: `An error occurred while deleting the ${entityName}.`,
                         icon: "error"
                     });
                 });

@@ -5,74 +5,74 @@
  */
 package controller.pet;
 
+import entity.Pet;
+
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import javax.ejb.EJB;
+
+import repository.PetFacade;
+import validator.PetValidator;
+
+import static constant.EndpointConstant.*;
+
 /**
- *
  * @author Jackson Tai
  */
-@WebServlet(name = "CreatePet", urlPatterns = {"/createPet"})
+@WebServlet(name = "CreatePet", urlPatterns = {CREATE_PET})
 public class CreatePet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CreatePet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CreatePet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
+    @EJB
+    private PetFacade petFacade;
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher(CREATE_PET + ".jsp").forward(request, response);
     }
 
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        String species = request.getParameter("species").trim();
+        String breed = request.getParameter("breed").trim();
+        String name = request.getParameter("name").trim();
+        String healthStatus = request.getParameter("healthStatus").trim();
+        Pet pet = new Pet(species, breed, name, healthStatus);
+
+        PetValidator petValidator = new PetValidator();
+        Map<String, String> errorMessages = petValidator.validate(pet);
+        if (!errorMessages.isEmpty()) {
+            errorMessages.forEach(request::setAttribute);
+            request.getRequestDispatcher(CREATE_PET + ".jsp").forward(request, response);
+        } else {
+            petFacade.create(pet);
+            response.sendRedirect(request.getContextPath() + VIEW_PET  + "?id=" + pet.getPetId());
+        }
     }
 
     /**
