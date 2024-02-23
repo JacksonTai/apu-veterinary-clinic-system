@@ -66,6 +66,18 @@
                             </li>
                         </c:if>
                         <c:if test="${sessionScope.clinicUser.userRole eq MANAGING_STAFF}">
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page"
+                                   href="<c:url value='<%= EndpointConstant.VIEW_IAM %>'/>">
+                                    IAM
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page"
+                                   href="<c:url value='<%= EndpointConstant.VIEW_WORKING_ROTA %>'/>">
+                                    Working Rota
+                                </a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button"
                                    data-bs-toggle="dropdown"
@@ -98,18 +110,6 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page"
-                                   href="<c:url value='<%= EndpointConstant.VIEW_IAM %>'/>">
-                                    IAM
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page"
-                                   href="<c:url value='<%= EndpointConstant.VIEW_WORKING_ROTA %>'/>">
-                                    Working Rota
-                                </a>
                             </li>
                         </c:if>
                         <li class="nav-item">

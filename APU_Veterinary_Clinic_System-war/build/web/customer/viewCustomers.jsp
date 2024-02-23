@@ -11,18 +11,13 @@
 <html>
 <head>
     <%@ include file="/shared/component/head_source.jsp" %>
-    <script>
-        const contextPath = "${pageContext.request.contextPath}";
-    </script>
-    <script src="${pageContext.request.contextPath}/asset/js/constant/endpointConstant.js"></script>
-    <script src="${pageContext.request.contextPath}/asset/js/customer/deleteCustomer.js"></script>
     <title>Customer</title>
 </head>
 <body>
 <%@ include file="/shared/component/header.jsp" %>
 <main class="w-75 my-2 mx-auto overflow-x-auto">
     <h1 class="text-center">Customers</h1>
-    <a class="btn btn-primary btn-sm" href="<c:url value='<%= EndpointConstant.CREATE_CUSTOMER %>'/>" role="button">
+    <a class="btn btn-primary" href="<c:url value='<%= EndpointConstant.CREATE_CUSTOMER %>'/>" role="button">
         Create Customer Profile</a>
     <c:choose>
         <c:when test="${empty customers}">
@@ -55,10 +50,8 @@
                         <td>${StringUtil.requireNonNullElse(customer.address, DASH)}</td>
                         <td>
                             <a class="btn btn-light btn-sm"
-                               href="<c:url value='<%= EndpointConstant.UPDATE_CUSTOMER %>'/>?id=${customer.customerId}"
-                               role="button">Update</a>
-                            <a class="btn btn-danger btn-sm" onclick="confirmDelete('${customer.customerId}')"
-                               role="button">Delete</a>
+                               href="<c:url value='<%= EndpointConstant.VIEW_CUSTOMER %>'/>?id=${customer.customerId}"
+                               role="button">View</a>
                         </td>
                     </tr>
                 </c:forEach>

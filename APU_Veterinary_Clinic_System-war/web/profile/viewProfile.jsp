@@ -24,11 +24,11 @@
         </thead>
         <tbody>
         <tr>
-            <th scope="row">User ID:</th>
+            <th scope="row">ID:</th>
             <td>${clinicUser.clinicUserId}</td>
         </tr>
         <tr>
-            <th scope="row">User Role:</th>
+            <th scope="row">Role:</th>
             <td>${clinicUser.userRole}</td>
         </tr>
         <tr>
@@ -38,9 +38,9 @@
         </tbody>
     </table>
     <div class="mx-auto d-flex justify-content-center">
-        <a class="btn btn-light me-2" href="<c:url value='<%= EndpointConstant.UPDATE_PROFILE %>'/>" role="button">
+        <a class="btn btn-secondary me-2" href="<c:url value='<%= EndpointConstant.UPDATE_PROFILE %>'/>" role="button">
             Update Profile</a>
-        <a class="btn btn-light" href="<c:url value='<%= EndpointConstant.CHANGE_PASSWORD %>'/>" role="button">
+        <a class="btn btn-secondary" href="<c:url value='<%= EndpointConstant.CHANGE_PASSWORD %>'/>" role="button">
             Change Password</a>
     </div>
 </main>

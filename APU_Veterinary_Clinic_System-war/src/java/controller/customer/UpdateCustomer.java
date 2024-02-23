@@ -89,15 +89,24 @@ public class UpdateCustomer extends HttpServlet {
         Customer customer = new Customer(fullName, phoneNumber, email, gender, dateOfBirthLocalDate, address);
 
         CustomerValidator customerValidator = new CustomerValidator(customerFacade);
-        errorMessages.putAll(customerValidator.validateCustomerDetails(customer));
+        errorMessages.putAll(customerValidator.validate(customer));
+        if (!email.equals(customer.getEmail())) {
+            errorMessages.putAll(customerValidator.validateDuplicateEmail(email));
+        }
+        if (!phoneNumber.equals(customer.getPhoneNumber())) {
+            errorMessages.putAll(customerValidator.validateDuplicatePhoneNumber(phoneNumber));
+        }
+        if (!fullName.equals(customer.getFullName())) {
+            errorMessages.putAll(customerValidator.validateDuplicateFullName(fullName));
+        }
 
         if (!errorMessages.isEmpty()) {
             errorMessages.forEach(request::setAttribute);
-            request.getRequestDispatcher(CREATE_CUSTOMER + ".jsp").forward(request, response);
+            request.getRequestDispatcher(UPDATE_CUSTOMER + ".jsp").forward(request, response);
         } else {
             customer.setEmail(email.toLowerCase());
             customerFacade.edit(customer);
-            response.sendRedirect(request.getContextPath() + VIEW_CUSTOMER);
+            response.sendRedirect(request.getContextPath() + VIEW_CUSTOMER + "?id=" + customer.getCustomerId());
         }
 
     }

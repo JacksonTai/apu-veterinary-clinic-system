@@ -88,7 +88,7 @@ public class CreateCustomer extends HttpServlet {
         } else {
             customer.setEmail(email.toLowerCase());
             customerFacade.create(customer);
-            response.sendRedirect(request.getContextPath() + VIEW_CUSTOMER);
+            response.sendRedirect(request.getContextPath() + VIEW_CUSTOMER  + "?id=" + customer.getCustomerId());
         }
 
     }

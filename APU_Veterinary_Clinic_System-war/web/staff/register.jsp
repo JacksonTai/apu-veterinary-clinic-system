@@ -36,7 +36,7 @@
         </div>
         <div class="mb-3">
             <label for="userRole" class="form-label">User Role:</label>
-            <select name="userRole" id="userRole" class="form-select" aria-label="Default select example">
+            <select name="userRole" id="userRole" class="form-select">
                 <option value=${RECEPTIONIST} ${param.userRole eq RECEPTIONIST ? 'selected' : ''}>Receptionist
                 </option>
                 <option value="${VET}" ${param.userRole eq VET ? 'selected' : ''}>Vet</option>
