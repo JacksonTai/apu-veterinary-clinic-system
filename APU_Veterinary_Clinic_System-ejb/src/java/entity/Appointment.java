@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 /**
@@ -30,15 +31,20 @@ public class Appointment implements Serializable {
     private String appointmentId;
 
     @Column(name="APPOINTMENT_DATE")
-    private Date appointmentDate;
+    private String appointmentDate;
 
     @Column(name="APPOINTMENT_STATUS")
     private AppointmentStatus appointmentStatus;
 
-//    @Column(name="CUSTOMER")
-//    private Customer customer;
+    @ManyToOne
+    @JoinColumn(name="ASSIGNED_VET")
+    private Vet assignedVet;
 
-    public Appointment(Date appointmentDate, AppointmentStatus appointmentStatus) {
+    @ManyToOne
+    @JoinColumn(name="PET_ID")
+    private Pet pet;
+
+    public Appointment(String appointmentDate, AppointmentStatus appointmentStatus) {
         this.appointmentDate = appointmentDate;
         this.appointmentStatus = appointmentStatus;
     }

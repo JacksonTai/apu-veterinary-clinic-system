@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 
 /**
@@ -49,6 +51,9 @@ public class Customer implements Serializable {
 
     @Column(name = "ADDRESS")
     private String address;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pet> pets = new ArrayList<>();
 
     public Customer(String fullName, String phoneNumber, String email, String gender, String dateOfBirth, String address) {
         this.fullName = fullName;

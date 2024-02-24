@@ -7,8 +7,8 @@ package entity;
 
 import lombok.NoArgsConstructor;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.List;
 
 import static constant.UserRole.VET;
 
@@ -21,8 +21,10 @@ import static constant.UserRole.VET;
 @NoArgsConstructor
 public class Vet extends ClinicUser {
 
-//    @Column(name="EXPERTISE")
-//    private String expertise;
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "EXPERTISES", joinColumns = @JoinColumn(name = "VET_ID"))
+    @Column(name="EXPERTISE")
+    private List<String> expertise;
 
     public Vet(String email, String password) {
         super(email, password);
