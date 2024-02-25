@@ -47,6 +47,9 @@ public class Pet implements Serializable {
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointment> appointments = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.REMOVE)
+    private List<MedicalRecord> medicalRecords = new ArrayList<>();
+
     public Pet(String species, String breed, String name, String healthStatus) {
         this.species = species;
         this.breed = breed;
