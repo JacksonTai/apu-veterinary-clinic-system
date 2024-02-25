@@ -14,6 +14,13 @@
 <%@ include file="/shared/component/header.jsp" %>
 <main class="w-75 my-2 mx-auto overflow-x-auto">
     <h1 class="text-center">Create Customer Profile</h1>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="<c:url value='<%= EndpointConstant.VIEW_CUSTOMER %>'/>">Customers</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Create Customer Profile</li>
+        </ol>
+    </nav>
     <form action="<c:url value='<%= EndpointConstant.CREATE_CUSTOMER %>'/>" method="POST" class="my-2 mx-auto"
           style="max-width: 30rem;">
         <div class="mb-3">
@@ -26,7 +33,7 @@
         </div>
         <div class="mb-3">
             <label for="phoneNumber" class="form-label">Phone Number:</label>
-            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
+            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="E.g. +6012-3456789"
                    value="${not empty param.phoneNumber ? param.phoneNumber : ''}">
             <c:if test="${not empty phoneNumberError}">
                 <span style="color: red;">${phoneNumberError}</span>
@@ -74,5 +81,6 @@
         </div>
     </form>
 </main>
+<%@ include file="/shared/component/footer.jsp" %>
 </body>
 </html>

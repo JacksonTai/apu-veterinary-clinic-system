@@ -1,7 +1,6 @@
 package constant.i18n;
 
 import static constant.GlobalConstant.DMY_SLASH_DATE_FORMAT;
-import static constant.GlobalConstant.ISO_DATE_FORMAT;
 
 public class En {
 
@@ -41,4 +40,9 @@ public class En {
     public static final String EMPTY_NAME_MESSAGE = "Name cannot be empty.";
     public static final String EMPTY_HEALTH_STATUS_MESSAGE = "Health status cannot be empty.";
     public static final String INVALID_HEALTH_STATUS_MESSAGE = "Invalid health status.";
+
+    public static final String PET_NOT_FOUND_MESSAGE = "Pet not found";
+    public static final String CUSTOMER_NOT_FOUND_MESSAGE = "Customer not found";
+    public static final String EMPTY_CUSTOMER_DETAILS_MESSAGE = "Customer details is required.";
+
 }

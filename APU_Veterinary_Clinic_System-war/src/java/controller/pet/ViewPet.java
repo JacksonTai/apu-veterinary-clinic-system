@@ -6,6 +6,7 @@
 package controller.pet;
 
 import entity.Pet;
+import repository.CustomerFacade;
 import repository.PetFacade;
 import util.pagination.PaginationConfig;
 import util.pagination.PaginationUtil;
@@ -20,6 +21,7 @@ import java.io.IOException;
 
 import static constant.EndpointConstant.VIEW_PET;
 import static constant.EndpointConstant.VIEW_PETS;
+import static constant.i18n.En.PET_NOT_FOUND_MESSAGE;
 
 /**
  *
@@ -29,8 +31,11 @@ import static constant.EndpointConstant.VIEW_PETS;
 public class ViewPet extends HttpServlet {
 
     @EJB
+    private CustomerFacade customerFacade;
+
+    @EJB
     private PetFacade petFacade;
-    
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -45,7 +50,13 @@ public class ViewPet extends HttpServlet {
 
         String petId = request.getParameter("id");
         if (petId != null && !petId.isEmpty()) {
-            request.setAttribute("pet", petFacade.find(petId));
+            Pet pet = petFacade.find(petId);
+            if (pet == null) {
+                request.setAttribute("notFoundMessage", PET_NOT_FOUND_MESSAGE);
+            } else {
+                request.setAttribute("pet", pet);
+                request.setAttribute("customer", customerFacade.findByPetId(petId).get());
+            }
             request.getRequestDispatcher(VIEW_PET + ".jsp").forward(request, response);
             return;
         }

@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static constant.GlobalConstant.*;
@@ -126,8 +127,8 @@ public class CustomerValidator implements Validator<Customer> {
 
     public Map<String, String> validateDuplicateFullName(String fullName) {
         Map<String, String> errorMessages = new HashMap<>();
-        Customer existingCustomer = customerFacade.findByFullName(fullName.trim());
-        if (existingCustomer != null) {
+        Optional<Customer> existingCustomer = customerFacade.findByFullName(fullName.trim());
+        if (existingCustomer.isPresent()) {
             errorMessages.put("fullNameError", DUPLICATE_FULL_NAME_MESSAGE);
         }
         return errorMessages;
@@ -135,8 +136,8 @@ public class CustomerValidator implements Validator<Customer> {
 
     public Map<String, String> validateDuplicatePhoneNumber(String phoneNumber) {
         Map<String, String> errorMessages = new HashMap<>();
-        Customer existingCustomer = customerFacade.findByPhoneNumber(phoneNumber.trim());
-        if (existingCustomer != null) {
+        Optional<Customer> existingCustomer = customerFacade.findByPhoneNumber(phoneNumber.trim());
+        if (existingCustomer.isPresent()) {
             errorMessages.put("phoneNumberError", DUPLICATE_PHONE_NUMBER_MESSAGE);
         }
         return errorMessages;
@@ -144,11 +145,25 @@ public class CustomerValidator implements Validator<Customer> {
 
     public Map<String, String> validateDuplicateEmail(String email) {
         Map<String, String> errorMessages = new HashMap<>();
-        Customer existingCustomer = customerFacade.findByEmail(email.trim());
-        if (existingCustomer != null) {
+        Optional<Customer> existingCustomer = customerFacade.findByEmail(email.trim());
+        if (existingCustomer.isPresent()) {
             errorMessages.put("emailError", DUPLICATE_EMAIL_MESSAGE);
         }
         return errorMessages;
+    }
+
+    public ValidationResponse<Customer> validateCustomerDetails(String customerDetails) {
+        Map<String, String> errorMessages = new HashMap<>();
+        Optional<Customer> customerOptional = Optional.empty();
+        if (customerDetails.isEmpty()) {
+            errorMessages.put("customerDetailsError", EMPTY_CUSTOMER_DETAILS_MESSAGE);
+        } else {
+            customerOptional = customerFacade.findByIdOrFullNameOrEmailOrPhoneNumber(customerDetails);
+            if (!customerOptional.isPresent()) {
+                errorMessages.put("customerDetailsError", CUSTOMER_NOT_FOUND_MESSAGE);
+            }
+        }
+        return new ValidationResponse<>(customerOptional, errorMessages);
     }
 
 }

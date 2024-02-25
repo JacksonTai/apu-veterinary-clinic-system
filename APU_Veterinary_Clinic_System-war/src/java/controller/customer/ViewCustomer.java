@@ -6,6 +6,7 @@
 package controller.customer;
 
 import entity.Customer;
+import entity.Pet;
 import repository.CustomerFacade;
 import util.pagination.PaginationConfig;
 import util.pagination.PaginationUtil;
@@ -20,12 +21,17 @@ import java.io.IOException;
 
 import static constant.EndpointConstant.VIEW_CUSTOMER;
 import static constant.EndpointConstant.VIEW_CUSTOMERS;
+import static constant.i18n.En.CUSTOMER_NOT_FOUND_MESSAGE;
+import repository.PetFacade;
 
 /**
  * @author Jackson Tai
  */
 @WebServlet(name = "ViewCustomer", urlPatterns = {VIEW_CUSTOMER})
 public class ViewCustomer extends HttpServlet {
+
+    @EJB
+    private PetFacade petFacade;
 
     @EJB
     private CustomerFacade customerFacade;
@@ -44,7 +50,13 @@ public class ViewCustomer extends HttpServlet {
 
         String customerId = request.getParameter("id");
         if (customerId != null && !customerId.isEmpty()) {
-            request.setAttribute("customer", customerFacade.find(customerId));
+            Customer customer = customerFacade.find(customerId);
+            if (customer == null) {
+                request.setAttribute("notFoundMessage", CUSTOMER_NOT_FOUND_MESSAGE);
+            } else {
+                request.setAttribute("customer", customer);
+                request.setAttribute("pets", customer.getPets());
+            }
             request.getRequestDispatcher(VIEW_CUSTOMER + ".jsp").forward(request, response);
             return;
         }

@@ -8,11 +8,10 @@ package entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
 
 /**
  * @author Jackson Tai
@@ -22,7 +21,13 @@ import javax.persistence.*;
         @NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c"),
         @NamedQuery(name = "Customer.findByFullName", query = "SELECT c FROM Customer c WHERE c.fullName = :fullName"),
         @NamedQuery(name = "Customer.findByEmail", query = "SELECT c FROM Customer c WHERE c.email = :email"),
-        @NamedQuery(name = "Customer.findByPhoneNumber", query = "SELECT c FROM Customer c WHERE c.phoneNumber = :phoneNumber")
+        @NamedQuery(name = "Customer.findByPhoneNumber",
+                query = "SELECT c FROM Customer c WHERE c.phoneNumber = :phoneNumber"),
+        @NamedQuery(name = "Customer.findByIdOrFullNameOrEmailOrPhoneNumber",
+                query = "SELECT c FROM Customer c WHERE c.customerId = :input OR LOWER(c.fullName) = LOWER(:input) " +
+                        "OR  LOWER(c.email) = LOWER(:input) OR c.phoneNumber = :input"),
+        @NamedQuery(name = "Customer.findByPetId",
+                query = "SELECT c FROM Customer c JOIN c.pets p WHERE p.petId = :petId"),
 })
 @Data
 @NoArgsConstructor
@@ -52,7 +57,7 @@ public class Customer implements Serializable {
     @Column(name = "ADDRESS")
     private String address;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE)
     private List<Pet> pets = new ArrayList<>();
 
     public Customer(String fullName, String phoneNumber, String email, String gender, String dateOfBirth, String address) {

@@ -13,7 +13,9 @@
 </head>
 <body>
 <%@ include file="/shared/component/header.jsp" %>
-staff home works
-${sessionScope.clinicUser}
+<main class="w-75 my-2 mx-auto overflow-x-auto">
+    ${sessionScope.clinicUser}
+</main>
+<%@ include file="/shared/component/footer.jsp" %>
 </body>
 </html>

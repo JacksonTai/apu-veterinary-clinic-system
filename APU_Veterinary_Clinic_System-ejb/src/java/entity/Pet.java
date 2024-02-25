@@ -40,11 +40,7 @@ public class Pet implements Serializable {
     @Column(name = "HEALTH_STATUS")
     private String healthStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "CUSTOMER_ID")
-    private Customer customer;
-
-    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE)
     private List<Appointment> appointments = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.REMOVE)

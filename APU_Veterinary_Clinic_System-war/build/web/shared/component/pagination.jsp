@@ -1,4 +1,4 @@
-<nav aria-label="Page navigation">
+<nav aria-label="Page navigation" class="mt-4">
     <ul class="pagination justify-content-center">
         <li class="page-item ${previousDisabled ? 'disabled' : ''}">
             <a class="page-link" href="?page=${currentPage - 1}"

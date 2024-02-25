@@ -15,7 +15,11 @@
 <%@ include file="/shared/component/header.jsp" %>
 <main class="w-75 my-2 mx-auto overflow-x-auto">
     <h1 class="text-center">Profile</h1>
-    <table class="table mx-auto" style="width: 30rem">
+    <table class="table mx-auto" style="max-width: 30rem">
+        <colgroup>
+            <col span="1" style="width: 4rem;">
+            <col span="1" style="width: auto;">
+        </colgroup>
         <thead>
         <tr>
             <th scope="col"></th>
@@ -44,6 +48,6 @@
             Change Password</a>
     </div>
 </main>
-
+<%@ include file="/shared/component/footer.jsp" %>
 </body>
 </html>

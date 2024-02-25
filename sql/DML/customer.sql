@@ -14,7 +14,7 @@ VALUES ('2001', '123 Jalan Merdeka, Kuala Lumpur', '1990-01-01', 'jonathanpang@g
         '0145678901'),
        ('2008', '234 Jalan Kedah, Georgetown', '1983-06-30', 'ashleytaylor@gmail.com', 'Ashley Taylor', 'Female',
         '0181234567'),
-       ('2009', '567 Jalan Perlis, Ipoh', '1980-09-05', 'jamesgarcia@gmail.com', 'James Garcia', 'Male', '0192345678'),
+       ('2009', '567 Jalan Perlis, Ipoh', '1980-09-05', 'jamesgarcia@gmail.com', 'James Garcia', 'Male', '0192345677'),
        ('2010', '890 Jalan Sabah, Seremban', '1998-02-28', 'amandalopez@gmail.com', 'Amanda Lopez', 'Female',
         '0113456789'),
        ('2011', '123 Jalan Sarawak, Petaling Jaya', '1993-11-10', 'danielmartinez@gmail.com', 'Daniel Martinez', 'Male',

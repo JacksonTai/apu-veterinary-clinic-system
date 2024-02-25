@@ -14,6 +14,12 @@
 <%@ include file="/shared/component/header.jsp" %>
 <main class="w-75 my-2 mx-auto overflow-x-auto">
     <h1 class="text-center">Create Pet Profile</h1>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="<c:url value='<%= EndpointConstant.VIEW_PET %>'/>">Pets</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Create</li>
+        </ol>
+    </nav>
     <form action="<c:url value='<%= EndpointConstant.CREATE_PET %>'/>" method="POST" class="my-2 mx-auto"
           style="max-width: 30rem;">
         <div class="mb-3">
@@ -66,6 +72,15 @@
                 <span style="color: red;">${healthStatusError}</span>
             </c:if>
         </div>
+        <div class="mb-3">
+            <label for="customerDetails" class="form-label">Customer Details (Owner):</label>
+            <input type="text" class="form-control" id="customerDetails" name="customerDetails"
+                   placeholder="Full name / ID / Phone number / Email address"
+                   value="${not empty param.customerDetails ? param.customerDetails : ''}">
+            <c:if test="${not empty customerDetailsError}">
+                <span style="color: red;">${customerDetailsError}</span>
+            </c:if>
+        </div>
         <div class="mx-auto d-flex justify-content-center">
             <a class="btn btn-light d-block me-2" href="<c:url value='<%= EndpointConstant.VIEW_PET %>'/>"
                role="button">Cancel</a>
@@ -73,5 +88,6 @@
         </div>
     </form>
 </main>
+<%@ include file="/shared/component/footer.jsp" %>
 </body>
 </html>

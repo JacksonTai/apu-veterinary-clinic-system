@@ -5,8 +5,12 @@
  */
 package repository;
 
+import entity.Customer;
+
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -51,6 +55,17 @@ public abstract class AbstractFacade<T> {
         q.setMaxResults(range[1] - range[0] + 1);
         q.setFirstResult(range[0]);
         return q.getResultList();
+    }
+
+    protected Optional<T> findByAttribute(String namedQuery, String paramName, String paramValue) {
+        try {
+            T customer = (T) getEntityManager().createNamedQuery(namedQuery)
+                    .setParameter(paramName, paramValue)
+                    .getSingleResult();
+            return Optional.ofNullable(customer);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     public int count() {

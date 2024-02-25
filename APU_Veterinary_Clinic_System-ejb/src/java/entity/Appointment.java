@@ -36,14 +36,6 @@ public class Appointment implements Serializable {
     @Column(name="APPOINTMENT_STATUS")
     private AppointmentStatus appointmentStatus;
 
-    @ManyToOne
-    @JoinColumn(name="ASSIGNED_VET")
-    private Vet assignedVet;
-
-    @ManyToOne
-    @JoinColumn(name="PET_ID")
-    private Pet pet;
-
     public Appointment(String appointmentDate, AppointmentStatus appointmentStatus) {
         this.appointmentDate = appointmentDate;
         this.appointmentStatus = appointmentStatus;

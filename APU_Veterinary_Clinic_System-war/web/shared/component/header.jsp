@@ -17,7 +17,7 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary mb-4">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <img src="${pageContext.request.contextPath}/asset/image/logo.png" alt="Logo" width="30" height="24"
+                <img src="${pageContext.request.contextPath}/asset/img/logo.png" alt="Logo" width="30" height="24"
                      class="d-inline-block align-text-top">
                 AVCS
             </a>

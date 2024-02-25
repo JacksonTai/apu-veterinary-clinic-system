@@ -15,7 +15,7 @@
 <body>
 <main class="vw-100 d-flex justify-content-center" style="margin-top: 8rem">
     <div>
-        <img src="${pageContext.request.contextPath}/asset/image/logo.png" alt="Registration success"
+        <img src="${pageContext.request.contextPath}/asset/img/logo.png" alt="Registration success"
              class="d-block mx-auto">
         <h1 class="text-center">Registration Success!</h1>
         <div class="mx-auto d-flex justify-content-center">

@@ -6,11 +6,12 @@
 package repository;
 
 import entity.Customer;
+import entity.Pet;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.util.Optional;
 
 /**
  *
@@ -31,38 +32,28 @@ public class CustomerFacade extends AbstractFacade<Customer> {
         super(Customer.class);
     }
 
-    public Customer findByCustomerId(String customerId) {
-        return em.find(Customer.class, customerId);
+    public Optional<Customer> findByCustomerId(String customerId) {
+        return findByAttribute("Customer.findByCustomerId", "customerId", customerId);
     }
 
-    public Customer findByFullName(String fullName) {
-        try {
-            return (Customer) em.createNamedQuery("Customer.findByFullName")
-                    .setParameter("fullName", fullName)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+    public Optional<Customer> findByFullName(String fullName) {
+        return findByAttribute("Customer.findByFullName", "fullName", fullName);
     }
 
-    public Customer findByPhoneNumber(String phoneNumber) {
-        try {
-            return (Customer) em.createNamedQuery("Customer.findByPhoneNumber")
-                    .setParameter("phoneNumber", phoneNumber)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+    public Optional<Customer> findByPhoneNumber(String phoneNumber) {
+        return findByAttribute("Customer.findByPhoneNumber", "phoneNumber", phoneNumber);
     }
 
-    public Customer findByEmail(String email) {
-        try {
-            return (Customer) em.createNamedQuery("Customer.findByEmail")
-                    .setParameter("email", email)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+    public Optional<Customer> findByEmail(String email) {
+        return findByAttribute("Customer.findByEmail", "email", email);
     }
 
+    // Note: Can be improved by using QueryDSL's BooleanBuilder in spring boot
+    public Optional<Customer> findByIdOrFullNameOrEmailOrPhoneNumber(String input) {
+        return findByAttribute("Customer.findByIdOrFullNameOrEmailOrPhoneNumber", "input", input);
+    }
+
+    public Optional<Customer> findByPetId(String petId) {
+        return findByAttribute("Customer.findByPetId", "petId", petId);
+    }
 }

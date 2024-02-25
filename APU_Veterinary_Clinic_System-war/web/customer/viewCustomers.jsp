@@ -17,11 +17,17 @@
 <%@ include file="/shared/component/header.jsp" %>
 <main class="w-75 my-2 mx-auto overflow-x-auto">
     <h1 class="text-center">Customers</h1>
-    <a class="btn btn-primary" href="<c:url value='<%= EndpointConstant.CREATE_CUSTOMER %>'/>" role="button">
-        Create Customer Profile</a>
+    <div class="d-flex justify-content-end mb-3">
+        <a class="btn btn-primary" href="<c:url value='<%= EndpointConstant.CREATE_CUSTOMER %>'/>" role="button">
+            Create Customer Profile</a>
+    </div>
     <c:choose>
         <c:when test="${empty customers}">
-            <p class="text-center">There is no customer records currently</p>
+            <div class="d-flex flex-column align-items-center justify-content-center">
+                <img src="${pageContext.request.contextPath}/asset/img/noRecord.png" alt="No Record Illustration"
+                     width="35%">
+                <h2 class="text-center">There are no customer records currently</h2>
+            </div>
         </c:when>
         <c:otherwise>
             <table class="table table-bordered w-100 my-2">
@@ -61,5 +67,6 @@
         </c:otherwise>
     </c:choose>
 </main>
+<%@ include file="/shared/component/footer.jsp" %>
 </body>
 </html>

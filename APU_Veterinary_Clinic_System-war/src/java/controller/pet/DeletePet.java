@@ -5,20 +5,21 @@
  */
 package controller.pet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import entity.Customer;
+import entity.Pet;
+import repository.CustomerFacade;
+import repository.PetFacade;
+
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Optional;
 
 import static constant.EndpointConstant.DELETE_PET;
-import javax.ejb.EJB;
-
-import entity.Customer;
-import entity.Pet;
-import repository.PetFacade;
 
 /**
  *
@@ -26,6 +27,9 @@ import repository.PetFacade;
  */
 @WebServlet(name = "DeletePet", urlPatterns = {DELETE_PET})
 public class DeletePet extends HttpServlet {
+
+    @EJB
+    private CustomerFacade customerFacade;
 
     @EJB
     private PetFacade petFacade;
@@ -36,6 +40,11 @@ public class DeletePet extends HttpServlet {
 
         String petId = request.getParameter("id");
         Pet pet = petFacade.find(petId);
+        Optional<Customer> customer = customerFacade.findByPetId(petId);
+        if (customer.isPresent()) {
+            customer.get().getPets().remove(pet);
+            customerFacade.edit(customer.get());
+        }
 
         if (pet != null) {
             petFacade.remove(pet);

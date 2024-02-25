@@ -13,7 +13,7 @@
 </head>
 <body>
 <%@ include file="/shared/component/header.jsp" %>
-<main class="w-75 my-2 mx-auto overflow-x-auto">
+<main class="w-75 my-2 mx-auto overflow-x-auto d-flex flex-column align-items-center justify-content-center">
     <h1 class="text-center">Change Password</h1>
     <form action="<c:url value='<%= EndpointConstant.CHANGE_PASSWORD %>'/>" method="POST" class="my-2 mx-auto"
           style="width: 15rem;">
@@ -48,5 +48,6 @@
         </div>
     </form>
 </main>
+<%@ include file="/shared/component/footer.jsp" %>
 </body>
 </html>

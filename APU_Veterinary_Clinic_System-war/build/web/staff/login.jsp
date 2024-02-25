@@ -13,7 +13,7 @@
 </head>
 <body>
 <%@ include file="/shared/component/header.jsp" %>
-<main class="w-75 my-2 mx-auto overflow-x-auto">
+<main class="w-75 my-2 mx-auto overflow-x-auto d-flex flex-column align-items-center justify-content-center">
     <h1 class="text-center">Staff Login</h1>
     <form action="<c:url value='<%= EndpointConstant.STAFF_LOGIN %>'/>" method="POST" class="my-2 mx-auto"
           style="width: 15rem;">
@@ -41,7 +41,6 @@
         <button type="submit" class="btn btn-primary d-block mx-auto">Login</button>
     </form>
 </main>
-
-
+<%@ include file="/shared/component/footer.jsp" %>
 </body>
 </html>

@@ -6,9 +6,9 @@
 package controller.pet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,13 +23,19 @@ import validator.CustomerValidator;
 import validator.PetValidator;
 
 import static constant.EndpointConstant.*;
+import static constant.i18n.En.*;
+
+import repository.CustomerFacade;
+import validator.ValidationResponse;
 
 /**
- *
  * @author Jackson Tai
  */
 @WebServlet(name = "UpdatePet", urlPatterns = {UPDATE_PET})
 public class UpdatePet extends HttpServlet {
+
+    @EJB
+    private CustomerFacade customerFacade;
 
     @EJB
     private PetFacade petFacade;
@@ -37,10 +43,10 @@ public class UpdatePet extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -48,32 +54,36 @@ public class UpdatePet extends HttpServlet {
 
         Pet pet = petFacade.find(request.getParameter("id"));
         if (pet == null) {
-            response.sendRedirect(request.getContextPath() + VIEW_PET + ".jsp");
-            return;
+            request.setAttribute("notFoundMessage", PET_NOT_FOUND_MESSAGE);
+        } else {
+            request.setAttribute("pet", pet);
+            Optional<Customer> existingOwner = customerFacade.findByPetId(pet.getPetId());
+            existingOwner.ifPresent(value -> request.setAttribute("existingOwner", value));
         }
-        request.setAttribute("pet", pet);
         request.getRequestDispatcher(UPDATE_PET + ".jsp").forward(request, response);
     }
 
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String id = request.getParameter("id");
-        Pet existingPet = petFacade.find(id);
+        String petId = request.getParameter("id");
+        Pet existingPet = petFacade.find(petId);
         if (existingPet == null) {
-            response.sendRedirect(request.getContextPath() + VIEW_PET);
+            request.setAttribute("notFoundMessage", PET_NOT_FOUND_MESSAGE);
+            request.getRequestDispatcher(VIEW_PET + ".jsp").forward(request, response);
             return;
         }
 
+        String customerDetails = request.getParameter("customerDetails").trim();
         String species = request.getParameter("species").trim();
         String breed = request.getParameter("breed").trim();
         String name = request.getParameter("name").trim();
@@ -93,6 +103,22 @@ public class UpdatePet extends HttpServlet {
             errorMessages.putAll(PetValidator.validateHealthStatus(healthStatus));
         }
 
+        Customer customer = null;
+        Optional<Customer> existingOwner = customerFacade.findByPetId(petId);
+        if (!existingOwner.isPresent()) {
+            response.sendRedirect(request.getContextPath() + VIEW_PET);
+            return;
+        }
+
+        CustomerValidator customerValidator = new CustomerValidator(customerFacade);
+        ValidationResponse<Customer> validationResponse = customerValidator.validateCustomerDetails(customerDetails);
+        Map<String, String> customerDetailsErrorMessages = validationResponse.getErrorMessages();
+        if (!customerDetailsErrorMessages.isEmpty()) {
+            errorMessages.putAll(customerDetailsErrorMessages);
+        } else if (validationResponse.getEntity().isPresent()) {
+            customer = validationResponse.getEntity().get();
+        }
+
         if (!errorMessages.isEmpty()) {
             errorMessages.forEach(request::setAttribute);
             request.getRequestDispatcher(UPDATE_PET + ".jsp").forward(request, response);
@@ -102,7 +128,13 @@ public class UpdatePet extends HttpServlet {
             existingPet.setName(name);
             existingPet.setHealthStatus(healthStatus);
             petFacade.edit(existingPet);
-            response.sendRedirect(request.getContextPath() + VIEW_PET  + "?id=" + existingPet.getPetId());
+            if (!existingOwner.get().getCustomerId().equals(customer.getCustomerId())) {
+                existingOwner.get().getPets().remove(existingPet);
+                customer.getPets().add(existingPet);
+                customerFacade.edit(existingOwner.get());
+                customerFacade.edit(customer);
+            }
+            response.sendRedirect(request.getContextPath() + VIEW_PET + "?id=" + existingPet.getPetId());
         }
     }
 

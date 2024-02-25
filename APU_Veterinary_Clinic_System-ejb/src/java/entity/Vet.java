@@ -8,6 +8,7 @@ package entity;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static constant.UserRole.VET;
@@ -25,6 +26,9 @@ public class Vet extends ClinicUser {
     @CollectionTable(name = "EXPERTISES", joinColumns = @JoinColumn(name = "VET_ID"))
     @Column(name="EXPERTISE")
     private List<String> expertise;
+
+    @OneToMany(cascade = CascadeType.REMOVE)
+    private List<Appointment> appointments = new ArrayList<>();
 
     public Vet(String email, String password) {
         super(email, password);
