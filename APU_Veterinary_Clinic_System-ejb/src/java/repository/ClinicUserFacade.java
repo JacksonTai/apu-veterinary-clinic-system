@@ -11,6 +11,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.swing.text.html.Option;
+import java.util.Optional;
 
 /**
  * @author Jackson Tai
@@ -35,13 +37,13 @@ public class ClinicUserFacade extends AbstractFacade<ClinicUser> {
     }
 
     public ClinicUser findByEmail(String email) {
-        try {
-            return (ClinicUser) em.createNamedQuery("ClinicUser.findByEmail")
-                    .setParameter("email", email)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+        Optional<ClinicUser> clinicUser = findByAttribute("ClinicUser.findByEmail", "email", email);
+        return clinicUser.orElse(null);
+    }
+
+    public ClinicUser findByFullName(String fullName) {
+        Optional<ClinicUser> clinicUser = findByAttribute("ClinicUser.findByFullName", "fullName", fullName);
+        return clinicUser.orElse(null);
     }
 
 }

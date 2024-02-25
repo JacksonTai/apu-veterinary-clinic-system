@@ -19,8 +19,10 @@ import java.util.List;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "Customer.findAll", query = "SELECT c FROM Customer c"),
-        @NamedQuery(name = "Customer.findByFullName", query = "SELECT c FROM Customer c WHERE c.fullName = :fullName"),
-        @NamedQuery(name = "Customer.findByEmail", query = "SELECT c FROM Customer c WHERE c.email = :email"),
+        @NamedQuery(name = "Customer.findByFullName",
+                query = "SELECT c FROM Customer c WHERE LOWER(c.fullName) = LOWER(:fullName)"),
+        @NamedQuery(name = "Customer.findByEmail",
+                query = "SELECT c FROM Customer c WHERE LOWER(c.email) = LOWER(:email)"),
         @NamedQuery(name = "Customer.findByPhoneNumber",
                 query = "SELECT c FROM Customer c WHERE c.phoneNumber = :phoneNumber"),
         @NamedQuery(name = "Customer.findByIdOrFullNameOrEmailOrPhoneNumber",

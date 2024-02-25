@@ -21,8 +21,8 @@ import static constant.UserRole.RECEPTIONIST;
 @NoArgsConstructor
 public class Receptionist extends ClinicUser {
 
-    public Receptionist(String email, String password) {
-        super(email, password);
+    public Receptionist(String email, String password, String fullName) {
+        super(email, password, fullName);
     }
 
 }

@@ -19,6 +19,14 @@
           style="width: 15rem;">
         <input type="hidden" name="formSubmitted" value="true">
         <div class="mb-3">
+            <label for="fullName" class="form-label">Full Name:</label>
+            <input type="text" class="form-control" id="fullName" name="fullName"
+                   value="${param.formSubmitted != null ? param.fullName : clinicUser.fullName}">
+            <c:if test="${not empty fullNameError}">
+                <span style="color: red;">${fullNameError}</span>
+            </c:if>
+        </div>
+        <div class="mb-3">
             <label for="email" class="form-label">Email:</label>
             <input type="text" class="form-control" id="email" name="email"
                    value="${param.formSubmitted != null ? param.email : clinicUser.email}">

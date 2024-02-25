@@ -21,8 +21,8 @@ import static constant.UserRole.MANAGING_STAFF;
 @NoArgsConstructor
 public class ManagingStaff extends ClinicUser {
 
-    public ManagingStaff(String email, String password) {
-        super(email, password);
+    public ManagingStaff(String email, String password, String fullName) {
+        super(email, password, fullName);
     }
 
 }

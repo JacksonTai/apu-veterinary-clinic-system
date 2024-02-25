@@ -17,7 +17,7 @@
     <h1 class="text-center">Profile</h1>
     <table class="table mx-auto" style="max-width: 30rem">
         <colgroup>
-            <col span="1" style="width: 4rem;">
+            <col span="1" style="width: 7rem;">
             <col span="1" style="width: auto;">
         </colgroup>
         <thead>
@@ -34,6 +34,10 @@
         <tr>
             <th scope="row">Role:</th>
             <td>${clinicUser.userRole}</td>
+        </tr>
+        <tr>
+            <th scope="row">Full Name:</th>
+            <td>${clinicUser.fullName}</td>
         </tr>
         <tr>
             <th scope="row">Email:</th>

@@ -19,6 +19,14 @@
     <form action="<c:url value='<%= EndpointConstant.STAFF_REGISTER %>'/>" method="POST" class="my-2 mx-auto"
           style="width: 15rem;">
         <div class="mb-3">
+            <label for="fullName" class="form-label">Full Name:</label>
+            <input type="text" class="form-control" id="fullName" name="fullName"
+                   value="${not empty param.fullName ? param.fullName : ''}">
+            <c:if test="${not empty fullNameError}">
+                <span style="color: red;">${fullNameError}</span>
+            </c:if>
+        </div>
+        <div class="mb-3">
             <label for="email" class="form-label">Email:</label>
             <input type="text" class="form-control" id="email" name="email"
                    value="${not empty param.email ? param.email : ''}">

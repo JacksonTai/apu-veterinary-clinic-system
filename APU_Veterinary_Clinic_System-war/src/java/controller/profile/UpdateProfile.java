@@ -64,16 +64,21 @@ public class UpdateProfile extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        String fullName = request.getParameter("fullName").trim();
         String email = request.getParameter("email").trim();
         String password = request.getParameter("password").trim();
 
         Map<String, String> errorMessages = new HashMap<>();
         ClinicUserValidator clinicUserValidator = new ClinicUserValidator(clinicUserFacade);
         errorMessages.putAll(ClinicUserValidator.validateEmail(email));
+        errorMessages.putAll(ClinicUserValidator.validateFullName(fullName));
         errorMessages.putAll(clinicUserValidator.validateCredentialDetails(clinicUser.getEmail(), password));
 
         if (!email.equals(clinicUser.getEmail())) {
             errorMessages.putAll(clinicUserValidator.validateDuplicateEmail(email));
+        }
+        if (!fullName.equals(clinicUser.getFullName())) {
+            errorMessages.putAll(clinicUserValidator.validateDuplicateFullName(fullName));
         }
         if (!errorMessages.isEmpty()) {
             errorMessages.forEach(request::setAttribute);
@@ -82,6 +87,7 @@ public class UpdateProfile extends HttpServlet {
         }
 
         clinicUser.setEmail(email.toLowerCase());
+        clinicUser.setFullName(fullName);
         clinicUserFacade.edit(clinicUser);
         response.sendRedirect(request.getContextPath() + VIEW_PROFILE + ".jsp");
     }

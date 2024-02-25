@@ -23,6 +23,8 @@ import java.io.Serializable;
 @NamedQueries({
         @NamedQuery(name = "ClinicUser.findAll", query = "SELECT c FROM ClinicUser c"),
         @NamedQuery(name = "ClinicUser.findByEmail", query = "SELECT c FROM ClinicUser c WHERE c.email = :email"),
+        @NamedQuery(name = "ClinicUser.findByFullName",
+                query = "SELECT c FROM ClinicUser c WHERE LOWER(c.fullName) = LOWER(:fullName)")
 })
 @Data
 @NoArgsConstructor
@@ -41,12 +43,16 @@ public class ClinicUser implements Serializable {
     @Column(name = "PASSWORD")
     private String password;
 
+    @Column(name = "FULL_NAME")
+    private String fullName;
+
     @Column(name = "USER_ROLE")
     private String userRole;
 
-    public ClinicUser(String email, String password) {
+    public ClinicUser(String email, String password, String fullName) {
         this.email = email;
         this.password = password;
+        this.fullName = fullName;
     }
 
 }

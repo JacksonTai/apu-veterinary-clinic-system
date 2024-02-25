@@ -58,6 +58,7 @@ public class Register extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        String fullName = request.getParameter("fullName").trim();
         String email = request.getParameter("email").trim().toLowerCase();
         String password = request.getParameter("password").trim();
         String userRole = request.getParameter("userRole").trim();
@@ -65,11 +66,11 @@ public class Register extends HttpServlet {
         ClinicUser clinicUser = null;
         switch (userRole) {
             case VET:
-                clinicUser = new Vet(email, password);
+                clinicUser = new Vet(email, password, fullName);
                 clinicUser.setUserRole(VET);
                 break;
             case RECEPTIONIST:
-                clinicUser = new Receptionist(email, password);
+                clinicUser = new Receptionist(email, password, fullName);
                 clinicUser.setUserRole(RECEPTIONIST);
                 break;
         }
@@ -88,7 +89,6 @@ public class Register extends HttpServlet {
             clinicUserFacade.create(clinicUser);
             response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS + ".jsp");
         }
-
     }
 
     /**

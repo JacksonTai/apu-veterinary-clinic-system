@@ -14,7 +14,8 @@ import java.util.regex.Pattern;
 
 import static constant.GlobalConstant.*;
 import static constant.i18n.En.*;
-import static util.StringUtil.*;
+
+;
 
 public class CustomerValidator implements Validator<Customer> {
 
@@ -29,7 +30,7 @@ public class CustomerValidator implements Validator<Customer> {
     public Map<String, String> validate(Customer customer) {
         Map<String, String> errorMessages = new HashMap<>();
         errorMessages.putAll(validateFullName(customer.getFullName()));
-        errorMessages.putAll(validatePhoneNumber(customer.getPhoneNumber()));
+        errorMessages.putAll(validateFullName(customer.getFullName()));
         errorMessages.putAll(validateEmail(customer.getEmail()));
         errorMessages.putAll(validateGender(customer.getGender()));
         errorMessages.putAll(validateDateOfBirth(customer.getDateOfBirth()));
@@ -38,18 +39,7 @@ public class CustomerValidator implements Validator<Customer> {
     }
 
     public static Map<String, String> validateFullName(String fullName) {
-        Map<String, String> errorMessages = new HashMap<>();
-        fullName = fullName.trim();
-        if (fullName.isEmpty()) {
-            errorMessages.put("fullNameError", EMPTY_FULL_NAME_MESSAGE);
-        } else if (fullName.length() < 8 || fullName.length() > 50) {
-            errorMessages.put("fullNameError", INVALID_FULL_NAME_LENGTH_MESSAGE);
-        } else if (containsExcessiveWhitespace(fullName)) {
-            errorMessages.put("fullNameError", EXCESSIVE_WHITESPACE_FULL_NAME_MESSAGE);
-        } else if (!containsAlphabetic(fullName)) { // TODO: containsAlphabetic(fullName) is not a valid check for full name
-            errorMessages.put("fullNameError", INVALID_FULL_NAME_CHARACTER_MESSAGE);
-        }
-        return errorMessages;
+        return ClinicUserValidator.validateFullName(fullName);
     }
 
     public static Map<String, String> validatePhoneNumber(String phoneNumber) {
@@ -127,7 +117,7 @@ public class CustomerValidator implements Validator<Customer> {
 
     public Map<String, String> validateDuplicateFullName(String fullName) {
         Map<String, String> errorMessages = new HashMap<>();
-        Optional<Customer> existingCustomer = customerFacade.findByFullName(fullName.trim());
+        Optional<Customer> existingCustomer = customerFacade.findByFullName(fullName.trim().toLowerCase());
         if (existingCustomer.isPresent()) {
             errorMessages.put("fullNameError", DUPLICATE_FULL_NAME_MESSAGE);
         }
@@ -145,7 +135,7 @@ public class CustomerValidator implements Validator<Customer> {
 
     public Map<String, String> validateDuplicateEmail(String email) {
         Map<String, String> errorMessages = new HashMap<>();
-        Optional<Customer> existingCustomer = customerFacade.findByEmail(email.trim());
+        Optional<Customer> existingCustomer = customerFacade.findByEmail(email.trim().toLowerCase());
         if (existingCustomer.isPresent()) {
             errorMessages.put("emailError", DUPLICATE_EMAIL_MESSAGE);
         }

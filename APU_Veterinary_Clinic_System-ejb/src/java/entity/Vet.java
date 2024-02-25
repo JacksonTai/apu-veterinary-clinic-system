@@ -30,8 +30,8 @@ public class Vet extends ClinicUser {
     @OneToMany(cascade = CascadeType.REMOVE)
     private List<Appointment> appointments = new ArrayList<>();
 
-    public Vet(String email, String password) {
-        super(email, password);
+    public Vet(String email, String password, String fullName) {
+        super(email, password, fullName);
     }
 
 }
