@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "EXPERTISE")
 @NamedQueries({
-        @NamedQuery(name = "Customer.findByName",
+        @NamedQuery(name = "Expertise.findByName",
                 query = "SELECT e FROM Expertise e WHERE LOWER(e.name) = LOWER(:name)")
 })
 @Data

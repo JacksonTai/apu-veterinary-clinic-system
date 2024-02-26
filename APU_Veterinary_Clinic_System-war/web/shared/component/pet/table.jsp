@@ -1,4 +1,3 @@
-<jsp:useBean id="StringUtil" class="util.StringUtil"/>
 <table class="table table-bordered w-100 my-2">
     <thead>
     <tr>

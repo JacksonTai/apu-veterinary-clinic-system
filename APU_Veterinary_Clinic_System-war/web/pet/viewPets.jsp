@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<jsp:useBean id="StringUtil" class="util.StringUtil"/>
 
 <!DOCTYPE html>
 <html>
