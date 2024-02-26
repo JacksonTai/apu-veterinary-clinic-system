@@ -5,6 +5,7 @@
  */
 package entity;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -18,17 +19,23 @@ import static constant.UserRole.VET;
  * @author Jackson Tai
  */
 @Entity
+@Data
 @DiscriminatorValue(VET)
 @NoArgsConstructor
 public class Vet extends ClinicUser {
 
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "EXPERTISES", joinColumns = @JoinColumn(name = "VET_ID"))
+    @CollectionTable(name = "VET_EXPERTISES", joinColumns = @JoinColumn(name = "VET_ID"))
     @Column(name="EXPERTISE")
     private List<String> expertise;
 
     @OneToMany(cascade = CascadeType.REMOVE)
     private List<Appointment> appointments = new ArrayList<>();
+
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "WORKING_DAYS", joinColumns = @JoinColumn(name = "VET_ID"))
+    @Column(name="WORKING_DAY")
+    private List<String> workingDays = new ArrayList<>();
 
     public Vet(String email, String password, String fullName) {
         super(email, password, fullName);

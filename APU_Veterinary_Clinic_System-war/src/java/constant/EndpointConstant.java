@@ -17,7 +17,6 @@ public class EndpointConstant {
     public static final String PET = "/pet";
     public static final String WORKING_ROTA = "/workingRota";
     public static final String REPORT = "/report";
-    public static final String IAM = "/iam";
     public static final String PROFILE = "/profile";
 
     public static final String LOGOUT = "/logout";
@@ -49,7 +48,16 @@ public class EndpointConstant {
     public static final String UPDATE_PET = PET + "/updatePet";
 
     public static final String VIEW_WORKING_ROTA = WORKING_ROTA + "/viewWorkingRota";
-    public static final String VIEW_IAM = IAM + "/viewIam";
+    public static final String DELETE_WORKING_ROTA = WORKING_ROTA + "/deleteWorkingRota";
+    public static final String CREATE_WORKING_ROTA = WORKING_ROTA + "/createWorkingRota";
+    public static final String UPDATE_WORKING_ROTA = WORKING_ROTA + "/updateWorkingRota";
+
+    public static final String VIEW_STAFF = STAFF + "/viewStaff";
+    public static final String VIEW_STAFFS = STAFF + "/viewStaffs";
+    public static final String DELETE_STAFF = STAFF + "/deleteStaff";
+    public static final String CREATE_STAFF = STAFF + "/createStaff";
+    public static final String UPDATE_STAFF = STAFF + "/updateStaff";
+
     public static final String REVENUE = "/revenue";
     public static final String CUSTOMER_REPORT = "/report";
 

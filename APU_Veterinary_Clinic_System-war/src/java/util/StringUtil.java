@@ -7,7 +7,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class StringUtil {
 
@@ -74,5 +76,9 @@ public class StringUtil {
 
     public static String requireNonNullElse(String value, String replacement) {
         return (value != null && !value.trim().isEmpty()) ? value : replacement;
+    }
+
+    public String getConcatenatedString(List<String> values) {
+        return values.stream().collect(Collectors.joining(", "));
     }
 }

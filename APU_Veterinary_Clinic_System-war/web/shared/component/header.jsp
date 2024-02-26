@@ -68,8 +68,8 @@
                         <c:if test="${sessionScope.clinicUser.userRole eq MANAGING_STAFF}">
                             <li class="nav-item">
                                 <a class="nav-link" aria-current="page"
-                                   href="<c:url value='<%= EndpointConstant.VIEW_IAM %>'/>">
-                                    IAM
+                                   href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>">
+                                    Staff
                                 </a>
                             </li>
                             <li class="nav-item">

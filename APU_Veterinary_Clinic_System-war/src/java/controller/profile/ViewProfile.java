@@ -5,7 +5,9 @@
  */
 package controller.profile;
 
+import constant.UserRole;
 import entity.ClinicUser;
+import entity.Vet;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -16,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import static constant.EndpointConstant.*;
+import javax.ejb.EJB;
+import repository.VetFacade;
 
 /**
  *
@@ -24,6 +28,9 @@ import static constant.EndpointConstant.*;
 @WebServlet(name = "ViewProfile", urlPatterns = {VIEW_PROFILE})
 public class ViewProfile extends HttpServlet {
 
+    @EJB
+    private VetFacade vetFacade;
+    
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -38,6 +45,11 @@ public class ViewProfile extends HttpServlet {
         HttpSession session = request.getSession(false);
         ClinicUser clinicUser = (ClinicUser) session.getAttribute("clinicUser");
         request.setAttribute("clinicUser", clinicUser);
+        if (clinicUser.getUserRole().equals(UserRole.VET)) {
+            Vet vet = vetFacade.find(clinicUser.getClinicUserId());
+            System.out.println(vet.getExpertise());
+            request.setAttribute("expertises", vet.getExpertise());
+        }
         request.getRequestDispatcher(VIEW_PROFILE + ".jsp").forward(request, response);
     }
 

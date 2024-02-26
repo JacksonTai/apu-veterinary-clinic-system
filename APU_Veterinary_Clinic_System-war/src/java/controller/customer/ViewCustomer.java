@@ -6,8 +6,8 @@
 package controller.customer;
 
 import entity.Customer;
-import entity.Pet;
 import repository.CustomerFacade;
+import repository.PetFacade;
 import util.pagination.PaginationConfig;
 import util.pagination.PaginationUtil;
 
@@ -22,7 +22,6 @@ import java.io.IOException;
 import static constant.EndpointConstant.VIEW_CUSTOMER;
 import static constant.EndpointConstant.VIEW_CUSTOMERS;
 import static constant.i18n.En.CUSTOMER_NOT_FOUND_MESSAGE;
-import repository.PetFacade;
 
 /**
  * @author Jackson Tai

@@ -16,6 +16,7 @@ import java.io.Serializable;
  * @author Jackson Tai
  */
 @Entity
+@Table(name="MEDICAL_RECORD")
 @Data
 @NoArgsConstructor
 public class MedicalRecord implements Serializable {
@@ -23,6 +24,7 @@ public class MedicalRecord implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "MEDICAL_RECORD_ID")
     private String medicalRecordId;
 
     @Column(name = "DIAGNOSIS")

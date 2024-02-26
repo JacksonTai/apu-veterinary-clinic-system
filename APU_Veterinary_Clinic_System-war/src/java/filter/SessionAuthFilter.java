@@ -12,9 +12,9 @@ import java.io.IOException;
 
 import static constant.EndpointConstant.*;
 
-//, PET + "/*", CUSTOMER + "/*"
+//, PET + "/*", CUSTOMER + "/*", WORKING_ROTA + "/*"
 @WebFilter(filterName = "SessionAuthFilter", urlPatterns = {
-        STAFF_HOME, PROFILE + "/*", APPOINTMENT + "/*", WORKING_ROTA + "/*", IAM + "/*"})
+        STAFF_HOME, PROFILE + "/*", APPOINTMENT + "/*"})
 public class SessionAuthFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(SessionAuthFilter.class);

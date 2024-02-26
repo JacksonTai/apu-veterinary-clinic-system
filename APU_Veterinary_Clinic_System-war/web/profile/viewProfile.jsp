@@ -23,7 +23,6 @@
         <thead>
         <tr>
             <th scope="col"></th>
-            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
@@ -43,6 +42,14 @@
             <th scope="row">Email:</th>
             <td>${clinicUser.email}</td>
         </tr>
+        <c:if test="${not empty sessionScope.clinicUser}">
+            <c:if test="${sessionScope.clinicUser.userRole eq VET}">
+                <tr>
+                    <th scope="row">Expertises:</th>
+                    <td>${StringUtil.requireNonNullElse(StringUtil.getConcatenatedString(expertises), DASH)}</td>
+                </tr>
+            </c:if>
+        </c:if>
         </tbody>
     </table>
     <div class="mx-auto d-flex justify-content-center">
