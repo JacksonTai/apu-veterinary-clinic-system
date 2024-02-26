@@ -1,9 +1,12 @@
-const customer = "/customer";
-const pet = "/pet";
+const CUSTOMER = "/customer";
+const PET = "/pet";
+const EXPERTISE = "/expertise";
 const endpoints = {
-  "VIEW_CUSTOMER": customer + "/viewCustomer",
-  "VIEW_CUSTOMERS": customer + "/viewCustomers",
-  "DELETE_CUSTOMER": customer + "/deleteCustomer",
-  "VIEW_PET": pet + "/viewPet",
-  "DELETE_PET": pet + "/deletePet"
+  "VIEW_CUSTOMER": CUSTOMER + "/viewCustomer",
+  "VIEW_CUSTOMERS": CUSTOMER + "/viewCustomers",
+  "DELETE_CUSTOMER": CUSTOMER + "/deleteCustomer",
+  "VIEW_PET": PET + "/viewPet",
+  "DELETE_PET": PET + "/deletePet",
+  "VIEW_EXPERTISE": EXPERTISE + "/viewExpertise",
+  "DELETE_EXPERTISE": EXPERTISE + "/deleteExpertise",
 };

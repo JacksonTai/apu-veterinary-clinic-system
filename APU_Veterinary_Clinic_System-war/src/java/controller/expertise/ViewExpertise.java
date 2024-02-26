@@ -3,15 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller.profile;
+package controller.expertise;
 
-import constant.UserRole;
-import entity.ClinicUser;
 import entity.Expertise;
-import entity.Vet;
 import repository.ExpertiseFacade;
-import repository.VetFacade;
-import util.StringUtil;
+import util.pagination.PaginationConfig;
+import util.pagination.PaginationUtil;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -19,25 +16,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import static constant.EndpointConstant.VIEW_PROFILE;
-import static constant.GlobalConstant.DASH;
+import static constant.EndpointConstant.VIEW_EXPERTISE;
+import static constant.EndpointConstant.VIEW_EXPERTISES;
 
 /**
  * @author Jackson Tai
  */
-@WebServlet(name = "ViewProfile", urlPatterns = {VIEW_PROFILE})
-public class ViewProfile extends HttpServlet {
+@WebServlet(name = "ViewExpertise", urlPatterns = {VIEW_EXPERTISE})
+public class ViewExpertise extends HttpServlet {
 
     @EJB
     private ExpertiseFacade expertiseFacade;
-
-    @EJB
-    private VetFacade vetFacade;
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -50,16 +41,14 @@ public class ViewProfile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        ClinicUser clinicUser = (ClinicUser) session.getAttribute("clinicUser");
-        request.setAttribute("clinicUser", clinicUser);
-        if (clinicUser.getUserRole().equals(UserRole.VET)) {
-            Vet vet = vetFacade.find(clinicUser.getClinicUserId());
-            List<String> expertises = vet.getExpertises().stream().map(Expertise::getName).collect(Collectors.toList());
-            request.setAttribute("expertises", StringUtil.requireNonNullElse(
-                    StringUtil.getConcatenatedString(expertises, ","), DASH));
-        }
-        request.getRequestDispatcher(VIEW_PROFILE + ".jsp").forward(request, response);
+        PaginationUtil.applyPagination(request, response, PaginationConfig.<Expertise>builder()
+                .request(request)
+                .response(response)
+                .entityAttribute("expertises")
+                .viewPageEndpoint(VIEW_EXPERTISE)
+                .viewJspPath(VIEW_EXPERTISES)
+                .facade(expertiseFacade)
+                .build());
     }
 
     /**

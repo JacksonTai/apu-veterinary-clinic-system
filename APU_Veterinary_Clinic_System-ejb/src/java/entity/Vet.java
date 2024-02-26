@@ -6,6 +6,7 @@
 package entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -24,16 +25,11 @@ import static constant.UserRole.VET;
 @NoArgsConstructor
 public class Vet extends ClinicUser {
 
-    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "VET_EXPERTISES", joinColumns = @JoinColumn(name = "VET_ID"))
-    @Column(name="EXPERTISE")
-    private List<String> expertise;
-
-    @OneToMany(cascade = CascadeType.REMOVE)
-    private List<Appointment> appointments = new ArrayList<>();
+    @OneToMany
+    private List<Expertise> expertises = new ArrayList<>();
 
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "WORKING_DAYS", joinColumns = @JoinColumn(name = "VET_ID"))
+    @CollectionTable(name = "VET_WORKING_DAYS", joinColumns = @JoinColumn(name = "VET_ID"))
     @Column(name="WORKING_DAY")
     private List<String> workingDays = new ArrayList<>();
 

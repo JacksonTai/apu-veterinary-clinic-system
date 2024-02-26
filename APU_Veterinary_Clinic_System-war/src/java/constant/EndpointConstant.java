@@ -18,6 +18,7 @@ public class EndpointConstant {
     public static final String WORKING_ROTA = "/workingRota";
     public static final String REPORT = "/report";
     public static final String PROFILE = "/profile";
+    public static final String EXPERTISE = "/expertise";
 
     public static final String LOGOUT = "/logout";
     public static final String REGISTRATION_SUCCESS = "/registrationSuccess";
@@ -57,6 +58,11 @@ public class EndpointConstant {
     public static final String DELETE_STAFF = STAFF + "/deleteStaff";
     public static final String CREATE_STAFF = STAFF + "/createStaff";
     public static final String UPDATE_STAFF = STAFF + "/updateStaff";
+
+    public static final String VIEW_EXPERTISE = EXPERTISE + "/viewExpertise";
+    public static final String VIEW_EXPERTISES = EXPERTISE + "/viewExpertises";
+    public static final String DELETE_EXPERTISE = EXPERTISE + "/deleteExpertise";
+    public static final String CREATE_EXPERTISE = EXPERTISE + "/createExpertise";
 
     public static final String REVENUE = "/revenue";
     public static final String CUSTOMER_REPORT = "/report";

@@ -41,11 +41,6 @@ public class Pet implements Serializable {
     private String healthStatus;
 
     @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "APPOINTMENTS")
-    private List<Appointment> appointments = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "MEDICAL_RECORDS")
     private List<MedicalRecord> medicalRecords = new ArrayList<>();
 
     public Pet(String species, String breed, String name, String healthStatus) {

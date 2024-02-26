@@ -23,6 +23,7 @@
         <thead>
         <tr>
             <th scope="col"></th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
@@ -46,7 +47,7 @@
             <c:if test="${sessionScope.clinicUser.userRole eq VET}">
                 <tr>
                     <th scope="row">Expertises:</th>
-                    <td>${StringUtil.requireNonNullElse(StringUtil.getConcatenatedString(expertises), DASH)}</td>
+                    <td>${expertises}</td>
                 </tr>
             </c:if>
         </c:if>

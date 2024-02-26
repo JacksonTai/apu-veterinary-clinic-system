@@ -78,7 +78,7 @@ public class StringUtil {
         return (value != null && !value.trim().isEmpty()) ? value : replacement;
     }
 
-    public String getConcatenatedString(List<String> values) {
-        return values.stream().collect(Collectors.joining(", "));
+    public static String getConcatenatedString(List<String> values, String separator) {
+        return String.join(separator + " ", values);
     }
 }

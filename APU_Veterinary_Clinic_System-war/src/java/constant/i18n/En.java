@@ -45,4 +45,5 @@ public class En {
     public static final String CUSTOMER_NOT_FOUND_MESSAGE = "Customer not found";
     public static final String EMPTY_CUSTOMER_DETAILS_MESSAGE = "Customer details is required.";
 
+    public static final String DUPLICATE_EXPERTISE_NAME_MESSAGE = "This expertise already exists.";
 }

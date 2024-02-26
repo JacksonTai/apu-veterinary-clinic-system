@@ -34,9 +34,17 @@ public class Appointment implements Serializable {
     private String appointmentDate;
 
     @Column(name="APPOINTMENT_STATUS")
-    private AppointmentStatus appointmentStatus;
+    private String appointmentStatus;
 
-    public Appointment(String appointmentDate, AppointmentStatus appointmentStatus) {
+    @OneToOne
+    @JoinColumn(name="VET_ID")
+    private Vet assignedVet;
+
+    @OneToOne
+    @JoinColumn(name="PET_ID")
+    private Pet pet;
+
+    public Appointment(String appointmentDate, String appointmentStatus) {
         this.appointmentDate = appointmentDate;
         this.appointmentStatus = appointmentStatus;
     }

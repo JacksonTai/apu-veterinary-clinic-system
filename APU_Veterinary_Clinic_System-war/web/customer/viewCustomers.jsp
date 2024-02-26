@@ -57,7 +57,9 @@
                         <td>
                             <a class="btn btn-light btn-sm"
                                href="<c:url value='<%= EndpointConstant.VIEW_CUSTOMER %>'/>?id=${customer.customerId}"
-                               role="button">View</a>
+                               role="button">
+                                View
+                            </a>
                         </td>
                     </tr>
                 </c:forEach>

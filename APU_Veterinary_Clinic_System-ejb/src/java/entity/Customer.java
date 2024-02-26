@@ -62,7 +62,8 @@ public class Customer implements Serializable {
     @OneToMany(cascade = CascadeType.REMOVE)
     private List<Pet> pets = new ArrayList<>();
 
-    public Customer(String fullName, String phoneNumber, String email, String gender, String dateOfBirth, String address) {
+    public Customer(String fullName, String phoneNumber, String email, String gender, String dateOfBirth,
+                    String address) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.email = email;
