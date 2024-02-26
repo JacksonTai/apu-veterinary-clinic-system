@@ -13,12 +13,12 @@
 </head>
 <body>
 <%@ include file="/shared/component/header.jsp" %>
-<main class="w-75 my-2 mx-auto overflow-x-auto">
+<main class="w-75 my-2 p-2 mx-auto overflow-x-auto">
     <h1 class="text-center">Update Profile</h1>
     <form action="<c:url value='<%= EndpointConstant.UPDATE_PROFILE %>'/>" method="POST" class="my-2 mx-auto"
-          style="width: 15rem;">
+          style="max-width: 30rem;">
         <input type="hidden" name="formSubmitted" value="true">
-        <div class="mb-3">
+        <div class="mb-3 p-1">
             <label for="fullName" class="form-label">Full Name:</label>
             <input type="text" class="form-control" id="fullName" name="fullName"
                    value="${param.formSubmitted != null ? param.fullName : clinicUser.fullName}">
@@ -26,7 +26,7 @@
                 <span style="color: red;">${fullNameError}</span>
             </c:if>
         </div>
-        <div class="mb-3">
+        <div class="mb-3 p-1">
             <label for="email" class="form-label">Email:</label>
             <input type="text" class="form-control" id="email" name="email"
                    value="${param.formSubmitted != null ? param.email : clinicUser.email}">
@@ -34,8 +34,29 @@
                 <span style="color: red;">${emailError}</span>
             </c:if>
         </div>
-
-        <div class="mb-3">
+        <c:if test="${not empty sessionScope.clinicUser}">
+            <c:if test="${sessionScope.clinicUser.userRole eq VET}">
+                <div class="mb-3">
+                    <label class="form-label">Expertises:</label>
+                    <div class="btn-group d-flex flex-wrap" role="group"
+                         aria-label="Basic checkbox toggle button group">
+                        <c:forEach items="${expertises}" var="expertise">
+                            <c:set var="isChecked" value="false"/>
+                            <c:forEach items="${clinicUser.expertises}" var="vetExpertise">
+                                <c:if test="${vetExpertise.expertiseId eq expertise.expertiseId}">
+                                    <c:set var="isChecked" value="true"/>
+                                </c:if>
+                            </c:forEach>
+                            <input type="checkbox" class="btn-check" id="${expertise.expertiseId}" autocomplete="off"
+                                   <c:if test="${isChecked}">checked</c:if>>
+                            <label class="btn btn-outline-primary m-1 rounded-0"
+                                   for="${expertise.expertiseId}">${expertise.name}</label>
+                        </c:forEach>
+                    </div>
+                </div>
+            </c:if>
+        </c:if>
+        <div class="mb-3 p-1">
             <label for="password" class="form-label">Password:</label>
             <input type="password" class="form-control" id="password" name="password"
                    value="${not empty param.password ? param.password : ''}">

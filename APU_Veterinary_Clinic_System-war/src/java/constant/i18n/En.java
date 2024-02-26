@@ -46,4 +46,7 @@ public class En {
     public static final String EMPTY_CUSTOMER_DETAILS_MESSAGE = "Customer details is required.";
 
     public static final String DUPLICATE_EXPERTISE_NAME_MESSAGE = "This expertise already exists.";
+    public static final String ERROR_UPDATING_PROFILE = "Error occurred while trying to update profile";
+
+
 }

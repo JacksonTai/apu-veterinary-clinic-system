@@ -5,8 +5,17 @@
  */
 package controller.profile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import constant.MakeChecker;
 import entity.ClinicUser;
+import entity.MakerChecker;
+import entity.Vet;
+import filter.SessionAuthFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import repository.ClinicUserFacade;
+import repository.ExpertiseFacade;
+import repository.MakerCheckerFacade;
 import validator.ClinicUserValidator;
 
 import javax.ejb.EJB;
@@ -22,6 +31,8 @@ import java.util.Map;
 
 import static constant.EndpointConstant.UPDATE_PROFILE;
 import static constant.EndpointConstant.VIEW_PROFILE;
+import static constant.UserRole.VET;
+import static constant.i18n.En.ERROR_UPDATING_PROFILE;
 
 /**
  * @author Jackson Tai
@@ -29,10 +40,19 @@ import static constant.EndpointConstant.VIEW_PROFILE;
 @WebServlet(name = "UpdateProfile", urlPatterns = {UPDATE_PROFILE})
 public class UpdateProfile extends HttpServlet {
 
+    private static final Logger logger = LoggerFactory.getLogger(SessionAuthFilter.class);
+
+    @EJB
+    private MakerCheckerFacade makerCheckerFacade;
+
+    @EJB
+    private ExpertiseFacade expertiseFacade;
+
     @EJB
     private ClinicUserFacade clinicUserFacade;
 
     private ClinicUser clinicUser;
+    private Vet vet;
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -47,7 +67,13 @@ public class UpdateProfile extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         this.clinicUser = (ClinicUser) session.getAttribute("clinicUser");
-        request.setAttribute("clinicUser", clinicUser);
+        if (clinicUser.getUserRole().equals(VET)) {
+            this.vet = (Vet) clinicUser;
+            request.setAttribute("expertises", expertiseFacade.findAll());
+            request.setAttribute("clinicUser", vet);
+        } else {
+            request.setAttribute("clinicUser", clinicUser);
+        }
         request.getRequestDispatcher(UPDATE_PROFILE + ".jsp").forward(request, response);
     }
 
@@ -86,9 +112,27 @@ public class UpdateProfile extends HttpServlet {
             return;
         }
 
-        clinicUser.setEmail(email.toLowerCase());
-        clinicUser.setFullName(fullName);
-        clinicUserFacade.edit(clinicUser);
+        if (clinicUser.getUserRole().equals(VET)) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                String currentVet = objectMapper.writeValueAsString(vet);
+                vet.setEmail(email);
+                vet.setFullName(fullName);
+                String updatedVet = objectMapper.writeValueAsString(vet);
+
+                makerCheckerFacade.create(new MakerChecker(clinicUser.getClinicUserId(), null,
+                        MakeChecker.Module.PROFILE.toString(), MakeChecker.ActionType.UPDATE.toString(),
+                        currentVet, updatedVet, MakeChecker.Status.PENDING.toString()));
+
+            } catch (Exception e) {
+                logger.error(ERROR_UPDATING_PROFILE, e);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ERROR_UPDATING_PROFILE);
+            }
+        }
+
+//        clinicUser.setEmail(email.toLowerCase());
+//        clinicUser.setFullName(fullName);
+//        clinicUserFacade.edit(clinicUser);
         response.sendRedirect(request.getContextPath() + VIEW_PROFILE + ".jsp");
     }
 
