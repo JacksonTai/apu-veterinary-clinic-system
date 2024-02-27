@@ -57,14 +57,14 @@ public class UpdateProfile extends HttpServlet {
     @EJB
     private ClinicUserFacade clinicUserFacade;
 
+    private MakerChecker mc;
     private ClinicUser clinicUser;
-    private ClinicUser updatedClinicUser;
+    private ClinicUser mcClinicUser;
     private Vet vet;
-    private Vet updatedVet;
+    private Vet mcVet;
+    private boolean mcExist;
     private List<Expertise> expertises = new ArrayList<>();
-    private MakerChecker makerChecker;
-    private boolean isMakerCheckerExist;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -81,22 +81,22 @@ public class UpdateProfile extends HttpServlet {
         HttpSession session = request.getSession(false);
         clinicUser = (ClinicUser) session.getAttribute("clinicUser");
 
-        makerChecker = makerCheckerFacade.findByMakerIdAndModuleAndActionType(clinicUser.getClinicUserId(),
+        mc = makerCheckerFacade.findByMakerIdAndModuleAndActionType(clinicUser.getClinicUserId(),
                 MakeChecker.Module.PROFILE.toString(), MakeChecker.ActionType.UPDATE.toString());
-        request.setAttribute("isPending", isMakerCheckerExist = makerChecker != null);
+        request.setAttribute("isPending", mcExist = mc != null);
 
         try {
-            if (isMakerCheckerExist) {
+            if (mcExist) {
                 if (clinicUser.getUserRole().equals(VET)) {
-                    updatedVet = objectMapper.readValue(makerChecker.getNewValue(), Vet.class);
-                    request.setAttribute("clinicUser", updatedVet);
+                    mcVet = objectMapper.readValue(mc.getNewValue(), Vet.class);
+                    request.setAttribute("clinicUser", mcVet);
                     request.setAttribute("expertises", expertises = expertiseFacade.findAll());
                 } else {
-                    updatedClinicUser = objectMapper.readValue(makerChecker.getNewValue(), ClinicUser.class);
-                    request.setAttribute("clinicUser", updatedClinicUser);
+                    mcClinicUser = objectMapper.readValue(mc.getNewValue(), ClinicUser.class);
+                    request.setAttribute("clinicUser", mcClinicUser);
                 }
             }
-            if (!isMakerCheckerExist) {
+            if (!mcExist) {
                 if (clinicUser.getUserRole().equals(VET)) {
                     vet = (Vet) clinicUser;
                     request.setAttribute("clinicUser", vet);
@@ -129,28 +129,26 @@ public class UpdateProfile extends HttpServlet {
         String email = request.getParameter("email").trim();
         String password = request.getParameter("password").trim();
         request.setAttribute("expertises", expertises);
-        request.setAttribute("isPending", isMakerCheckerExist);
+        request.setAttribute("isPending", mcExist);
 
         Map<String, String> errorMessages = new HashMap<>();
         ClinicUserValidator clinicUserValidator = new ClinicUserValidator(clinicUserFacade);
         errorMessages.putAll(ClinicUserValidator.validateEmail(email));
         errorMessages.putAll(ClinicUserValidator.validateFullName(fullName));
 
-        boolean emailChanged;
-        boolean fullNameChanged;
-        if (clinicUser.getUserRole().equals(VET)) {
-            emailChanged = !email.equalsIgnoreCase(isMakerCheckerExist ? updatedVet.getEmail()
-                    : vet.getEmail());
-            fullNameChanged = !fullName.equalsIgnoreCase(isMakerCheckerExist ? updatedVet.getFullName()
-                    : vet.getFullName());
-        } else {
-            emailChanged = !email.equalsIgnoreCase(isMakerCheckerExist ? updatedClinicUser.getEmail()
-                    : clinicUser.getEmail());
-            fullNameChanged = !fullName.equalsIgnoreCase(isMakerCheckerExist ? updatedClinicUser.getFullName()
-                    : clinicUser.getFullName());
+        // Check if the user has made any changes to the actual profile or the one in the maker checker.
+        boolean mcChanged = false;
+        boolean profileEmailChanged = !email.equalsIgnoreCase(clinicUser.getEmail());
+        boolean profileFullNameChanged = !fullName.equalsIgnoreCase(clinicUser.getFullName());
+        boolean profileChanged = profileEmailChanged || profileFullNameChanged;
+        if (mcExist) {
+            if (clinicUser.getUserRole().equals(VET)) {
+                mcChanged = !email.equalsIgnoreCase(mcVet.getEmail()) || !fullName.equalsIgnoreCase(mcVet.getFullName());
+            } else {
+                mcChanged = !email.equalsIgnoreCase(mcClinicUser.getEmail()) || !fullName.equalsIgnoreCase(mcClinicUser.getFullName());
+            }
         }
-        boolean noChanges = !emailChanged && !fullNameChanged;
-        if (noChanges) {
+        if ((!mcExist && !profileChanged) || (mcExist && !mcChanged)) {
             request.setAttribute("noChanges", true);
             request.setAttribute("noChangesMessage", NO_CHANGES_MESSAGE);
             request.getRequestDispatcher(UPDATE_PROFILE + ".jsp").forward(request, response);
@@ -158,10 +156,10 @@ public class UpdateProfile extends HttpServlet {
         }
 
         errorMessages.putAll(clinicUserValidator.validateCredentialDetails(clinicUser.getEmail(), password));
-        if (emailChanged) {
+        if (profileEmailChanged) {
             errorMessages.putAll(clinicUserValidator.validateDuplicateEmail(email));
         }
-        if (fullNameChanged) {
+        if (profileFullNameChanged) {
             errorMessages.putAll(clinicUserValidator.validateDuplicateFullName(fullName));
         }
         if (!errorMessages.isEmpty()) {
@@ -176,6 +174,14 @@ public class UpdateProfile extends HttpServlet {
 
             ClinicUser clinicUser = null;
             Vet vet = null;
+
+            // If the maker checker exist and the user update the profile to the same value, remove the maker checker
+            if (mcExist && !profileChanged) {
+                makerCheckerFacade.remove(mc);
+                response.sendRedirect(request.getContextPath() + VIEW_PROFILE);
+                return;
+            }
+
             if (this.clinicUser.getUserRole().equals(VET)) {
                 vet = SerializationUtils.clone(this.vet);
                 vet.setEmail(email);
@@ -189,12 +195,12 @@ public class UpdateProfile extends HttpServlet {
             String newValue = this.clinicUser.getUserRole().equals(VET) ? objectMapper.writeValueAsString(vet) :
                     objectMapper.writeValueAsString(clinicUser);
 
-            if (isMakerCheckerExist) {
-                makerChecker.setNewValue(newValue);
-                makerCheckerFacade.edit(makerChecker);
+            if (mcExist) {
+                mc.setNewValue(newValue);
+                makerCheckerFacade.edit(mc);
             }
 
-            if (!isMakerCheckerExist) {
+            if (!mcExist) {
                 makerCheckerFacade.create(new MakerChecker(this.clinicUser.getClinicUserId(), null,
                         MakeChecker.Module.PROFILE.toString(), MakeChecker.ActionType.UPDATE.toString(), currentValue,
                         newValue, MakeChecker.Status.PENDING.toString()));
@@ -203,7 +209,7 @@ public class UpdateProfile extends HttpServlet {
             logger.error(ERROR_UPDATING_PROFILE, e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ERROR_UPDATING_PROFILE);
         }
-        response.sendRedirect(request.getContextPath() + VIEW_PROFILE + ".jsp");
+        response.sendRedirect(request.getContextPath() + VIEW_PROFILE);
     }
 
     /**
