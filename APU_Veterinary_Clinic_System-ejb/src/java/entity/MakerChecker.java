@@ -16,6 +16,11 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "MAKER_CHECKER")
+@NamedQueries({
+        @NamedQuery(name = "Customer.findByMakerIdAndModuleAndActionType",
+                query = "SELECT mc FROM MakerChecker mc WHERE mc.makerId = :makerId AND mc.module = :module AND " +
+                        "mc.actionType = :actionType")
+})
 @Data
 @NoArgsConstructor
 public class MakerChecker implements Serializable {

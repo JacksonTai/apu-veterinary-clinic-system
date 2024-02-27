@@ -28,5 +28,12 @@ public class MakerCheckerFacade extends AbstractFacade<MakerChecker> {
     public MakerCheckerFacade() {
         super(MakerChecker.class);
     }
-    
+
+    public MakerChecker findByMakerIdAndModuleAndActionType(String makerId, String module, String actionType) {
+        String[] paramNames = {"makerId", "module", "actionType"};
+        String[] paramValues = {makerId, module, actionType};
+        return findByAttributes("Customer.findByMakerIdAndModuleAndActionType", paramNames, paramValues)
+                .orElse(null);
+    }
+
 }

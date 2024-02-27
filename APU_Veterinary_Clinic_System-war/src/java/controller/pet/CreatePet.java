@@ -11,7 +11,6 @@ import entity.Pet;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,8 +24,6 @@ import validator.CustomerValidator;
 import validator.PetValidator;
 
 import static constant.EndpointConstant.*;
-import static constant.i18n.En.EMPTY_CUSTOMER_DETAILS_MESSAGE;
-import static constant.i18n.En.CUSTOMER_NOT_FOUND_MESSAGE;
 
 import repository.CustomerFacade;
 import validator.ValidationResponse;

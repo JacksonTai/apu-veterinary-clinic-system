@@ -68,6 +68,22 @@ public abstract class AbstractFacade<T> {
         }
     }
 
+    protected Optional<T> findByAttributes(String namedQuery, String[] paramNames, String[] paramValues) {
+        try {
+            if (paramNames.length != paramValues.length) {
+                throw new IllegalArgumentException("Number of paramNames must match the number of paramValues");
+            }
+            javax.persistence.Query query = getEntityManager().createNamedQuery(namedQuery);
+            for (int i = 0; i < paramNames.length; i++) {
+                query.setParameter(paramNames[i], paramValues[i]);
+            }
+            T result = (T) query.getSingleResult();
+            return Optional.ofNullable(result);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
     public int count() {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         javax.persistence.criteria.Root<T> rt = cq.from(entityClass);

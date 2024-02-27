@@ -17,6 +17,16 @@
     <h1 class="text-center">Update Profile</h1>
     <form action="<c:url value='<%= EndpointConstant.UPDATE_PROFILE %>'/>" method="POST" class="my-2 mx-auto"
           style="max-width: 30rem;">
+        <c:if test="${not empty isPending && isPending eq true}">
+            <div class="alert alert-warning mt-4" role="alert">
+                This is your last profile update information, you may update again until it is approved.
+            </div>
+        </c:if>
+        <c:if test="${noChanges}">
+            <div class="alert alert-warning mt-4" role="alert">
+                ${noChangesMessage}
+            </div>
+        </c:if>
         <input type="hidden" name="formSubmitted" value="true">
         <div class="mb-3 p-1">
             <label for="fullName" class="form-label">Full Name:</label>

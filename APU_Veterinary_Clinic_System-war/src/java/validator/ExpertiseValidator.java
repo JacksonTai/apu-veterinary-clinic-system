@@ -1,16 +1,13 @@
 package validator;
 
-import entity.Customer;
+import constant.i18n.En;
 import entity.Expertise;
-import repository.CustomerFacade;
 import repository.ExpertiseFacade;
 
 import javax.ejb.EJB;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import static constant.i18n.En.*;
 
 public class ExpertiseValidator implements Validator<Expertise> {
 
@@ -30,7 +27,7 @@ public class ExpertiseValidator implements Validator<Expertise> {
         Map<String, String> errorMessages = new HashMap<>();
         name = name.trim();
         if (name.isEmpty()) {
-            errorMessages.put("nameError", EMPTY_NAME_MESSAGE);
+            errorMessages.put("nameError", En.EMPTY_NAME_MESSAGE);
         }
         return errorMessages;
     }
@@ -39,7 +36,7 @@ public class ExpertiseValidator implements Validator<Expertise> {
         Map<String, String> errorMessages = new HashMap<>();
         Optional<Expertise> existingExpertise = expertiseFacade.findByName(name.trim().toLowerCase());
         if (existingExpertise.isPresent()) {
-            errorMessages.put("nameError", DUPLICATE_EXPERTISE_NAME_MESSAGE);
+            errorMessages.put("nameError", En.DUPLICATE_EXPERTISE_NAME_MESSAGE);
         }
         return errorMessages;
     }

@@ -17,16 +17,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
 import static constant.EndpointConstant.CREATE_CUSTOMER;
 import static constant.EndpointConstant.VIEW_CUSTOMER;
 import static constant.GlobalConstant.ISO_DATE_FORMAT;
-import static constant.i18n.En.INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE;
 
 /**
  * @author Jackson Tai

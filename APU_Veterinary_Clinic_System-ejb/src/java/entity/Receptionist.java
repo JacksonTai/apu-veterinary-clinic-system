@@ -11,6 +11,12 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 import static constant.UserRole.RECEPTIONIST;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import repository.CustomerFacade;
 
 /**
  *

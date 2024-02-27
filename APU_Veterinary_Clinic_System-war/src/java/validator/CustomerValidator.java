@@ -1,5 +1,7 @@
 package validator;
 
+import constant.GlobalConstant;
+import constant.i18n.En;
 import entity.Customer;
 import repository.CustomerFacade;
 
@@ -11,9 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
-
-import static constant.GlobalConstant.*;
-import static constant.i18n.En.*;
 
 ;
 
@@ -46,9 +45,9 @@ public class CustomerValidator implements Validator<Customer> {
         Map<String, String> errorMessages = new HashMap<>();
         phoneNumber = phoneNumber.trim();
         if (phoneNumber.isEmpty()) {
-            errorMessages.put("phoneNumberError", EMPTY_PHONE_NUMBER_MESSAGE);
-        } else if (!Pattern.matches(MY_PHONE_REGEX, phoneNumber)) {
-            errorMessages.put("phoneNumberError", INVALID_PHONE_NUMBER_MESSAGE);
+            errorMessages.put("phoneNumberError", En.EMPTY_PHONE_NUMBER_MESSAGE);
+        } else if (!Pattern.matches(GlobalConstant.MY_PHONE_REGEX, phoneNumber)) {
+            errorMessages.put("phoneNumberError", En.INVALID_PHONE_NUMBER_MESSAGE);
         }
         return errorMessages;
     }
@@ -57,9 +56,9 @@ public class CustomerValidator implements Validator<Customer> {
         Map<String, String> errorMessages = new HashMap<>();
         email = email.trim();
         if (email.isEmpty()) {
-            errorMessages.put("emailError", EMPTY_EMAIL_MESSAGE);
-        } else if (!Pattern.matches(CUSTOMER_EMAIL_REGEX, email) || Pattern.matches(STAFF_EMAIL_REGEX, email)) {
-            errorMessages.put("emailError", INVALID_EMAIL_MESSAGE);
+            errorMessages.put("emailError", En.EMPTY_EMAIL_MESSAGE);
+        } else if (!Pattern.matches(GlobalConstant.CUSTOMER_EMAIL_REGEX, email) || Pattern.matches(GlobalConstant.STAFF_EMAIL_REGEX, email)) {
+            errorMessages.put("emailError", En.INVALID_EMAIL_MESSAGE);
         }
         return errorMessages;
     }
@@ -68,10 +67,10 @@ public class CustomerValidator implements Validator<Customer> {
         Map<String, String> errorMessages = new HashMap<>();
         gender = gender.trim();
         if (gender.isEmpty()) {
-            errorMessages.put("genderError", EMPTY_GENDER_MESSAGE);
+            errorMessages.put("genderError", En.EMPTY_GENDER_MESSAGE);
         } else if (!gender.equalsIgnoreCase("Male") && !gender.equalsIgnoreCase("Female") &&
                 !gender.equalsIgnoreCase("Other")) {
-            errorMessages.put("genderError", INVALID_GENDER_MESSAGE);
+            errorMessages.put("genderError", En.INVALID_GENDER_MESSAGE);
         }
         return errorMessages;
     }
@@ -80,17 +79,17 @@ public class CustomerValidator implements Validator<Customer> {
         Map<String, String> errorMessages = new HashMap<>();
         dateOfBirth = dateOfBirth.trim();
         if (dateOfBirth.isEmpty()) {
-            errorMessages.put("dateOfBirthError", EMPTY_DATE_OF_BIRTH_MESSAGE);
+            errorMessages.put("dateOfBirthError", En.EMPTY_DATE_OF_BIRTH_MESSAGE);
         } else {
             LocalDate dateOfBirthLocalDate;
             try {
-                dateOfBirthLocalDate = LocalDate.parse(dateOfBirth, DateTimeFormatter.ofPattern(ISO_DATE_FORMAT));
+                dateOfBirthLocalDate = LocalDate.parse(dateOfBirth, DateTimeFormatter.ofPattern(GlobalConstant.ISO_DATE_FORMAT));
                 LocalDate today = LocalDate.now();
                 if (dateOfBirthLocalDate.isAfter(today)) {
-                    errorMessages.put("dateOfBirthError", FUTURE_DATE_OF_BIRTH_MESSAGE);
+                    errorMessages.put("dateOfBirthError", En.FUTURE_DATE_OF_BIRTH_MESSAGE);
                 }
             } catch (DateTimeParseException e) {
-                errorMessages.put("dateOfBirthError", INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE);
+                errorMessages.put("dateOfBirthError", En.INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE);
             }
         }
         return errorMessages;
@@ -100,9 +99,9 @@ public class CustomerValidator implements Validator<Customer> {
         Map<String, String> errorMessages = new HashMap<>();
         address = address.trim();
         if (address.isEmpty()) {
-            errorMessages.put("addressError", EMPTY_ADDRESS_MESSAGE);
+            errorMessages.put("addressError", En.EMPTY_ADDRESS_MESSAGE);
         } else if (address.length() < 10 || address.length() > 100) {
-            errorMessages.put("addressError", INVALID_ADDRESS_LENGTH_MESSAGE);
+            errorMessages.put("addressError", En.INVALID_ADDRESS_LENGTH_MESSAGE);
         }
         return errorMessages;
     }
@@ -119,7 +118,7 @@ public class CustomerValidator implements Validator<Customer> {
         Map<String, String> errorMessages = new HashMap<>();
         Optional<Customer> existingCustomer = customerFacade.findByFullName(fullName.trim().toLowerCase());
         if (existingCustomer.isPresent()) {
-            errorMessages.put("fullNameError", DUPLICATE_FULL_NAME_MESSAGE);
+            errorMessages.put("fullNameError", En.DUPLICATE_FULL_NAME_MESSAGE);
         }
         return errorMessages;
     }
@@ -128,7 +127,7 @@ public class CustomerValidator implements Validator<Customer> {
         Map<String, String> errorMessages = new HashMap<>();
         Optional<Customer> existingCustomer = customerFacade.findByPhoneNumber(phoneNumber.trim());
         if (existingCustomer.isPresent()) {
-            errorMessages.put("phoneNumberError", DUPLICATE_PHONE_NUMBER_MESSAGE);
+            errorMessages.put("phoneNumberError", En.DUPLICATE_PHONE_NUMBER_MESSAGE);
         }
         return errorMessages;
     }
@@ -137,7 +136,7 @@ public class CustomerValidator implements Validator<Customer> {
         Map<String, String> errorMessages = new HashMap<>();
         Optional<Customer> existingCustomer = customerFacade.findByEmail(email.trim().toLowerCase());
         if (existingCustomer.isPresent()) {
-            errorMessages.put("emailError", DUPLICATE_EMAIL_MESSAGE);
+            errorMessages.put("emailError", En.DUPLICATE_EMAIL_MESSAGE);
         }
         return errorMessages;
     }
@@ -146,11 +145,11 @@ public class CustomerValidator implements Validator<Customer> {
         Map<String, String> errorMessages = new HashMap<>();
         Optional<Customer> customerOptional = Optional.empty();
         if (customerDetails.isEmpty()) {
-            errorMessages.put("customerDetailsError", EMPTY_CUSTOMER_DETAILS_MESSAGE);
+            errorMessages.put("customerDetailsError", En.EMPTY_CUSTOMER_DETAILS_MESSAGE);
         } else {
             customerOptional = customerFacade.findByIdOrFullNameOrEmailOrPhoneNumber(customerDetails);
             if (!customerOptional.isPresent()) {
-                errorMessages.put("customerDetailsError", CUSTOMER_NOT_FOUND_MESSAGE);
+                errorMessages.put("customerDetailsError", En.CUSTOMER_NOT_FOUND_MESSAGE);
             }
         }
         return new ValidationResponse<>(customerOptional, errorMessages);

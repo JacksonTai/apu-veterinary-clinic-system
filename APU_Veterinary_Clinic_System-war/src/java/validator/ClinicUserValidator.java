@@ -1,17 +1,16 @@
 package validator;
 
+import constant.GlobalConstant;
+import constant.i18n.En;
 import entity.ClinicUser;
 import org.mindrot.jbcrypt.BCrypt;
 import repository.ClinicUserFacade;
+import util.StringUtil;
 
 import javax.ejb.EJB;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import static constant.GlobalConstant.*;
-import static constant.i18n.En.*;
-import static util.StringUtil.containsExcessiveWhitespace;
 
 public class ClinicUserValidator implements Validator<ClinicUser> {
 
@@ -35,9 +34,9 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
         Map<String, String> errorMessages = new HashMap<>();
         email = email.trim().toLowerCase();
         if (email.isEmpty()) {
-            errorMessages.put("emailError", EMPTY_EMAIL_MESSAGE);
-        } else if (!email.matches(STAFF_EMAIL_REGEX)) {
-            errorMessages.put("emailError", INVALID_EMAIL_MESSAGE);
+            errorMessages.put("emailError", En.EMPTY_EMAIL_MESSAGE);
+        } else if (!email.matches(GlobalConstant.STAFF_EMAIL_REGEX)) {
+            errorMessages.put("emailError", En.INVALID_EMAIL_MESSAGE);
         }
         return errorMessages;
     }
@@ -46,9 +45,9 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
         Map<String, String> errorMessages = new HashMap<>();
         password = password.trim();
         if (password.isEmpty()) {
-            errorMessages.put("passwordError", EMPTY_PASSWORD_MESSAGE);
-        } else if (!password.matches(PASSWORD_REGEX)) {
-            errorMessages.put("passwordError", INVALID_PASSWORD_MESSAGE);
+            errorMessages.put("passwordError", En.EMPTY_PASSWORD_MESSAGE);
+        } else if (!password.matches(GlobalConstant.PASSWORD_REGEX)) {
+            errorMessages.put("passwordError", En.INVALID_PASSWORD_MESSAGE);
         }
         return errorMessages;
     }
@@ -57,13 +56,13 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
         Map<String, String> errorMessages = new HashMap<>();
         fullName = fullName.trim();
         if (fullName.isEmpty()) {
-            errorMessages.put("fullNameError", EMPTY_FULL_NAME_MESSAGE);
+            errorMessages.put("fullNameError", En.EMPTY_FULL_NAME_MESSAGE);
         } else if (fullName.length() < 8 || fullName.length() > 50) {
-            errorMessages.put("fullNameError", INVALID_FULL_NAME_LENGTH_MESSAGE);
-        } else if (containsExcessiveWhitespace(fullName)) {
-            errorMessages.put("fullNameError", EXCESSIVE_WHITESPACE_FULL_NAME_MESSAGE);
-        } else if (!Pattern.matches(ALPHABET_WHITESPACE_ONLY_REGEX, fullName)) {
-            errorMessages.put("fullNameError", INVALID_FULL_NAME_CHARACTER_MESSAGE);
+            errorMessages.put("fullNameError", En.INVALID_FULL_NAME_LENGTH_MESSAGE);
+        } else if (StringUtil.containsExcessiveWhitespace(fullName)) {
+            errorMessages.put("fullNameError", En.EXCESSIVE_WHITESPACE_FULL_NAME_MESSAGE);
+        } else if (!Pattern.matches(GlobalConstant.ALPHABET_WHITESPACE_ONLY_REGEX, fullName)) {
+            errorMessages.put("fullNameError", En.INVALID_FULL_NAME_CHARACTER_MESSAGE);
         }
         return errorMessages;
     }
@@ -73,10 +72,10 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
         email = email.trim().toLowerCase();
         password = password.trim();
         if (email.isEmpty()) {
-            errorMessages.put("emailError", EMPTY_EMAIL_MESSAGE);
+            errorMessages.put("emailError", En.EMPTY_EMAIL_MESSAGE);
         }
         if (password.isEmpty()) {
-            errorMessages.put("passwordError", EMPTY_PASSWORD_MESSAGE);
+            errorMessages.put("passwordError", En.EMPTY_PASSWORD_MESSAGE);
         }
         return errorMessages;
     }
@@ -85,9 +84,9 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
         Map<String, String> errorMessages = new HashMap<>();
         password = password.trim();
         if (password.isEmpty()) {
-            errorMessages.put("invalidCredentialError", EMPTY_PASSWORD_MESSAGE);
+            errorMessages.put("invalidCredentialError", En.EMPTY_PASSWORD_MESSAGE);
         } else if (authenticateClinicUser(email, password) == null) {
-            errorMessages.put("invalidCredentialError", INVALID_CREDENTIAL_MESSAGE);
+            errorMessages.put("invalidCredentialError", En.INVALID_CREDENTIAL_MESSAGE);
         }
         return errorMessages;
     }
@@ -108,7 +107,7 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
         Map<String, String> errorMessages = new HashMap<>();
         ClinicUser existingClinicUser = clinicUserFacade.findByEmail(email.trim().toLowerCase());
         if (existingClinicUser != null) {
-            errorMessages.put("emailError", DUPLICATE_EMAIL_MESSAGE);
+            errorMessages.put("emailError", En.DUPLICATE_EMAIL_MESSAGE);
         }
         return errorMessages;
     }
@@ -117,7 +116,7 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
         Map<String, String> errorMessages = new HashMap<>();
         ClinicUser existingClinicUser = clinicUserFacade.findByFullName(fullName.trim().toLowerCase());
         if (existingClinicUser != null) {
-            errorMessages.put("fullNameError", DUPLICATE_FULL_NAME_MESSAGE);
+            errorMessages.put("fullNameError", En.DUPLICATE_FULL_NAME_MESSAGE);
         }
         return errorMessages;
     }
