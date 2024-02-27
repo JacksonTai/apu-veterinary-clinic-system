@@ -5,31 +5,27 @@
  */
 package controller.workingRota;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
-import java.util.*;
+import entity.Vet;
+import repository.ClinicUserFacade;
+import repository.VetFacade;
+
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+import java.util.*;
 
-import static constant.EndpointConstant.CREATE_PET;
 import static constant.EndpointConstant.CREATE_WORKING_ROTA;
 import static constant.GlobalConstant.DMY_SLASH_DATE_FORMAT;
 import static util.StringUtil.convertDateFormat;
-
-import javax.ejb.EJB;
-
-import entity.Vet;
-import repository.ClinicUserFacade;
-import repository.VetFacade;
 
 /**
  * @author Jackson Tai

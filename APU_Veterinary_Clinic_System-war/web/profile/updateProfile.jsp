@@ -52,15 +52,16 @@
                          aria-label="Basic checkbox toggle button group">
                         <c:forEach items="${expertises}" var="expertise">
                             <c:set var="isChecked" value="false"/>
-                            <c:forEach items="${clinicUser.expertises}" var="vetExpertise">
+                            <c:forEach items="${selectedExpertises}" var="vetExpertise">
                                 <c:if test="${vetExpertise.expertiseId eq expertise.expertiseId}">
                                     <c:set var="isChecked" value="true"/>
                                 </c:if>
                             </c:forEach>
-                            <input type="checkbox" class="btn-check" id="${expertise.expertiseId}" autocomplete="off"
+                            <input type="checkbox" class="btn-check" autocomplete="off"
+                                   name="expertise_${expertise.expertiseId}" id="expertise_${expertise.expertiseId}"
                                    <c:if test="${isChecked}">checked</c:if>>
                             <label class="btn btn-outline-primary m-1 rounded-0"
-                                   for="${expertise.expertiseId}">${expertise.name}</label>
+                                   for="expertise_${expertise.expertiseId}">${expertise.name}</label>
                         </c:forEach>
                     </div>
                 </div>

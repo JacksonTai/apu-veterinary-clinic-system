@@ -29,10 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static constant.EndpointConstant.UPDATE_PROFILE;
 import static constant.EndpointConstant.VIEW_PROFILE;
@@ -63,6 +61,7 @@ public class UpdateProfile extends HttpServlet {
     private Vet vet;
     private Vet mcVet;
     private boolean mcExist;
+    private boolean isVet;
     private List<Expertise> expertises = new ArrayList<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -81,27 +80,30 @@ public class UpdateProfile extends HttpServlet {
         HttpSession session = request.getSession(false);
         clinicUser = (ClinicUser) session.getAttribute("clinicUser");
 
+        isVet = clinicUser.getUserRole().equals(VET);
         mc = makerCheckerFacade.findByMakerIdAndModuleAndActionType(clinicUser.getClinicUserId(),
                 MakeChecker.Module.PROFILE.toString(), MakeChecker.ActionType.UPDATE.toString());
         request.setAttribute("isPending", mcExist = mc != null);
 
         try {
-            if (mcExist) {
-                if (clinicUser.getUserRole().equals(VET)) {
+            if (isVet) {
+                request.setAttribute("expertises", expertises = expertiseFacade.findAll());
+                if (mcExist) {
                     mcVet = objectMapper.readValue(mc.getNewValue(), Vet.class);
                     request.setAttribute("clinicUser", mcVet);
-                    request.setAttribute("expertises", expertises = expertiseFacade.findAll());
-                } else {
+                    request.setAttribute("selectedExpertises", mcVet.getExpertises());
+                }
+                if (!mcExist) {
+                    vet = (Vet) clinicUser;
+                    request.setAttribute("clinicUser", vet);
+                    request.setAttribute("selectedExpertises", vet.getExpertises());
+                }
+            } else {
+                if (mcExist) {
                     mcClinicUser = objectMapper.readValue(mc.getNewValue(), ClinicUser.class);
                     request.setAttribute("clinicUser", mcClinicUser);
                 }
-            }
-            if (!mcExist) {
-                if (clinicUser.getUserRole().equals(VET)) {
-                    vet = (Vet) clinicUser;
-                    request.setAttribute("clinicUser", vet);
-                    request.setAttribute("expertises", expertises = expertiseFacade.findAll());
-                } else {
+                if (!mcExist) {
                     request.setAttribute("clinicUser", clinicUser);
                 }
             }
@@ -128,8 +130,24 @@ public class UpdateProfile extends HttpServlet {
         String fullName = request.getParameter("fullName").trim();
         String email = request.getParameter("email").trim();
         String password = request.getParameter("password").trim();
-        request.setAttribute("expertises", expertises);
+        List<Expertise> selectedExpertises = new ArrayList<>();
+
         request.setAttribute("isPending", mcExist);
+        if (isVet) {
+            request.setAttribute("expertises", expertises);
+            Enumeration<String> parameterNames = request.getParameterNames();
+            while (parameterNames.hasMoreElements()) {
+                String paramName = parameterNames.nextElement();
+                if (paramName.startsWith("expertise_")) {
+                    String expertiseId = paramName.substring("expertise_".length());
+                    expertises.stream()
+                            .filter(expertise -> expertise.getExpertiseId().equals(expertiseId))
+                            .findFirst()
+                            .ifPresent(selectedExpertises::add);
+                }
+            }
+            request.setAttribute("selectedExpertises", selectedExpertises);
+        }
 
         Map<String, String> errorMessages = new HashMap<>();
         ClinicUserValidator clinicUserValidator = new ClinicUserValidator(clinicUserFacade);
@@ -140,12 +158,18 @@ public class UpdateProfile extends HttpServlet {
         boolean mcChanged = false;
         boolean profileEmailChanged = !email.equalsIgnoreCase(clinicUser.getEmail());
         boolean profileFullNameChanged = !fullName.equalsIgnoreCase(clinicUser.getFullName());
-        boolean profileChanged = profileEmailChanged || profileFullNameChanged;
+        boolean profileExpertisesChanged = !(new HashSet<>(selectedExpertises).containsAll(vet.getExpertises()) &&
+                new HashSet<>(vet.getExpertises()).containsAll(selectedExpertises));
+        boolean profileChanged = profileEmailChanged || profileFullNameChanged || profileExpertisesChanged;
         if (mcExist) {
-            if (clinicUser.getUserRole().equals(VET)) {
-                mcChanged = !email.equalsIgnoreCase(mcVet.getEmail()) || !fullName.equalsIgnoreCase(mcVet.getFullName());
+            if (isVet) {
+                mcChanged = !email.equalsIgnoreCase(mcVet.getEmail()) ||
+                        !fullName.equalsIgnoreCase(mcVet.getFullName()) ||
+                        !(new HashSet<>(selectedExpertises).containsAll(mcVet.getExpertises()) &&
+                                new HashSet<>(mcVet.getExpertises()).containsAll(selectedExpertises));
             } else {
-                mcChanged = !email.equalsIgnoreCase(mcClinicUser.getEmail()) || !fullName.equalsIgnoreCase(mcClinicUser.getFullName());
+                mcChanged = !email.equalsIgnoreCase(mcClinicUser.getEmail()) ||
+                        !fullName.equalsIgnoreCase(mcClinicUser.getFullName());
             }
         }
         if ((!mcExist && !profileChanged) || (mcExist && !mcChanged)) {
@@ -169,9 +193,7 @@ public class UpdateProfile extends HttpServlet {
         }
 
         try {
-            String currentValue = clinicUser.getUserRole().equals(VET) ? objectMapper.writeValueAsString(vet) :
-                    objectMapper.writeValueAsString(clinicUser);
-
+            String currentValue = isVet ? objectMapper.writeValueAsString(vet) : objectMapper.writeValueAsString(clinicUser);
             ClinicUser clinicUser = null;
             Vet vet = null;
 
@@ -182,18 +204,18 @@ public class UpdateProfile extends HttpServlet {
                 return;
             }
 
-            if (this.clinicUser.getUserRole().equals(VET)) {
+            if (isVet) {
                 vet = SerializationUtils.clone(this.vet);
                 vet.setEmail(email);
                 vet.setFullName(fullName);
+                vet.setExpertises(selectedExpertises);
             } else {
                 clinicUser = SerializationUtils.clone(this.clinicUser);
                 clinicUser.setEmail(email);
                 clinicUser.setFullName(fullName);
             }
 
-            String newValue = this.clinicUser.getUserRole().equals(VET) ? objectMapper.writeValueAsString(vet) :
-                    objectMapper.writeValueAsString(clinicUser);
+            String newValue = isVet ? objectMapper.writeValueAsString(vet) : objectMapper.writeValueAsString(clinicUser);
 
             if (mcExist) {
                 mc.setNewValue(newValue);
