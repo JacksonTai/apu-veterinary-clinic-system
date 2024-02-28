@@ -66,11 +66,32 @@
                             </li>
                         </c:if>
                         <c:if test="${sessionScope.clinicUser.userRole eq MANAGING_STAFF}">
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page"
-                                   href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false">
                                     Staff
                                 </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="<c:url value='<%= EndpointConstant.STAFF_LOGIN %>'/>">
+                                            Managing Staff
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="<c:url value='<%= EndpointConstant.STAFF_REGISTER %>'/>">
+                                            Receptionist
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="<c:url value='<%= EndpointConstant.STAFF_REGISTER %>'/>">
+                                            Vet
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" aria-current="page"
