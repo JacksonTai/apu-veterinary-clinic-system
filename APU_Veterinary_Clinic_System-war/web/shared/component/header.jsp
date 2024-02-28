@@ -40,14 +40,6 @@
                                 Profile
                             </a>
                         </li>
-                        <c:if test="${sessionScope.clinicUser.userRole eq VET}">
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page"
-                                   href="<c:url value='<%= EndpointConstant.VIEW_PET %>'/>">
-                                    Pet
-                                </a>
-                            </li>
-                        </c:if>
                         <c:if test="${sessionScope.clinicUser.userRole eq RECEPTIONIST}">
                             <li class="nav-item">
                                 <a class="nav-link" aria-current="page"
@@ -62,6 +54,12 @@
                                 <a class="nav-link" aria-current="page"
                                    href="<c:url value='<%= EndpointConstant.VIEW_APPOINTMENT %>'/>">
                                     Appointment
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page"
+                                   href="<c:url value='<%= EndpointConstant.VIEW_PET %>'/>">
+                                    Pet
                                 </a>
                             </li>
                         </c:if>
