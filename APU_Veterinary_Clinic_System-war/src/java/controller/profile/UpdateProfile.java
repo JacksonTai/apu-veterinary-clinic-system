@@ -11,7 +11,6 @@ import entity.ClinicUser;
 import entity.Expertise;
 import entity.MakerChecker;
 import entity.Vet;
-import filter.SessionAuthFilter;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
@@ -30,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static constant.EndpointConstant.UPDATE_PROFILE;
 import static constant.EndpointConstant.VIEW_PROFILE;
@@ -44,7 +42,7 @@ import static constant.i18n.En.NO_CHANGES_MESSAGE;
 @WebServlet(name = "UpdateProfile", urlPatterns = {UPDATE_PROFILE})
 public class UpdateProfile extends HttpServlet {
 
-    private static final Logger logger = LoggerFactory.getLogger(SessionAuthFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(UpdateProfile.class);
 
     @EJB
     private MakerCheckerFacade makerCheckerFacade;
@@ -60,7 +58,7 @@ public class UpdateProfile extends HttpServlet {
     private ClinicUser mcClinicUser;
     private Vet vet;
     private Vet mcVet;
-    private boolean mcExist;
+    private boolean pendingMcExist;
     private boolean isVet;
     private List<Expertise> expertises = new ArrayList<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -81,29 +79,31 @@ public class UpdateProfile extends HttpServlet {
         clinicUser = (ClinicUser) session.getAttribute("clinicUser");
 
         isVet = clinicUser.getUserRole().equals(VET);
-        mc = makerCheckerFacade.findByMakerIdAndModuleAndActionType(clinicUser.getClinicUserId(),
-                MakeChecker.Module.PROFILE.toString(), MakeChecker.ActionType.UPDATE.toString());
-        request.setAttribute("isPending", mcExist = mc != null);
+        mc = makerCheckerFacade.findByMakerIdAndStatusAndModuleAndActionType(clinicUser.getClinicUserId(),
+                MakeChecker.Status.PENDING.toString(), MakeChecker.Module.PROFILE.toString(),
+                MakeChecker.ActionType.UPDATE.toString());
+
+        request.setAttribute("pendingMcExist", pendingMcExist = mc != null);
 
         try {
             if (isVet) {
                 request.setAttribute("expertises", expertises = expertiseFacade.findAll());
-                if (mcExist) {
+                if (pendingMcExist) {
                     mcVet = objectMapper.readValue(mc.getNewValue(), Vet.class);
                     request.setAttribute("clinicUser", mcVet);
                     request.setAttribute("selectedExpertises", mcVet.getExpertises());
                 }
-                if (!mcExist) {
+                if (!pendingMcExist) {
                     vet = (Vet) clinicUser;
                     request.setAttribute("clinicUser", vet);
                     request.setAttribute("selectedExpertises", vet.getExpertises());
                 }
             } else {
-                if (mcExist) {
+                if (pendingMcExist) {
                     mcClinicUser = objectMapper.readValue(mc.getNewValue(), ClinicUser.class);
                     request.setAttribute("clinicUser", mcClinicUser);
                 }
-                if (!mcExist) {
+                if (!pendingMcExist) {
                     request.setAttribute("clinicUser", clinicUser);
                 }
             }
@@ -132,7 +132,7 @@ public class UpdateProfile extends HttpServlet {
         String password = request.getParameter("password").trim();
         List<Expertise> selectedExpertises = new ArrayList<>();
 
-        request.setAttribute("isPending", mcExist);
+        request.setAttribute("pendingMcExist", pendingMcExist);
         if (isVet) {
             request.setAttribute("expertises", expertises);
 
@@ -162,24 +162,24 @@ public class UpdateProfile extends HttpServlet {
         boolean profileFullNameChanged = !fullName.equalsIgnoreCase(clinicUser.getFullName());
         boolean profileExpertisesChanged = false;
         if (isVet) {
-            if (mcExist) {
+            if (pendingMcExist) {
                 mcChanged = !email.equalsIgnoreCase(mcVet.getEmail()) ||
                         !fullName.equalsIgnoreCase(mcVet.getFullName()) ||
                         !(new HashSet<>(selectedExpertises).containsAll(mcVet.getExpertises()) &&
                                 new HashSet<>(mcVet.getExpertises()).containsAll(selectedExpertises));
             }
-            if (!mcExist) {
+            if (!pendingMcExist) {
                 profileExpertisesChanged = !(new HashSet<>(selectedExpertises).containsAll(vet.getExpertises()) &&
                         new HashSet<>(vet.getExpertises()).containsAll(selectedExpertises));
             }
         } else {
-            if (mcExist) {
+            if (pendingMcExist) {
                 mcChanged = !email.equalsIgnoreCase(mcClinicUser.getEmail()) ||
                         !fullName.equalsIgnoreCase(mcClinicUser.getFullName());
             }
         }
         boolean profileChanged = profileEmailChanged || profileFullNameChanged || profileExpertisesChanged;
-        if ((!mcExist && !profileChanged) || (mcExist && !mcChanged)) {
+        if ((!pendingMcExist && !profileChanged) || (pendingMcExist && !mcChanged)) {
             request.setAttribute("noChanges", true);
             request.setAttribute("noChangesMessage", NO_CHANGES_MESSAGE);
             request.getRequestDispatcher(UPDATE_PROFILE + ".jsp").forward(request, response);
@@ -201,7 +201,7 @@ public class UpdateProfile extends HttpServlet {
 
         try {
             // If the maker checker exist and the user update the profile to the same value, remove the maker checker
-            if (mcExist && !profileChanged) {
+            if (pendingMcExist && !profileChanged) {
                 makerCheckerFacade.remove(mc);
                 response.sendRedirect(request.getContextPath() + VIEW_PROFILE);
                 return;
@@ -211,26 +211,26 @@ public class UpdateProfile extends HttpServlet {
             Vet vet = null;
             ClinicUser clinicUser = null;
             if (isVet) {
-                vet = SerializationUtils.clone(mcExist ? mcVet : this.vet);
+                vet = SerializationUtils.clone(pendingMcExist ? mcVet : this.vet);
                 vet.setEmail(email);
                 vet.setFullName(fullName);
                 vet.setExpertises(selectedExpertises);
             } else {
-                clinicUser = SerializationUtils.clone(mcExist ? mcClinicUser : this.clinicUser);
+                clinicUser = SerializationUtils.clone(pendingMcExist ? mcClinicUser : this.clinicUser);
                 clinicUser.setEmail(email);
                 clinicUser.setFullName(fullName);
             }
 
             // Make current value and new value in JSON format for maker checker
-            String currentValue = isVet ? objectMapper.writeValueAsString(mcExist ? mcVet : this.vet) :
-                    objectMapper.writeValueAsString(mcExist ? mcClinicUser : this.clinicUser);
+            String currentValue = isVet ? objectMapper.writeValueAsString(pendingMcExist ? mcVet : this.vet) :
+                    objectMapper.writeValueAsString(pendingMcExist ? mcClinicUser : this.clinicUser);
             String newValue = isVet ? objectMapper.writeValueAsString(vet) : objectMapper.writeValueAsString(clinicUser);
 
-            if (mcExist) {
+            if (pendingMcExist) {
                 mc.setNewValue(newValue);
                 makerCheckerFacade.edit(mc);
             }
-            if (!mcExist) {
+            if (!pendingMcExist) {
                 makerCheckerFacade.create(new MakerChecker(this.clinicUser.getClinicUserId(), null,
                         MakeChecker.Module.PROFILE.toString(), MakeChecker.ActionType.UPDATE.toString(), currentValue,
                         newValue, MakeChecker.Status.PENDING.toString()));

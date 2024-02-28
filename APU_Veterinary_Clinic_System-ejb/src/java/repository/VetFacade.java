@@ -6,9 +6,12 @@
 package repository;
 
 import entity.Vet;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -28,5 +31,9 @@ public class VetFacade extends AbstractFacade<Vet> {
     public VetFacade() {
         super(Vet.class);
     }
-    
+
+    public Optional<List<Vet>> findAllByExpertiseId(String expertiseId) {
+        return findResultsByAttribute("Vet.findAllByExpertiseId", "expertiseId", expertiseId);
+    }
+
 }

@@ -5,12 +5,10 @@
  */
 package repository;
 
-import entity.Customer;
-
-import java.util.List;
-import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -57,18 +55,28 @@ public abstract class AbstractFacade<T> {
         return q.getResultList();
     }
 
-    protected Optional<T> findByAttribute(String namedQuery, String paramName, String paramValue) {
+    protected Optional<T> findResultByAttribute(String namedQuery, String paramName, String paramValue) {
         try {
-            T customer = (T) getEntityManager().createNamedQuery(namedQuery)
+            T entity = (T) getEntityManager().createNamedQuery(namedQuery)
                     .setParameter(paramName, paramValue)
                     .getSingleResult();
-            return Optional.ofNullable(customer);
+            return Optional.ofNullable(entity);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+    protected Optional<List<T>> findResultsByAttribute(String namedQuery, String paramName, String paramValue) {
+        try {
+            List<T> entity = (List<T>) getEntityManager().createNamedQuery(namedQuery)
+                    .setParameter(paramName, paramValue)
+                    .getResultList();
+            return Optional.ofNullable(entity);
         } catch (NoResultException e) {
             return Optional.empty();
         }
     }
 
-    protected Optional<T> findByAttributes(String namedQuery, String[] paramNames, String[] paramValues) {
+    protected Optional<T> findResultByAttributes(String namedQuery, String[] paramNames, String[] paramValues) {
         try {
             if (paramNames.length != paramValues.length) {
                 throw new IllegalArgumentException("Number of paramNames must match the number of paramValues");

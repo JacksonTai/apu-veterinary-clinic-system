@@ -17,7 +17,7 @@
     <h1 class="text-center">Update Profile</h1>
     <form action="<c:url value='<%= EndpointConstant.UPDATE_PROFILE %>'/>" method="POST" class="my-2 mx-auto"
           style="max-width: 30rem;">
-        <c:if test="${not empty isPending && isPending eq true}">
+        <c:if test="${not empty pendingMcExist && pendingMcExist eq true}">
             <div class="alert alert-warning mt-4" role="alert">
                 This is your last profile update information, you may update again until it is approved.
             </div>

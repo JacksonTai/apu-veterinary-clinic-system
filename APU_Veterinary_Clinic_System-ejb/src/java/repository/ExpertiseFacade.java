@@ -5,8 +5,8 @@
  */
 package repository;
 
-import entity.Customer;
 import entity.Expertise;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,7 +32,7 @@ public class ExpertiseFacade extends AbstractFacade<Expertise> {
     }
 
     public Optional<Expertise> findByName(String name) {
-        return findByAttribute("Expertise.findByName", "name", name);
+        return findResultByAttribute("Expertise.findByName", "name", name);
     }
 
 }

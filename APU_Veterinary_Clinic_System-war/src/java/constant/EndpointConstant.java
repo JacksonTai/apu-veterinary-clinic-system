@@ -12,6 +12,9 @@ public class EndpointConstant {
 
     // Sub-path
     public static final String STAFF = "/staff";
+    public static final String VET = "/vet";
+    public static final String RECEPTIONIST = "/receptionist";
+    public static final String MANAGING_STAFF = "/managingStaff";
     public static final String CUSTOMER = "/customer";
     public static final String APPOINTMENT = "/appointment";
     public static final String PET = "/pet";
@@ -53,16 +56,20 @@ public class EndpointConstant {
     public static final String CREATE_WORKING_ROTA = WORKING_ROTA + "/createWorkingRota";
     public static final String UPDATE_WORKING_ROTA = WORKING_ROTA + "/updateWorkingRota";
 
-    public static final String VIEW_STAFF = STAFF + "/viewStaff";
-    public static final String VIEW_STAFFS = STAFF + "/viewStaffs";
-    public static final String DELETE_STAFF = STAFF + "/deleteStaff";
-    public static final String CREATE_STAFF = STAFF + "/createStaff";
-    public static final String UPDATE_STAFF = STAFF + "/updateStaff";
-
     public static final String VIEW_EXPERTISE = EXPERTISE + "/viewExpertise";
     public static final String VIEW_EXPERTISES = EXPERTISE + "/viewExpertises";
     public static final String DELETE_EXPERTISE = EXPERTISE + "/deleteExpertise";
     public static final String CREATE_EXPERTISE = EXPERTISE + "/createExpertise";
+
+    public static final String VIEW_RECEPTIONIST = STAFF + RECEPTIONIST + "/viewReceptionist";
+    public static final String UPDATE_RECEPTIONIST = STAFF + RECEPTIONIST + "/viewReceptionist";
+    public static final String DELETE_RECEPTIONIST = STAFF + RECEPTIONIST + "/viewReceptionist";
+    public static final String CREATE_RECEPTIONIST = STAFF + RECEPTIONIST + "/viewReceptionist";
+
+    public static final String VIEW_VET = STAFF + VET + "/viewVet";
+    public static final String UPDATE_VET = STAFF + VET + "/updateVet";
+    public static final String DELETE_VET = STAFF + VET + "/deleteVet";
+    public static final String CREATE_VET = STAFF + VET + "/createVet";
 
     public static final String REVENUE = "/revenue";
     public static final String CUSTOMER_REPORT = "/report";

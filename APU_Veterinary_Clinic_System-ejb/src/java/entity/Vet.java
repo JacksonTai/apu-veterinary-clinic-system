@@ -6,7 +6,6 @@
 package entity;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -20,6 +19,10 @@ import static constant.UserRole.VET;
  * @author Jackson Tai
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Vet.findAllByExpertiseId",
+                query = "SELECT v FROM Vet v JOIN v.expertises e WHERE e.expertiseId = :expertiseId"),
+})
 @Data
 @DiscriminatorValue(VET)
 @NoArgsConstructor

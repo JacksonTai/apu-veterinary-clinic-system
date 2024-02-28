@@ -8,8 +8,8 @@ package entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author Jackson Tai
@@ -17,8 +17,11 @@ import javax.persistence.*;
 @Entity
 @Table(name = "MAKER_CHECKER")
 @NamedQueries({
-        @NamedQuery(name = "Customer.findByMakerIdAndModuleAndActionType",
-                query = "SELECT mc FROM MakerChecker mc WHERE mc.makerId = :makerId AND mc.module = :module AND " +
+        @NamedQuery(name = "MakerChecker.findByMakerIdAndStatusAndModuleAndActionType",
+                query = "SELECT mc FROM MakerChecker mc WHERE mc.makerId = :makerId AND mc.status = :status AND " +
+                        "mc.module = :module AND mc.actionType = :actionType"),
+        @NamedQuery(name = "MakerChecker.findByStatusAndModuleAndActionType",
+                query = "SELECT mc FROM MakerChecker mc WHERE mc.status = :status AND mc.module = :module AND " +
                         "mc.actionType = :actionType")
 })
 @Data

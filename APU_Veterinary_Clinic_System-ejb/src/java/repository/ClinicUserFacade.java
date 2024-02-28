@@ -9,9 +9,7 @@ import entity.ClinicUser;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 /**
@@ -37,12 +35,12 @@ public class ClinicUserFacade extends AbstractFacade<ClinicUser> {
     }
 
     public ClinicUser findByEmail(String email) {
-        Optional<ClinicUser> clinicUser = findByAttribute("ClinicUser.findByEmail", "email", email);
+        Optional<ClinicUser> clinicUser = findResultByAttribute("ClinicUser.findByEmail", "email", email);
         return clinicUser.orElse(null);
     }
 
     public ClinicUser findByFullName(String fullName) {
-        Optional<ClinicUser> clinicUser = findByAttribute("ClinicUser.findByFullName", "fullName", fullName);
+        Optional<ClinicUser> clinicUser = findResultByAttribute("ClinicUser.findByFullName", "fullName", fullName);
         return clinicUser.orElse(null);
     }
 
