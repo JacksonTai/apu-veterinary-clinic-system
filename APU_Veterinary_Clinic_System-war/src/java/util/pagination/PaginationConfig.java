@@ -8,6 +8,7 @@ import repository.AbstractFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * Configuration class for pagination, encapsulating all necessary settings and parameters.

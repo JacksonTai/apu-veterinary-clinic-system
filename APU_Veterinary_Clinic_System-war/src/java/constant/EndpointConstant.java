@@ -71,7 +71,13 @@ public class EndpointConstant {
     public static final String DELETE_VET = STAFF + VET + "/deleteVet";
     public static final String CREATE_VET = STAFF + VET + "/createVet";
 
-    public static final String REVENUE = "/revenue";
+    public static final String DELETE_STAFF = STAFF + "/deleteStaff";
+    public static final String VIEW_STAFF = STAFF + "/viewStaff";
+    public static final String VIEW_STAFFS = STAFF + "/viewStaffs";
+    public static final String CREATE_STAFF = STAFF + "/createStaff";
+
+    public static final String UPDATE_STAFF = STAFF + "/updateManagingStaff";
+
     public static final String CUSTOMER_REPORT = "/report";
 
 }

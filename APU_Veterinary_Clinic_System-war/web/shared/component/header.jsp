@@ -64,47 +64,17 @@
                             </li>
                         </c:if>
                         <c:if test="${sessionScope.clinicUser.userRole eq MANAGING_STAFF}">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button"
-                                   data-bs-toggle="dropdown"
-                                   aria-expanded="false">
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page"
+                                   href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>">
                                     Staff
                                 </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="dropdown-item"
-                                           href="<c:url value='<%= EndpointConstant.STAFF_LOGIN %>'/>">
-                                            Managing Staff
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item"
-                                           href="<c:url value='<%= EndpointConstant.STAFF_REGISTER %>'/>">
-                                            Receptionist
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item"
-                                           href="<c:url value='<%= EndpointConstant.STAFF_REGISTER %>'/>">
-                                            Vet
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item"
-                                           href="<c:url value='<%= EndpointConstant.VIEW_WORKING_ROTA %>'/>">
-                                            Working Rota
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item"
-                                           href="<c:url value='<%= EndpointConstant.VIEW_EXPERTISE %>'/>">
-                                            Expertises
-                                        </a>
-                                    </li>
-                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page"
+                                   href="<c:url value='<%= EndpointConstant.VIEW_WORKING_ROTA %>'/>">
+                                    Working Rota
+                                </a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button"

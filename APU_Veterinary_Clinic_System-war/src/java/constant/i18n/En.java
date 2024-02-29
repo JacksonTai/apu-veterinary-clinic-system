@@ -41,6 +41,7 @@ public class En {
     public static final String EMPTY_HEALTH_STATUS_MESSAGE = "Health status cannot be empty.";
     public static final String INVALID_HEALTH_STATUS_MESSAGE = "Invalid health status.";
 
+    public static final String RECORD_NOT_FOUND_MESSAGE = "Record not found";
     public static final String PET_NOT_FOUND_MESSAGE = "Pet not found";
     public static final String CUSTOMER_NOT_FOUND_MESSAGE = "Customer not found";
     public static final String EMPTY_CUSTOMER_DETAILS_MESSAGE = "Customer details is required.";

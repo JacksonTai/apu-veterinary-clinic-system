@@ -60,7 +60,7 @@ public class ViewCustomer extends HttpServlet {
             return;
         }
 
-        PaginationUtil.applyPagination(request, response, PaginationConfig.<Customer>builder()
+        PaginationUtil.applyPagination(PaginationConfig.<Customer>builder()
                 .request(request)
                 .response(response)
                 .entityAttribute("customers")

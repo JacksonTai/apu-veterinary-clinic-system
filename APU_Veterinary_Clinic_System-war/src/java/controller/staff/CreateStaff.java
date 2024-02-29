@@ -3,52 +3,50 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller.expertise;
+package controller.staff;
 
-import entity.Expertise;
-import repository.ExpertiseFacade;
-import util.pagination.PaginationConfig;
-import util.pagination.PaginationUtil;
-
-import javax.ejb.EJB;
+import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
-import static constant.EndpointConstant.VIEW_EXPERTISE;
-import static constant.EndpointConstant.VIEW_EXPERTISES;
+import static constant.EndpointConstant.CREATE_STAFF;
+import static constant.EndpointConstant.STAFF_REGISTER;
 
 /**
+ *
  * @author Jackson Tai
  */
-@WebServlet(name = "ViewExpertise", urlPatterns = {VIEW_EXPERTISE})
-public class ViewExpertise extends HttpServlet {
-
-    @EJB
-    private ExpertiseFacade expertiseFacade;
+@WebServlet(name = "CreateStaff", urlPatterns = {CREATE_STAFF})
+public class CreateStaff extends HttpServlet {
 
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PaginationUtil.applyPagination(PaginationConfig.<Expertise>builder()
-                .request(request)
-                .response(response)
-                .entityAttribute("expertises")
-                .viewPageEndpoint(VIEW_EXPERTISE)
-                .viewJspPath(VIEW_EXPERTISES)
-                .facade(expertiseFacade)
-                .build());
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
     }
 
     /**

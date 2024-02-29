@@ -19,17 +19,17 @@ public class PaginationUtil {
      * of entities along with pagination controls.
      *
      * @param <T> The type of entity for which pagination is being applied.
-     * @param request The {@link HttpServletRequest} object, used for reading and manipulating request data.
-     * @param response The {@link HttpServletResponse} object, used for sending redirects in case of out-of-range page requests.
      * @param config The {@link PaginationConfig} object containing all necessary configuration for pagination.
      * @throws IOException If an I/O error occurs during redirection.
      */
-    public static <T> void applyPagination(HttpServletRequest request, HttpServletResponse response,
-                                           PaginationConfig<T> config) throws IOException {
+    public static <T> void applyPagination(PaginationConfig<T> config) throws IOException {
         int defaultPage = 1;
         int pageSize = 10;
 
-        String pageParam = request.getParameter("page");
+        HttpServletRequest request = config.getRequest();
+        HttpServletResponse response = config.getResponse();
+
+        String pageParam = config.getRequest().getParameter("page");
         int pageNumber;
 
         try {

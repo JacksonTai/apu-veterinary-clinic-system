@@ -14,7 +14,7 @@ import static constant.EndpointConstant.*;
 
 //, PET + "/*", CUSTOMER + "/*", WORKING_ROTA + "/*"
 @WebFilter(filterName = "SessionAuthFilter", urlPatterns = {
-        STAFF_HOME, PROFILE + "/*", APPOINTMENT + "/*"})
+        STAFF_HOME, PROFILE + "/*", APPOINTMENT + "/*" + STAFF + "/*/*"})
 public class SessionAuthFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(SessionAuthFilter.class);

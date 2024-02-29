@@ -61,7 +61,7 @@ public class ViewPet extends HttpServlet {
             return;
         }
 
-        PaginationUtil.applyPagination(request, response, PaginationConfig.<Pet>builder()
+        PaginationUtil.applyPagination(PaginationConfig.<Pet>builder()
                 .request(request)
                 .response(response)
                 .entityAttribute("pets")
