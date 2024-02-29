@@ -20,22 +20,24 @@
         <span style="color: red;">${emailError}</span>
     </c:if>
 </div>
-<div class="mb-3">
-    <label for="password" class="form-label">Password:</label>
-    <input type="password" class="form-control" id="password" name="password"
-           value="${formType eq 'UPDATE' ? (param.formSubmitted != null ? param.password : staff.password) :
-                                            (not empty param.password ? param.password : '')}">
-    <c:if test="${not empty passwordError}">
-        <span style="color: red;">${passwordError}</span>
-    </c:if>
-</div>
-<div class="mb-3">
-    <label for="userRole" class="form-label">User Role:</label>
-    <select name="userRole" id="userRole" class="form-select">
-        <c:forEach var="role" items="${roleList}">
-            <option value="${role}" ${formType eq 'UPDATE' ? ((param.formSubmitted != null ? (param.userRole == role ? 'selected' : '') :
-                    (staff.userRole == role ? 'selected' : ''))) :
-                    (param.userRole == role ? 'selected' : '')}>${role}</option>
-        </c:forEach>
-    </select>
-</div>
+<c:if test="${formType eq 'CREATE'}">
+    <div class="mb-3">
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" class="form-control" id="password" name="password"
+               value="${not empty param.password ? param.password : ''}">
+        <c:if test="${not empty passwordError}">
+            <span style="color: red;">${passwordError}</span>
+        </c:if>
+    </div>
+    <div class="mb-3">
+        <label for="userRole" class="form-label">User Role:</label>
+        <select name="userRole" id="userRole" class="form-select">
+            <c:forEach var="role" items="${roleList}">
+                <option ${formType eq 'UPDATE' ? ((param.formSubmitted != null ? (param.userRole == role ? 'selected' : '') :
+                                                 (staff.userRole == role ? 'selected' : ''))) :
+                                                 (param.userRole == role ? 'selected' : '')}
+                        value="${role}">${role}</option>
+            </c:forEach>
+        </select>
+    </div>
+</c:if>

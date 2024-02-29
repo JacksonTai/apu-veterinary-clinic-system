@@ -67,9 +67,7 @@ public class ViewStaff extends HttpServlet {
         if (staffId != null && !staffId.isEmpty()) {
             HttpSession session = request.getSession(false);
             ClinicUser clinicUser = (ClinicUser) session.getAttribute("clinicUser");
-            System.out.println("clinicUser: " + clinicUser);
             ClinicUser staff = clinicUserFacade.find(staffId);
-            System.out.println("staff: " + staff);
             request.setAttribute("isOwnProfile", clinicUser.getClinicUserId().equals(staffId));
             if (staff == null) {
                 request.setAttribute("notFoundMessage", RECORD_NOT_FOUND_MESSAGE);

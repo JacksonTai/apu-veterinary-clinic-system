@@ -35,7 +35,6 @@
             <c:if test="${not empty fullNameError}">
                 <span style="color: red;">${fullNameError}</span>
             </c:if>
-            <%=  %>
         </div>
         <div class="mb-3">
             <label for="phoneNumber" class="form-label">Phone Number:</label>
