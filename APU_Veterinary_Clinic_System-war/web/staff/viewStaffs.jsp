@@ -35,7 +35,7 @@
                 Receptionist
             </a>
         </li>
-        <li class="nav-item">4
+        <li class="nav-item">
             <a class="nav-link ${role eq 'managingStaff' ? 'active' : ''}"
                href="<c:url value='${EndpointConstant.VIEW_STAFF}'/>?role=managingStaff">
                 Managing Staff

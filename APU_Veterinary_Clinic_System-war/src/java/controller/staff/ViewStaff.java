@@ -62,12 +62,11 @@ public class ViewStaff extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession(false);
-        ClinicUser clinicUser = (ClinicUser) session.getAttribute("clinicUser");
-
         String staffId = request.getParameter("id");
 
         if (staffId != null && !staffId.isEmpty()) {
+            HttpSession session = request.getSession(false);
+            ClinicUser clinicUser = (ClinicUser) session.getAttribute("clinicUser");
             ClinicUser staff = clinicUserFacade.find(staffId);
             request.setAttribute("isOwnProfile", clinicUser.getClinicUserId().equals(staffId));
             if (staff == null) {
