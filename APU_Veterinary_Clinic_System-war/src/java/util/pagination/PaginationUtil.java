@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 /**
  * A utility class to handle pagination logic using an AbstractFacade, simplifying
@@ -18,11 +19,12 @@ public class PaginationUtil {
      * updates the request with necessary attributes for displaying a paginated list
      * of entities along with pagination controls.
      *
-     * @param <T> The type of entity for which pagination is being applied.
+     * @param <T>    The type of entity for which pagination is being applied.
      * @param config The {@link PaginationConfig} object containing all necessary configuration for pagination.
      * @throws IOException If an I/O error occurs during redirection.
      */
     public static <T> void applyPagination(PaginationConfig<T> config) throws IOException {
+
         int defaultPage = 1;
         int pageSize = 10;
 
@@ -41,9 +43,23 @@ public class PaginationUtil {
         int totalItems = config.getFacade().count();
         int totalPages = (int) Math.ceil((double) totalItems / pageSize);
 
+        // Remove the page parameter from the existing parameters
+        String existingParams = request.getQueryString();
+        if (existingParams != null && !existingParams.isEmpty()) {
+            existingParams = existingParams.replaceAll("&?page=\\d+", "");
+        }
+
         // Redirect to the last page if the requested page number exceeds the total number of pages.
         if (pageNumber > totalPages && totalPages > 0) {
-            response.sendRedirect(request.getContextPath() + config.getViewPageEndpoint() + "?page=" + totalPages);
+
+            // Check if there are existing parameters
+            if (existingParams != null && !existingParams.isEmpty()) {
+                response.sendRedirect(request.getContextPath() + config.getViewPageEndpoint() + "&page=" + totalPages);
+            }
+            if (existingParams == null || existingParams.isEmpty()) {
+                response.sendRedirect(request.getContextPath() + config.getViewPageEndpoint() + "?page=" +
+                        totalPages);
+            }
             return;
         }
         // Redirect to the first page if the requested page number is less than 1.
@@ -61,6 +77,7 @@ public class PaginationUtil {
         request.setAttribute(config.getEntityAttribute(), items);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("currentPage", pageNumber);
+        request.setAttribute("existingParams", existingParams);
         request.setAttribute("previousDisabled", pageNumber == 1);
         request.setAttribute("nextDisabled", pageNumber == totalPages);
 

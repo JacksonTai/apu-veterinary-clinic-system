@@ -72,7 +72,7 @@
                         entityId: '${staff.clinicUserId}',
                         entityName: 'staff',
                         deleteEndpoint: endpoints.DELETE_STAFF,
-                        successRedirectEndpoint: endpoints.VIEW_STAFF + '?role=${staff.role}'
+                        successRedirectEndpoint: endpoints.VIEW_STAFF
                         })" role="button">Delete
                 </a>
             </div>

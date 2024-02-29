@@ -67,12 +67,14 @@ public class ViewStaff extends HttpServlet {
         if (staffId != null && !staffId.isEmpty()) {
             HttpSession session = request.getSession(false);
             ClinicUser clinicUser = (ClinicUser) session.getAttribute("clinicUser");
+            System.out.println("clinicUser: " + clinicUser);
             ClinicUser staff = clinicUserFacade.find(staffId);
+            System.out.println("staff: " + staff);
             request.setAttribute("isOwnProfile", clinicUser.getClinicUserId().equals(staffId));
             if (staff == null) {
                 request.setAttribute("notFoundMessage", RECORD_NOT_FOUND_MESSAGE);
             } else {
-                request.setAttribute("managingStaff", staff);
+                request.setAttribute("staff", staff);
             }
             request.getRequestDispatcher(VIEW_STAFF + ".jsp").forward(request, response);
             return;
@@ -88,7 +90,7 @@ public class ViewStaff extends HttpServlet {
                     .request(request)
                     .response(response)
                     .entityAttribute("staffs")
-                    .viewPageEndpoint(VIEW_STAFF + "role=" + role)
+                    .viewPageEndpoint(VIEW_STAFF + "?role=" + role)
                     .viewJspPath(VIEW_STAFFS)
                     .facade(vetFacade)
                     .build());
@@ -97,7 +99,7 @@ public class ViewStaff extends HttpServlet {
                     .request(request)
                     .response(response)
                     .entityAttribute("staffs")
-                    .viewPageEndpoint(VIEW_STAFF + "role=" + role)
+                    .viewPageEndpoint(VIEW_STAFF + "?role=" + role)
                     .viewJspPath(VIEW_STAFFS)
                     .facade(receptionistFacade)
                     .build());
@@ -106,13 +108,12 @@ public class ViewStaff extends HttpServlet {
                     .request(request)
                     .response(response)
                     .entityAttribute("staffs")
-                    .viewPageEndpoint(VIEW_STAFF + "role=" + role)
+                    .viewPageEndpoint(VIEW_STAFF + "?role=" + role)
                     .viewJspPath(VIEW_STAFFS)
                     .facade(managingStaffFacade)
                     .build());
         }
     }
-
 
     /**
      * Returns a short description of the servlet.
