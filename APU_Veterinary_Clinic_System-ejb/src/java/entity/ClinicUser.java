@@ -21,10 +21,12 @@ import java.io.Serializable;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "USER_ROLE", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
-        @NamedQuery(name = "ClinicUser.findAll", query = "SELECT c FROM ClinicUser c"),
         @NamedQuery(name = "ClinicUser.findByEmail", query = "SELECT c FROM ClinicUser c WHERE c.email = :email"),
         @NamedQuery(name = "ClinicUser.findByFullName",
-                query = "SELECT c FROM ClinicUser c WHERE LOWER(c.fullName) = LOWER(:fullName)")
+                query = "SELECT c FROM ClinicUser c WHERE LOWER(c.fullName) = LOWER(:fullName)"),
+        @NamedQuery(name = "ClinicUser.findByIdOrFullNameOrEmail",
+                query = "SELECT c FROM ClinicUser c WHERE c.clinicUserId = :input OR " +
+                        "LOWER(c.fullName) = LOWER(:input) OR LOWER(c.email) = LOWER(:input)"),
 })
 @Data
 @NoArgsConstructor

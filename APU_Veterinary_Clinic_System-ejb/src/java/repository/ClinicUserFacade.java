@@ -35,13 +35,16 @@ public class ClinicUserFacade extends AbstractFacade<ClinicUser> {
     }
 
     public ClinicUser findByEmail(String email) {
-        Optional<ClinicUser> clinicUser = findResultByAttribute("ClinicUser.findByEmail", "email", email);
-        return clinicUser.orElse(null);
+        return findResultByAttribute("ClinicUser.findByEmail", "email", email).orElse(null);
     }
 
     public ClinicUser findByFullName(String fullName) {
-        Optional<ClinicUser> clinicUser = findResultByAttribute("ClinicUser.findByFullName", "fullName", fullName);
-        return clinicUser.orElse(null);
+        return findResultByAttribute("ClinicUser.findByFullName", "fullName", fullName)
+                .orElse(null);
+    }
+
+    public Optional<ClinicUser> findByIdOrFullNameOrEmail(String input) {
+        return findResultByAttribute("ClinicUser.findByIdOrFullNameOrEmail", "input", input);
     }
 
 }

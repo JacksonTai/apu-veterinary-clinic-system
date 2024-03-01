@@ -11,15 +11,30 @@
 <html>
 <head>
     <%@ include file="/shared/component/head_source.jsp" %>
+    <script src="${pageContext.request.contextPath}/asset/js/shared/submitForm.js" defer></script>
+    <script src="${pageContext.request.contextPath}/asset/js/constant/endpointConstant.js" defer></script>
+    <script src="${pageContext.request.contextPath}/asset/js/staff/searchStaff.js" defer></script>
     <title>Staff</title>
 </head>
 <body>
 <%@ include file="/shared/component/header.jsp" %>
 <main class="w-75 my-2 mx-auto overflow-x-auto">
     <h1 class="text-center">Staff</h1>
-    <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-primary" href="<c:url value='<%= EndpointConstant.CREATE_STAFF %>'/>" role="button">
-            Create Staff</a>
+    <div class="d-flex justify-content-between mb-3">
+        <form method="POST" class="d-flex" id="searchStaffForm">
+            <div class="me-2">
+                <input type="text" name="searchInput" class="form-control mb-1" placeholder="ID / Full Name / Email"
+                       value="${not empty param.searchInput ? param.searchInput : ''}">
+                <span style="color: red;" id="searchError"></span>
+                <a href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>" target="_blank" id="searchResult"
+                   class="d-none mt-2 btn btn-outline-primary btn-sm"></a>
+            </div>
+            <button type="submit" class="btn btn-primary align-self-start">Search</button>
+        </form>
+        <a class="btn btn-primary align-self-start" href="<c:url value='<%= EndpointConstant.CREATE_STAFF %>'/>"
+           role="button">
+            Create Staff
+        </a>
     </div>
     <c:set var="role" value="${param.role == null ? 'vet' : param.role}"/>
     <ul class="nav nav-tabs">

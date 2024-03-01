@@ -1,5 +1,10 @@
 main {
-    min-height: calc(100vh - 10rem)
+    min-height: calc(100vh - 10rem);
+    padding: 0.5rem;
+}
+
+h1 {
+    margin-bottom: 1.5rem;
 }
 
 .largeCheckbox {

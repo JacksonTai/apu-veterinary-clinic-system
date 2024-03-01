@@ -25,7 +25,6 @@
     </nav>
     <form action="<c:url value='<%= EndpointConstant.UPDATE_CUSTOMER %>'/>" method="POST" class="my-2 mx-auto"
           style="max-width: 30rem;">
-
         <input type="hidden" name="formSubmitted" value="true">
         <input type="hidden" name="id" value="${customer.customerId ? customer.customerId : param.id}">
         <div class="mb-3">

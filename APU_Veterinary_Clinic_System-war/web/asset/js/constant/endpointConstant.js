@@ -13,4 +13,5 @@ const endpoints = {
   "DELETE_EXPERTISE": EXPERTISE + "/deleteExpertise",
   "DELETE_STAFF": STAFF + "/deleteStaff",
   "VIEW_STAFF": STAFF + "/viewStaff",
+  "SEARCH_STAFF": STAFF + "/searchStaff",
 };

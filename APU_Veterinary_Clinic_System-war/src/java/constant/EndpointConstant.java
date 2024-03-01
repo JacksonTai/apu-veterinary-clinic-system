@@ -76,6 +76,7 @@ public class EndpointConstant {
     public static final String VIEW_STAFFS = STAFF + "/viewStaffs";
     public static final String CREATE_STAFF = STAFF + "/createStaff";
     public static final String UPDATE_STAFF = STAFF + "/updateStaff";
+    public static final String SEARCH_STAFF = STAFF + "/searchStaff";
 
     public static final String CUSTOMER_REPORT = "/report";
 

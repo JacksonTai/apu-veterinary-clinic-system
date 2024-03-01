@@ -11,9 +11,6 @@
 <html>
 <head>
     <%@ include file="/shared/component/head_source.jsp" %>
-    <script>
-        const contextPath = "${pageContext.request.contextPath}";
-    </script>
     <script src="${pageContext.request.contextPath}/asset/js/constant/endpointConstant.js"></script>
     <script src="${pageContext.request.contextPath}/asset/js/shared/confirmDeleteModal.js"></script>
     <title>Expertises</title>

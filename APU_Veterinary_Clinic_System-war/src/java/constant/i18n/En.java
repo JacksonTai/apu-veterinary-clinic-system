@@ -39,17 +39,18 @@ public class En {
     public static final String EMPTY_BREED_MESSAGE = "Breed cannot be empty.";
     public static final String EMPTY_NAME_MESSAGE = "Name cannot be empty.";
     public static final String EMPTY_HEALTH_STATUS_MESSAGE = "Health status cannot be empty.";
+    public static final String EMPTY_CUSTOMER_DETAILS_MESSAGE = "Customer details is required.";
+    public static final String EMPTY_SEARCH_INPUT_MESSAGE = "Search input is required.";
     public static final String INVALID_HEALTH_STATUS_MESSAGE = "Invalid health status.";
 
     public static final String RECORD_NOT_FOUND_MESSAGE = "Record not found";
+    public static final String STAFF_NOT_FOUND_MESSAGE = "Staff not found";
     public static final String PET_NOT_FOUND_MESSAGE = "Pet not found";
     public static final String CUSTOMER_NOT_FOUND_MESSAGE = "Customer not found";
-    public static final String EMPTY_CUSTOMER_DETAILS_MESSAGE = "Customer details is required.";
 
     public static final String DUPLICATE_EXPERTISE_NAME_MESSAGE = "This expertise already exists.";
     public static final String ERROR_UPDATING_PROFILE = "Error occurred while trying to update profile";
     public static final String ERROR_DELETING_EXPERTISE = "Error occurred while trying to delete the expertise";
     public static final String NO_CHANGES_MESSAGE = "No changes are made.";
-
 
 }

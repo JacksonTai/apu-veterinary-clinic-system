@@ -10,3 +10,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/asset/css/global.css">
 <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/asset/img/logo.ico">
+<script defer>
+    const contextPath = "${pageContext.request.contextPath}";
+</script>

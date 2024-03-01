@@ -34,8 +34,8 @@
         <select name="userRole" id="userRole" class="form-select">
             <c:forEach var="role" items="${roleList}">
                 <option ${formType eq 'UPDATE' ? ((param.formSubmitted != null ? (param.userRole == role ? 'selected' : '') :
-                                                 (staff.userRole == role ? 'selected' : ''))) :
-                                                 (param.userRole == role ? 'selected' : '')}
+                        (staff.userRole == role ? 'selected' : ''))) :
+                        (param.userRole == role ? 'selected' : '')}
                         value="${role}">${role}</option>
             </c:forEach>
         </select>
