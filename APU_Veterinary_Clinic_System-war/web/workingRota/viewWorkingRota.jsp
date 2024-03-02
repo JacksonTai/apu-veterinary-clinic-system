@@ -5,7 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:useBean id="StringUtil" class="util.StringUtil"/>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,8 +15,72 @@
 </head>
 <body>
 <%@ include file="/shared/component/header.jsp" %>
-<main class="w-75 my-2 mx-auto overflow-x-auto">
-    working rota works
+<main class="my-2 mx-auto overflow-x-auto" style="width: 80%">
+    <h1 class="text-center">Working Rota</h1>
+    <div class="d-flex justify-content-between flex-wrap mb-3">
+        <form action="<c:url value='<%= EndpointConstant.VIEW_WORKING_ROTA %>'/>" method="GET" class="d-flex">
+            <div class="me-2">
+                <label for="week" class="form-label">Select Week:</label>
+                <select id="week" name="week" class="form-select" style="max-width: 12rem">
+                    <c:forEach var="week" items="${weeks}">
+                        <option value="${week}" ${param.week != null and param.week eq week ? 'selected' : ''}>
+                                ${StringUtil.convertDateFormat(week, DMY_SLASH_DATE_FORMAT)}
+                        </option>
+                    </c:forEach>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary align-self-end">View</button>
+        </form>
+        <a class="btn btn-primary align-self-end" href="<c:url value='<%= EndpointConstant.CREATE_WORKING_ROTA %>'/>"
+           role="button">
+            Create Working Rota
+        </a>
+    </div>
+    <div class="w-100 mx-auto overflow-x-auto">
+        <table class="table w-100 my-4 mx-auto">
+            <colgroup>
+                <col span="1" style="width: 3rem;">
+                <col span="1" style="width: 3rem;">
+                <col span="1" style="width: 6rem;">
+                <col span="1" style="width: 6rem;">
+                <col span="1" style="width: 6rem;">
+                <col span="1" style="width: 6rem;">
+                <col span="1" style="width: 6rem;">
+                <col span="1" style="width: 6rem;">
+                <col span="1" style="width: 6rem;">
+            </colgroup>
+            <thead>
+            <tr>
+                <th scope="col" class="text-center">No</th>
+                <th scope="col" class="text-center">Vet</th>
+                <c:forEach var="day" begin="0" end="6">
+                    <th scope="col" class="text-center">
+                            ${weekDays[day]}
+                        <br>
+                        <span class="fw-light">
+                                ${StringUtil.convertDateFormat(weekDates[day], DMY_SLASH_DATE_FORMAT)}
+                        </span>
+                    </th>
+                </c:forEach>
+            </tr>
+            </thead>
+            <c:forEach items="${vets}" var="vet" varStatus="rowNum">
+                <tr>
+                    <td class="text-center">${rowNum.index + 1}</td>
+                    <td>
+                        <a href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>?id=${vet.clinicUserId}"
+                           target="_blank" role="button" class="d-block mx-auto text-center">${vet.fullName}</a>
+                    </td>
+                    <c:forEach items="${weekDates}" var="weekDate">
+                        <td class="text-center pe-none">
+                            <input type="checkbox" class="largeCheckbox"
+                                ${vet.workingDays.contains(weekDate.toString()) ? 'checked' : ''}>
+                        </td>
+                    </c:forEach>
+                </tr>
+            </c:forEach>
+        </table>
+    </div>
 </main>
 <%@ include file="/shared/component/footer.jsp" %>
 </body>
