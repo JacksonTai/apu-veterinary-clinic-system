@@ -7,11 +7,12 @@ package repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
- *
  * @author Jackson Tai
  */
 public abstract class AbstractFacade<T> {
@@ -65,6 +66,7 @@ public abstract class AbstractFacade<T> {
             return Optional.empty();
         }
     }
+
     protected Optional<List<T>> findResultsByAttribute(String namedQuery, String paramName, String paramValue) {
         try {
             List<T> entity = (List<T>) getEntityManager().createNamedQuery(namedQuery)
@@ -77,6 +79,9 @@ public abstract class AbstractFacade<T> {
     }
 
     protected Optional<T> findResultByAttributes(String namedQuery, String[] paramNames, String[] paramValues) {
+        if (paramNames.length != paramValues.length) {
+            throw new IllegalArgumentException("The length of parameter names and values must match.");
+        }
         try {
             if (paramNames.length != paramValues.length) {
                 throw new IllegalArgumentException("Number of paramNames must match the number of paramValues");
@@ -92,6 +97,28 @@ public abstract class AbstractFacade<T> {
         }
     }
 
+    public List<T> findResultsByAttributes(int[] range, String namedQuery, Map<String, String> parameters) {
+        javax.persistence.Query query;
+
+        if (namedQuery != null && parameters != null && !parameters.isEmpty()) {
+            query = getEntityManager().createNamedQuery(namedQuery);
+            parameters.forEach(query::setParameter);
+        } else {
+            javax.persistence.criteria.CriteriaQuery<T> cq = getEntityManager().getCriteriaBuilder().createQuery(entityClass);
+            cq.select(cq.from(entityClass));
+            query = getEntityManager().createQuery(cq);
+        }
+
+        query.setMaxResults(range[1] - range[0] + 1);
+        query.setFirstResult(range[0]);
+
+        try {
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return Collections.emptyList();
+        }
+    }
+
     public int count() {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         javax.persistence.criteria.Root<T> rt = cq.from(entityClass);
@@ -99,5 +126,21 @@ public abstract class AbstractFacade<T> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-    
+
+    public int count(String namedQuery, Map<String, String> parameters) {
+        javax.persistence.Query query;
+
+        if (namedQuery != null && parameters != null && !parameters.isEmpty()) {
+            query = getEntityManager().createNamedQuery(namedQuery);
+            parameters.forEach(query::setParameter);
+        } else {
+            return count();
+        }
+
+        try {
+            return ((Long) query.getSingleResult()).intValue();
+        } catch (NoResultException e) {
+            return 0;
+        }
+    }
 }

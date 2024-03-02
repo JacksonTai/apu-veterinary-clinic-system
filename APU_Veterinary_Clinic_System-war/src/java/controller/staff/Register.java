@@ -84,7 +84,7 @@ public class Register extends HttpServlet {
         CreateStaffResponseModel createStaffResponse = staffService.createStaff(fullName, email, password, userRole);
 
         if (createStaffResponse.getStatusCode() == HttpServletResponse.SC_CREATED) {
-            response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS + ".jsp");
+            response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS);
         } else {
             createStaffResponse.getErrorMessages().forEach(request::setAttribute);
             request.getRequestDispatcher(STAFF_REGISTER + ".jsp").forward(request, response);

@@ -81,4 +81,22 @@ public class StringUtil {
     public static String getConcatenatedString(List<String> values, String separator) {
         return String.join(separator + " ", values);
     }
+
+    public static String toTitleCase(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(Character.toUpperCase(input.charAt(0)));
+        for (int i = 1; i < input.length(); i++) {
+            char ch = input.charAt(i);
+            // Add space before consecutive uppercase letters (except the first word)
+            if (Character.isUpperCase(ch) && i > 1 && !Character.isUpperCase(input.charAt(i - 1))) {
+                sb.append(' ');
+            }
+            sb.append(ch);
+        }
+        return sb.toString();
+    }
 }

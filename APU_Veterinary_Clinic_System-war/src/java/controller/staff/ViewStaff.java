@@ -5,34 +5,36 @@
  */
 package controller.staff;
 
-import entity.*;
+import entity.ClinicUser;
+import entity.Expertise;
+import entity.Vet;
+import org.apache.commons.lang3.text.WordUtils;
+import repository.ClinicUserFacade;
+import repository.ManagingStaffFacade;
+import repository.ReceptionistFacade;
+import repository.VetFacade;
 import util.StringUtil;
 import util.pagination.PaginationConfig;
 import util.pagination.PaginationUtil;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static constant.EndpointConstant.VIEW_STAFF;
 import static constant.EndpointConstant.VIEW_STAFFS;
 import static constant.GlobalConstant.DASH;
 import static constant.UserRole.VET;
 import static constant.i18n.En.RECORD_NOT_FOUND_MESSAGE;
-
-import javax.ejb.EJB;
-
-import repository.ClinicUserFacade;
-import repository.ManagingStaffFacade;
-import repository.ReceptionistFacade;
-import repository.VetFacade;
+import static util.StringUtil.toTitleCase;
 
 /**
  * @author Jackson Tai
@@ -92,38 +94,18 @@ public class ViewStaff extends HttpServlet {
         }
 
         String role = request.getParameter("role");
-        if (role == null || role.isEmpty()) {
-            role = "vet";
-        }
-
-        if (role.equals("vet")) {
-            PaginationUtil.applyPagination(PaginationConfig.<Vet>builder()
-                    .request(request)
-                    .response(response)
-                    .entityAttribute("staffs")
-                    .viewPageEndpoint(VIEW_STAFF + "?role=" + role)
-                    .viewJspPath(VIEW_STAFFS)
-                    .facade(vetFacade)
-                    .build());
-        } else if (role.equals("receptionist")) {
-            PaginationUtil.applyPagination(PaginationConfig.<Receptionist>builder()
-                    .request(request)
-                    .response(response)
-                    .entityAttribute("staffs")
-                    .viewPageEndpoint(VIEW_STAFF + "?role=" + role)
-                    .viewJspPath(VIEW_STAFFS)
-                    .facade(receptionistFacade)
-                    .build());
-        } else if (role.equals("managingStaff")) {
-            PaginationUtil.applyPagination(PaginationConfig.<ManagingStaff>builder()
-                    .request(request)
-                    .response(response)
-                    .entityAttribute("staffs")
-                    .viewPageEndpoint(VIEW_STAFF + "?role=" + role)
-                    .viewJspPath(VIEW_STAFFS)
-                    .facade(managingStaffFacade)
-                    .build());
-        }
+        LinkedHashMap<String, String> queryParams = new LinkedHashMap<>();
+        queryParams.put("userRole", toTitleCase(role == null || role.isEmpty() ? "vet" : role));
+        PaginationUtil.applyPagination(PaginationConfig.<ClinicUser>builder()
+                .request(request)
+                .response(response)
+                .entityAttribute("staffs")
+                .viewPageEndpoint(VIEW_STAFF + "?role=" + role)
+                .viewJspPath(VIEW_STAFFS)
+                .facade(clinicUserFacade)
+                .namedQuery("ClinicUser.findByUserRole")
+                .queryParams(queryParams)
+                .build());
     }
 
     /**

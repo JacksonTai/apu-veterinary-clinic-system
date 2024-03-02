@@ -6,6 +6,7 @@
 package controller.staff.approval;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.ServletException;
@@ -18,6 +19,7 @@ import static constant.EndpointConstant.*;
 import static constant.GlobalConstant.DASH;
 import static constant.UserRole.VET;
 import static constant.i18n.En.RECORD_NOT_FOUND_MESSAGE;
+import static util.StringUtil.toTitleCase;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpSession;
@@ -115,14 +117,19 @@ public class ViewStaffApproval extends HttpServlet {
             return;
         }
 
-        String type = request.getParameter("type");
+        String status = request.getParameter("type");
+        status = (status == null || status.isEmpty() ? "pending" : status);
+        LinkedHashMap<String, String> queryParams = new LinkedHashMap<>();
+        queryParams.put("status", status.toUpperCase());
         PaginationUtil.applyPagination(PaginationConfig.<MakerChecker>builder()
                 .request(request)
                 .response(response)
                 .entityAttribute("staffApprovals")
-                .viewPageEndpoint(VIEW_STAFF_APPROVAL + "?type=" + (type == null || type.isEmpty() ? "pending" : type))
+                .viewPageEndpoint(VIEW_STAFF_APPROVAL + "?type=" + status)
                 .viewJspPath(VIEW_STAFF_APPROVALS)
                 .facade(makerCheckerFacade)
+                .namedQuery("MakerChecker.findByStatus")
+                .queryParams(queryParams)
                 .build());
     }
 

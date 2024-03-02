@@ -1,10 +1,15 @@
 package util.pagination;
 
+import lombok.SneakyThrows;
+import repository.AbstractFacade;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A utility class to handle pagination logic using an AbstractFacade, simplifying
@@ -23,6 +28,7 @@ public class PaginationUtil {
      * @param config The {@link PaginationConfig} object containing all necessary configuration for pagination.
      * @throws IOException If an I/O error occurs during redirection.
      */
+    @SneakyThrows
     public static <T> void applyPagination(PaginationConfig<T> config) throws IOException {
 
         int defaultPage = 1;
@@ -40,13 +46,31 @@ public class PaginationUtil {
             pageNumber = defaultPage;
         }
 
-        int totalItems = config.getFacade().count();
+        int startIndex = (pageNumber - 1) * pageSize;
+        int endIndex = startIndex + pageSize - 1;
+
+        String namedQuery = config.getNamedQuery();
+        Map<String, String> queryParams = config.getQueryParams();
+
+        // Fetch the list of entities for the current page.
+        AbstractFacade<T> facade = config.getFacade();
+        List<T> items = facade.findResultsByAttributes(new int[]{startIndex, endIndex}, namedQuery, queryParams);
+        int totalItems = namedQuery != null && queryParams != null ?
+                facade.count(namedQuery.replace("find", "count"), queryParams) :
+                facade.count();
+
         int totalPages = (int) Math.ceil((double) totalItems / pageSize);
 
-        // Remove the page parameter from the existing parameters
+        // Exclude the page parameter from the existing parameters
         String existingParams = request.getQueryString();
         if (existingParams != null && !existingParams.isEmpty()) {
             existingParams = existingParams.replaceAll("&?page=\\d+", "");
+        }
+
+        // Redirect to the first page if the requested page number is less than 1.
+        if (pageNumber <= 0) {
+            response.sendRedirect(request.getContextPath() + config.getViewPageEndpoint());
+            return;
         }
 
         // Redirect to the last page if the requested page number exceeds the total number of pages.
@@ -54,7 +78,8 @@ public class PaginationUtil {
 
             // Check if there are existing parameters
             if (existingParams != null && !existingParams.isEmpty()) {
-                response.sendRedirect(request.getContextPath() + config.getViewPageEndpoint() + "&page=" + totalPages);
+                response.sendRedirect(request.getContextPath() + config.getViewPageEndpoint() + "&page=" +
+                        totalPages);
             }
             if (existingParams == null || existingParams.isEmpty()) {
                 response.sendRedirect(request.getContextPath() + config.getViewPageEndpoint() + "?page=" +
@@ -62,17 +87,6 @@ public class PaginationUtil {
             }
             return;
         }
-        // Redirect to the first page if the requested page number is less than 1.
-        if (pageNumber <= 0) {
-            response.sendRedirect(request.getContextPath() + config.getViewPageEndpoint());
-            return;
-        }
-
-        int startIndex = (pageNumber - 1) * pageSize;
-        int endIndex = startIndex + pageSize - 1;
-
-        // Fetch the list of entities for the current page.
-        java.util.List<T> items = config.getFacade().findRange(new int[]{startIndex, endIndex});
 
         request.setAttribute(config.getEntityAttribute(), items);
         request.setAttribute("totalPages", totalPages);
@@ -80,11 +94,6 @@ public class PaginationUtil {
         request.setAttribute("existingParams", existingParams);
         request.setAttribute("previousDisabled", pageNumber == 1);
         request.setAttribute("nextDisabled", pageNumber == totalPages);
-
-        try {
-            request.getRequestDispatcher(config.getViewJspPath() + ".jsp").forward(request, response);
-        } catch (javax.servlet.ServletException e) {
-            throw new RuntimeException(e);
-        }
+        request.getRequestDispatcher(config.getViewJspPath() + ".jsp").forward(request, response);
     }
 }

@@ -117,7 +117,7 @@
                 </tbody>
             </table>
         </div>
-        <c:if test="${not empty isOwnProfile and isOwnProfile eq false and staffApproval.status eq 'PENDING'}">
+        <c:if test="${not empty isOwnApproval and isOwnApproval eq false and staffApproval.status eq 'PENDING'}">
             <div class="mx-auto mt-4 d-flex justify-content-center">
                 <form id="staffApprovalForm" method="POST">
                     <input type="hidden" name="approvalAction" id="approvalAction" value="asdf">

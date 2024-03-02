@@ -22,7 +22,11 @@ import java.io.Serializable;
                         "mc.module = :module AND mc.actionType = :actionType"),
         @NamedQuery(name = "MakerChecker.findByStatusAndModuleAndActionType",
                 query = "SELECT mc FROM MakerChecker mc WHERE mc.status = :status AND mc.module = :module AND " +
-                        "mc.actionType = :actionType")
+                        "mc.actionType = :actionType"),
+        @NamedQuery(name = "MakerChecker.findByStatus",
+                query = "SELECT c FROM MakerChecker c WHERE c.status = :status"),
+        @NamedQuery(name = "MakerChecker.countByStatus",
+                query = "SELECT COUNT(c) FROM MakerChecker c WHERE c.status = :status")
 })
 @Data
 @NoArgsConstructor
