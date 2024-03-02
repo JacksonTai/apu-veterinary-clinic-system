@@ -30,41 +30,43 @@
             </div>
         </c:when>
         <c:otherwise>
-            <table class="table table-bordered w-100 my-2">
-                <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Full Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone Number</th>
-                    <th scope="col">Gender</th>
-                    <th scope="col">Date Of Birth</th>
-                    <th scope="col">Address</th>
-                    <th scope="col">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${customers}" var="customer">
+            <div class="w-100 mx-auto overflow-x-auto">
+                <table class="table table-bordered w-100 my-2">
+                    <thead>
                     <tr>
-                        <td>${StringUtil.requireNonNullElse(customer.customerId, DASH)}</td>
-                        <td>${StringUtil.requireNonNullElse(customer.fullName, DASH)}</td>
-                        <td>${StringUtil.requireNonNullElse(customer.email, DASH)}</td>
-                        <td>${StringUtil.requireNonNullElse(customer.phoneNumber, DASH)}</td>
-                        <td>${StringUtil.requireNonNullElse(customer.gender, DASH)}</td>
-                        <td>${StringUtil.requireNonNullElse(
-                                StringUtil.convertDateFormat(customer.dateOfBirth, DMY_SLASH_DATE_FORMAT), DASH)}</td>
-                        <td>${StringUtil.requireNonNullElse(customer.address, DASH)}</td>
-                        <td>
-                            <a class="btn btn-light btn-sm"
-                               href="<c:url value='<%= EndpointConstant.VIEW_CUSTOMER %>'/>?id=${customer.customerId}"
-                               role="button">
-                                View
-                            </a>
-                        </td>
+                        <th scope="col">ID</th>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Date Of Birth</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Action</th>
                     </tr>
-                </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${customers}" var="customer">
+                        <tr>
+                            <td>${StringUtil.requireNonNullElse(customer.customerId, DASH)}</td>
+                            <td>${StringUtil.requireNonNullElse(customer.fullName, DASH)}</td>
+                            <td>${StringUtil.requireNonNullElse(customer.email, DASH)}</td>
+                            <td>${StringUtil.requireNonNullElse(customer.phoneNumber, DASH)}</td>
+                            <td>${StringUtil.requireNonNullElse(customer.gender, DASH)}</td>
+                            <td>${StringUtil.requireNonNullElse(
+                                    StringUtil.convertDateFormat(customer.dateOfBirth, DMY_SLASH_DATE_FORMAT), DASH)}</td>
+                            <td>${StringUtil.requireNonNullElse(customer.address, DASH)}</td>
+                            <td>
+                                <a class="btn btn-light btn-sm"
+                                   href="<c:url value='<%= EndpointConstant.VIEW_CUSTOMER %>'/>?id=${customer.customerId}"
+                                   role="button">
+                                    View
+                                </a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
             <%@ include file="/shared/component/pagination.jsp" %>
         </c:otherwise>
     </c:choose>

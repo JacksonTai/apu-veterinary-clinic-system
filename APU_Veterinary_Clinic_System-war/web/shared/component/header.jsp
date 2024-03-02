@@ -64,17 +64,32 @@
                             </li>
                         </c:if>
                         <c:if test="${sessionScope.clinicUser.userRole eq MANAGING_STAFF}">
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page"
-                                   href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false">
                                     Staff
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page"
-                                   href="<c:url value='<%= EndpointConstant.VIEW_WORKING_ROTA %>'/>">
-                                    Working Rota
-                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>">
+                                            Record
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="<c:url value='<%= EndpointConstant.VIEW_STAFF_APPROVAL %>'/>?type=pending">
+                                            Approval
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="<c:url value='<%= EndpointConstant.VIEW_EXPERTISE %>'/>">
+                                            Expertise
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button"
@@ -108,6 +123,12 @@
                                         </a>
                                     </li>
                                 </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page"
+                                   href="<c:url value='<%= EndpointConstant.VIEW_WORKING_ROTA %>'/>">
+                                    Working Rota
+                                </a>
                             </li>
                         </c:if>
                         <li class="nav-item">

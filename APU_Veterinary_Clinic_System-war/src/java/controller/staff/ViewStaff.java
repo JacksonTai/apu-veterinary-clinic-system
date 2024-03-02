@@ -5,15 +5,15 @@
  */
 package controller.staff;
 
-import entity.ClinicUser;
-import entity.ManagingStaff;
-import entity.Receptionist;
-import entity.Vet;
+import entity.*;
+import util.StringUtil;
 import util.pagination.PaginationConfig;
 import util.pagination.PaginationUtil;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,6 +23,8 @@ import javax.servlet.http.HttpSession;
 
 import static constant.EndpointConstant.VIEW_STAFF;
 import static constant.EndpointConstant.VIEW_STAFFS;
+import static constant.GlobalConstant.DASH;
+import static constant.UserRole.VET;
 import static constant.i18n.En.RECORD_NOT_FOUND_MESSAGE;
 
 import javax.ejb.EJB;
@@ -65,15 +67,26 @@ public class ViewStaff extends HttpServlet {
         String staffId = request.getParameter("id");
 
         if (staffId != null && !staffId.isEmpty()) {
+
             HttpSession session = request.getSession(false);
-            ClinicUser clinicUser = (ClinicUser) session.getAttribute("clinicUser");
+            ClinicUser loggedInStaff = (ClinicUser) session.getAttribute("clinicUser");
+            request.setAttribute("isOwnProfile", loggedInStaff.getClinicUserId().equals(staffId));
+
             ClinicUser staff = clinicUserFacade.find(staffId);
-            request.setAttribute("isOwnProfile", clinicUser.getClinicUserId().equals(staffId));
             if (staff == null) {
                 request.setAttribute("notFoundMessage", RECORD_NOT_FOUND_MESSAGE);
             } else {
                 request.setAttribute("staff", staff);
+                if (staff.getUserRole().equals(VET)) {
+                    Vet vet = (Vet) staff;
+                    List<String> expertises = vet.getExpertises().stream()
+                            .map(Expertise::getName)
+                            .collect(Collectors.toList());
+                    request.setAttribute("expertises", StringUtil.requireNonNullElse(
+                            StringUtil.getConcatenatedString(expertises, ","), DASH));
+                }
             }
+
             request.getRequestDispatcher(VIEW_STAFF + ".jsp").forward(request, response);
             return;
         }

@@ -32,33 +32,34 @@
             </div>
         </c:when>
         <c:otherwise>
-            <table class="table table w-100 my-2 mx-auto" style="max-width: 30rem">
-
-                <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${expertises}" var="expertise">
+            <div class="w-100 mx-auto overflow-x-auto">
+                <table class="table table w-100 my-2 mx-auto" style="max-width: 30rem">
+                    <thead>
                     <tr>
-                        <td>${StringUtil.requireNonNullElse(expertise.expertiseId, DASH)}</td>
-                        <td>${StringUtil.requireNonNullElse(expertise.name, DASH)}</td>
-                        <td>
-                            <a class="btn btn-danger btn-sm" onclick="confirmDelete({
-                                    entityId: '${expertise.expertiseId}',
-                                    entityName: 'expertise',
-                                    deleteEndpoint: endpoints.DELETE_EXPERTISE,
-                                    successRedirectEndpoint: endpoints.VIEW_EXPERTISE
-                                    })" role="button">Delete
-                            </a>
-                        </td>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Action</th>
                     </tr>
-                </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${expertises}" var="expertise">
+                        <tr>
+                            <td>${StringUtil.requireNonNullElse(expertise.expertiseId, DASH)}</td>
+                            <td>${StringUtil.requireNonNullElse(expertise.name, DASH)}</td>
+                            <td>
+                                <a class="btn btn-danger btn-sm" onclick="confirmDelete({
+                                        entityId: '${expertise.expertiseId}',
+                                        entityName: 'expertise',
+                                        deleteEndpoint: endpoints.DELETE_EXPERTISE,
+                                        successRedirectEndpoint: endpoints.VIEW_EXPERTISE
+                                        })" role="button">Delete
+                                </a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
             <%@ include file="/shared/component/pagination.jsp" %>
         </c:otherwise>
     </c:choose>

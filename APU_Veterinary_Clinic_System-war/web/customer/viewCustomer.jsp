@@ -39,8 +39,8 @@
     </c:if>
     <c:if test="${empty notFoundMessage}">
         <h2>Customer Details</h2>
-        <div class="mx-auto">
-            <table class="table">
+        <div class="w-100 mx-auto overflow-x-auto">
+            <table class="table w-100">
                 <colgroup>
                     <col span="1" style="width: 9rem;">
                     <col span="1" style="width: auto;">

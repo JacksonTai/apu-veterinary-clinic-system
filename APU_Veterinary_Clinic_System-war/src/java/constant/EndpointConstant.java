@@ -11,17 +11,16 @@ package constant;/*
 public class EndpointConstant {
 
     // Sub-path
+    public static final String PET = "/pet";
     public static final String STAFF = "/staff";
-    public static final String VET = "/vet";
-    public static final String RECEPTIONIST = "/receptionist";
-    public static final String MANAGING_STAFF = "/managingStaff";
     public static final String CUSTOMER = "/customer";
     public static final String APPOINTMENT = "/appointment";
-    public static final String PET = "/pet";
     public static final String WORKING_ROTA = "/workingRota";
     public static final String REPORT = "/report";
     public static final String PROFILE = "/profile";
+    public static final String APPROVAL = "/approval";
     public static final String EXPERTISE = "/expertise";
+    public static final String STAFF_APPROVAL = STAFF + APPROVAL;
 
     public static final String LOGOUT = "/logout";
     public static final String REGISTRATION_SUCCESS = "/registrationSuccess";
@@ -52,24 +51,12 @@ public class EndpointConstant {
     public static final String UPDATE_PET = PET + "/updatePet";
 
     public static final String VIEW_WORKING_ROTA = WORKING_ROTA + "/viewWorkingRota";
-    public static final String DELETE_WORKING_ROTA = WORKING_ROTA + "/deleteWorkingRota";
     public static final String CREATE_WORKING_ROTA = WORKING_ROTA + "/createWorkingRota";
-    public static final String UPDATE_WORKING_ROTA = WORKING_ROTA + "/updateWorkingRota";
 
     public static final String VIEW_EXPERTISE = EXPERTISE + "/viewExpertise";
     public static final String VIEW_EXPERTISES = EXPERTISE + "/viewExpertises";
     public static final String DELETE_EXPERTISE = EXPERTISE + "/deleteExpertise";
     public static final String CREATE_EXPERTISE = EXPERTISE + "/createExpertise";
-
-    public static final String VIEW_RECEPTIONIST = STAFF + RECEPTIONIST + "/viewReceptionist";
-    public static final String UPDATE_RECEPTIONIST = STAFF + RECEPTIONIST + "/viewReceptionist";
-    public static final String DELETE_RECEPTIONIST = STAFF + RECEPTIONIST + "/viewReceptionist";
-    public static final String CREATE_RECEPTIONIST = STAFF + RECEPTIONIST + "/viewReceptionist";
-
-    public static final String VIEW_VET = STAFF + VET + "/viewVet";
-    public static final String UPDATE_VET = STAFF + VET + "/updateVet";
-    public static final String DELETE_VET = STAFF + VET + "/deleteVet";
-    public static final String CREATE_VET = STAFF + VET + "/createVet";
 
     public static final String DELETE_STAFF = STAFF + "/deleteStaff";
     public static final String VIEW_STAFF = STAFF + "/viewStaff";
@@ -77,6 +64,10 @@ public class EndpointConstant {
     public static final String CREATE_STAFF = STAFF + "/createStaff";
     public static final String UPDATE_STAFF = STAFF + "/updateStaff";
     public static final String SEARCH_STAFF = STAFF + "/searchStaff";
+
+    public static final String VIEW_STAFF_APPROVAL = STAFF_APPROVAL + "/viewStaffApproval";
+    public static final String VIEW_STAFF_APPROVALS = STAFF_APPROVAL + "/viewStaffApprovals";
+    public static final String UPDATE_STAFF_APPROVAL = STAFF_APPROVAL + "/updateStaffApproval";
 
     public static final String CUSTOMER_REPORT = "/report";
 

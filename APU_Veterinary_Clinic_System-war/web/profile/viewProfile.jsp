@@ -54,10 +54,14 @@
         </tbody>
     </table>
     <div class="mx-auto d-flex justify-content-center">
-        <a class="btn btn-secondary me-2" href="<c:url value='<%= EndpointConstant.UPDATE_PROFILE %>'/>" role="button">
-            Update Profile</a>
-        <a class="btn btn-secondary" href="<c:url value='<%= EndpointConstant.CHANGE_PASSWORD %>'/>" role="button">
-            Change Password</a>
+        <a class="btn btn-primary me-2" href="<c:url value='<%= EndpointConstant.UPDATE_PROFILE %>'/>"
+           role="button">
+            Update Profile
+        </a>
+        <a class="btn btn-primary" href="<c:url value='<%= EndpointConstant.CHANGE_PASSWORD %>'/>"
+           role="button">
+            Change Password
+        </a>
     </div>
 </main>
 <%@ include file="/shared/component/footer.jsp" %>

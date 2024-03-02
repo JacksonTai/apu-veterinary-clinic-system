@@ -16,12 +16,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Optional;
 
 import static constant.EndpointConstant.SEARCH_STAFF;
 import static constant.i18n.En.EMPTY_SEARCH_INPUT_MESSAGE;
 import static constant.i18n.En.STAFF_NOT_FOUND_MESSAGE;
+import static util.HttpUtil.sendJsonResponse;
 
 /**
  * @author Jackson Tai
@@ -62,15 +62,6 @@ public class SearchStaff extends HttpServlet {
             sendJsonResponse(response, HttpServletResponse.SC_OK,
                     "{\"error\":\"" + STAFF_NOT_FOUND_MESSAGE + "\"}");
         }
-    }
-
-    private void sendJsonResponse(HttpServletResponse response, int statusCode, String json) throws IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setStatus(statusCode);
-        PrintWriter out = response.getWriter();
-        out.print(json);
-        out.flush();
     }
 
     /**

@@ -51,6 +51,7 @@ public class En {
     public static final String DUPLICATE_EXPERTISE_NAME_MESSAGE = "This expertise already exists.";
     public static final String ERROR_UPDATING_PROFILE = "Error occurred while trying to update profile";
     public static final String ERROR_DELETING_EXPERTISE = "Error occurred while trying to delete the expertise";
+    public static final String ERROR_UPDATING_APPROVAL = "Error occurred while trying to updating the approval";
     public static final String NO_CHANGES_MESSAGE = "No changes are made.";
 
 }

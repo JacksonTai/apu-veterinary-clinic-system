@@ -29,7 +29,7 @@
             </div>
         </c:when>
         <c:otherwise>
-            <%@ include file="/shared/component/pet/table.jsp" %>
+            <%@ include file="shared/petTable.jsp" %>
             <%@ include file="/shared/component/pagination.jsp" %>
         </c:otherwise>
     </c:choose>

@@ -77,6 +77,7 @@ public class UpdateProfile extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         clinicUser = (ClinicUser) session.getAttribute("clinicUser");
+        clinicUser = clinicUserFacade.find(clinicUser.getClinicUserId());
 
         isVet = clinicUser.getUserRole().equals(VET);
         mc = makerCheckerFacade.findByMakerIdAndStatusAndModuleAndActionType(clinicUser.getClinicUserId(),
@@ -88,13 +89,13 @@ public class UpdateProfile extends HttpServlet {
         try {
             if (isVet) {
                 request.setAttribute("expertises", expertises = expertiseFacade.findAll());
+                vet = (Vet) clinicUser;
                 if (pendingMcExist) {
                     mcVet = objectMapper.readValue(mc.getNewValue(), Vet.class);
                     request.setAttribute("clinicUser", mcVet);
                     request.setAttribute("selectedExpertises", mcVet.getExpertises());
                 }
                 if (!pendingMcExist) {
-                    vet = (Vet) clinicUser;
                     request.setAttribute("clinicUser", vet);
                     request.setAttribute("selectedExpertises", vet.getExpertises());
                 }
@@ -168,10 +169,8 @@ public class UpdateProfile extends HttpServlet {
                         !(new HashSet<>(selectedExpertises).containsAll(mcVet.getExpertises()) &&
                                 new HashSet<>(mcVet.getExpertises()).containsAll(selectedExpertises));
             }
-            if (!pendingMcExist) {
-                profileExpertisesChanged = !(new HashSet<>(selectedExpertises).containsAll(vet.getExpertises()) &&
-                        new HashSet<>(vet.getExpertises()).containsAll(selectedExpertises));
-            }
+            profileExpertisesChanged = !(new HashSet<>(selectedExpertises).containsAll(vet.getExpertises()) &&
+                    new HashSet<>(vet.getExpertises()).containsAll(selectedExpertises));
         } else {
             if (pendingMcExist) {
                 mcChanged = !email.equalsIgnoreCase(mcClinicUser.getEmail()) ||
@@ -208,23 +207,24 @@ public class UpdateProfile extends HttpServlet {
             }
 
             // Make new object with the new value for maker checker
-            Vet vet = null;
-            ClinicUser clinicUser = null;
+            Vet newMcVet = null;
+            ClinicUser newMcClinicUser = null;
             if (isVet) {
-                vet = SerializationUtils.clone(pendingMcExist ? mcVet : this.vet);
-                vet.setEmail(email);
-                vet.setFullName(fullName);
-                vet.setExpertises(selectedExpertises);
+                newMcVet = SerializationUtils.clone(pendingMcExist ? mcVet : vet);
+                newMcVet.setEmail(email);
+                newMcVet.setFullName(fullName);
+                newMcVet.setExpertises(selectedExpertises);
             } else {
-                clinicUser = SerializationUtils.clone(pendingMcExist ? mcClinicUser : this.clinicUser);
-                clinicUser.setEmail(email);
-                clinicUser.setFullName(fullName);
+                newMcClinicUser = SerializationUtils.clone(pendingMcExist ? mcClinicUser : clinicUser);
+                newMcClinicUser.setEmail(email);
+                newMcClinicUser.setFullName(fullName);
             }
 
             // Make current value and new value in JSON format for maker checker
-            String currentValue = isVet ? objectMapper.writeValueAsString(pendingMcExist ? mcVet : this.vet) :
-                    objectMapper.writeValueAsString(pendingMcExist ? mcClinicUser : this.clinicUser);
-            String newValue = isVet ? objectMapper.writeValueAsString(vet) : objectMapper.writeValueAsString(clinicUser);
+            String currentValue = isVet ? objectMapper.writeValueAsString(pendingMcExist ? mcVet : vet) :
+                    objectMapper.writeValueAsString(pendingMcExist ? mcClinicUser : clinicUser);
+            String newValue = isVet ? objectMapper.writeValueAsString(newMcVet) :
+                    objectMapper.writeValueAsString(newMcClinicUser);
 
             if (pendingMcExist) {
                 mc.setNewValue(newValue);

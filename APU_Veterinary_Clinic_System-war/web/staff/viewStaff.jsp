@@ -59,6 +59,16 @@
                     <th scope="row">Email:</th>
                     <td>${StringUtil.requireNonNullElse(staff.email, DASH)}</td>
                 </tr>
+                <tr>
+                    <th scope="row">Role:</th>
+                    <td>${StringUtil.requireNonNullElse(staff.userRole, DASH)}</td>
+                </tr>
+                <c:if test="${staff.userRole eq VET}">
+                    <tr>
+                        <th scope="row">Expertises:</th>
+                        <td>${StringUtil.requireNonNullElse(expertises, DASH)}</td>
+                    </tr>
+                </c:if>
                 </tbody>
             </table>
         </div>

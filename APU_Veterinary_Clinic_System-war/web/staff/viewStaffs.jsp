@@ -14,13 +14,13 @@
     <script src="${pageContext.request.contextPath}/asset/js/shared/submitForm.js" defer></script>
     <script src="${pageContext.request.contextPath}/asset/js/constant/endpointConstant.js" defer></script>
     <script src="${pageContext.request.contextPath}/asset/js/staff/searchStaff.js" defer></script>
-    <title>Staff</title>
+    <title>Staff Records</title>
 </head>
 <body>
 <%@ include file="/shared/component/header.jsp" %>
 <main class="w-75 my-2 mx-auto overflow-x-auto">
-    <h1 class="text-center">Staff</h1>
-    <div class="d-flex justify-content-between mb-3">
+    <h1 class="text-center">Staff Records</h1>
+    <div class="d-flex justify-content-between flex-wrap mb-3">
         <form method="POST" class="d-flex" id="searchStaffForm">
             <div class="me-2">
                 <input type="text" name="searchInput" class="form-control mb-1" placeholder="ID / Full Name / Email"
@@ -66,32 +66,34 @@
             </div>
         </c:when>
         <c:otherwise>
-            <table class="table table-bordered w-100 h-100 mb-2">
-                <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Full Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${staffs}" var="staff">
+            <div class="w-100 mx-auto overflow-x-auto">
+                <table class="table table-bordered w-100 h-100 mb-2">
+                    <thead>
                     <tr>
-                        <td>${StringUtil.requireNonNullElse(staff.clinicUserId, DASH)}</td>
-                        <td>${StringUtil.requireNonNullElse(staff.fullName, DASH)}</td>
-                        <td>${StringUtil.requireNonNullElse(staff.email, DASH)}</td>
-                        <td>
-                            <a class="btn btn-light btn-sm"
-                               href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>?id=${staff.clinicUserId}"
-                               role="button">
-                                View
-                            </a>
-                        </td>
+                        <th scope="col">ID</th>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Action</th>
                     </tr>
-                </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${staffs}" var="staff">
+                        <tr>
+                            <td>${StringUtil.requireNonNullElse(staff.clinicUserId, DASH)}</td>
+                            <td>${StringUtil.requireNonNullElse(staff.fullName, DASH)}</td>
+                            <td>${StringUtil.requireNonNullElse(staff.email, DASH)}</td>
+                            <td>
+                                <a class="btn btn-light btn-sm"
+                                   href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>?id=${staff.clinicUserId}"
+                                   role="button">
+                                    View
+                                </a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
             <%@ include file="/shared/component/pagination.jsp" %>
         </c:otherwise>
     </c:choose>

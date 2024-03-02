@@ -1,6 +1,7 @@
 const submitForm = (form, endpoint, successCallback, errorCallback) => {
     form.addEventListener('submit', function (event) {
         event.preventDefault();
+        console.log('submitting form')
         const formData = new FormData(form);
 
         fetch(endpoint, {

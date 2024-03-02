@@ -32,7 +32,7 @@
         <%@ include file="/shared/component/notFound.jsp" %>
     </c:if>
     <c:if test="${empty notFoundMessage}">
-        <div class="mx-auto" style="max-width: 30rem">
+        <div class="w-100 mx-auto overflow-x-auto" style="max-width: 30rem">
             <table class="table">
                 <thead>
                 <tr>
