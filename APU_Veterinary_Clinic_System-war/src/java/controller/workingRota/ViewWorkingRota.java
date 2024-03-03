@@ -16,8 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static constant.EndpointConstant.VIEW_WORKING_ROTA;
 import static constant.GlobalConstant.WEEKDAYS;
@@ -33,15 +32,8 @@ public class ViewWorkingRota extends HttpServlet {
     @EJB
     private VetFacade vetFacade;
 
-    private List<Vet> vets = new ArrayList<>();
-    private final List<LocalDate> weeks = getNextFourMondaysDates();
+    private static final List<LocalDate> weeks = getNextFourMondaysDates();
     private LocalDate week = weeks.get(0);
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        vets = vetFacade.findAll();
-    }
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -62,10 +54,39 @@ public class ViewWorkingRota extends HttpServlet {
                 week = weeks.get(0);
             }
         }
+
+        List<Vet> vets = vetFacade.findAll();
+        List<LocalDate> weekDates = generateWeekDates(week);
+
         request.setAttribute("vets", vets);
         request.setAttribute("weeks", weeks);
         request.setAttribute("weekDays", WEEKDAYS);
-        request.setAttribute("weekDates", generateWeekDates(week));
+        request.setAttribute("weekDates", weekDates);
+
+        Map<String, List<String>> vetWorkingDaysMap = new HashMap<>();
+        vets.forEach(vet -> vetWorkingDaysMap.put(vet.getClinicUserId(), vet.getWorkingDays()));
+
+        Map<LocalDate, Set<String>> dateToExpertisesMap = new HashMap<>();
+        for (LocalDate weekDate : weekDates) {
+            Set<String> allExpertises = new HashSet<>();
+
+            for (Map.Entry<String, List<String>> entry : vetWorkingDaysMap.entrySet()) {
+                String vetId = entry.getKey();
+                List<String> vetWorkingDays = entry.getValue();
+
+                // Check if the vet is working on the current day and add the expertises to the set
+                if (vetWorkingDays.contains(weekDate.toString())) {
+                    vets.forEach(vet -> {
+                        if (vet.getClinicUserId().equals(vetId)) {
+                            vet.setWorkingDays(vetWorkingDays);
+                            vet.getExpertises().forEach(expertise -> allExpertises.add(expertise.getName()));
+                        }
+                    });
+                }
+            }
+            dateToExpertisesMap.put(weekDate, allExpertises);
+        }
+        request.setAttribute("dateToExpertisesMap", dateToExpertisesMap);
         request.getRequestDispatcher(VIEW_WORKING_ROTA + ".jsp").forward(request, response);
     }
 

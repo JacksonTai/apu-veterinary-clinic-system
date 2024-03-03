@@ -40,18 +40,16 @@
         <table class="table w-100 my-4 mx-auto">
             <colgroup>
                 <col span="1" style="width: 3rem;">
-                <col span="1" style="width: 3rem;">
-                <col span="1" style="width: 6rem;">
-                <col span="1" style="width: 6rem;">
-                <col span="1" style="width: 6rem;">
-                <col span="1" style="width: 6rem;">
-                <col span="1" style="width: 6rem;">
-                <col span="1" style="width: 6rem;">
-                <col span="1" style="width: 6rem;">
+                <col span="1" style="width: 7rem;">
+                <col span="1" style="width: 7rem;">
+                <col span="1" style="width: 7rem;">
+                <col span="1" style="width: 7rem;">
+                <col span="1" style="width: 7rem;">
+                <col span="1" style="width: 7rem;">
+                <col span="1" style="width: 7rem;">
             </colgroup>
             <thead>
             <tr>
-                <th scope="col" class="text-center">No</th>
                 <th scope="col" class="text-center">Vet</th>
                 <c:forEach var="day" begin="0" end="6">
                     <th scope="col" class="text-center">
@@ -64,9 +62,9 @@
                 </c:forEach>
             </tr>
             </thead>
+            <tbody>
             <c:forEach items="${vets}" var="vet" varStatus="rowNum">
                 <tr>
-                    <td class="text-center">${rowNum.index + 1}</td>
                     <td>
                         <a href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>?id=${vet.clinicUserId}"
                            target="_blank" role="button" class="d-block mx-auto text-center">${vet.fullName}</a>
@@ -79,6 +77,23 @@
                     </c:forEach>
                 </tr>
             </c:forEach>
+            <tr>
+                <th class="text-center">Expertises Covered:</th>
+                <c:forEach items="${weekDates}" var="weekDate">
+                    <td class="text-center">
+                        <c:set var="expertises" value="${dateToExpertisesMap[weekDate]}"/>
+                        <c:if test="${not empty expertises}">
+                            <c:forEach items="${expertises}" var="expertise">
+                                <div class="badge text-bg-light text-wrap mb-1 lh-base w-100">${expertise}</div>
+                            </c:forEach>
+                        </c:if>
+                        <c:if test="${empty expertises}">
+                            -
+                        </c:if>
+                    </td>
+                </c:forEach>
+            </tr>
+            </tbody>
         </table>
     </div>
 </main>

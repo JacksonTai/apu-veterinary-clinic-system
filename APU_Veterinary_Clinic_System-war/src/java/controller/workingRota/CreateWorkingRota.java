@@ -5,7 +5,9 @@
  */
 package controller.workingRota;
 
+import entity.Expertise;
 import entity.Vet;
+import org.apache.commons.lang3.SerializationUtils;
 import repository.ClinicUserFacade;
 import repository.VetFacade;
 
@@ -19,7 +21,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
-import static constant.EndpointConstant.CREATE_WORKING_ROTA;
+import static constant.EndpointConstant.*;
 import static constant.GlobalConstant.WEEKDAYS;
 import static util.DateUtil.generateWeekDates;
 import static util.DateUtil.getNextFourMondaysDates;
@@ -37,13 +39,22 @@ public class CreateWorkingRota extends HttpServlet {
     private ClinicUserFacade clinicUserFacade;
 
     private static List<Vet> vets = new ArrayList<>();
-    private static final List<LocalDate> weeks = getNextFourMondaysDates();
     private static LocalDate week;
+    private static final List<LocalDate> weeks = getNextFourMondaysDates();
+    private static List<LocalDate> weekDates = new ArrayList<>();
     private static boolean maxWorkingRota;
 
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request  servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
     @Override
-    public void init() throws ServletException {
-        super.init();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         vets = vetFacade.findAll();
         for (Vet vet : vets) {
             for (String workingDay : vet.getWorkingDays()) {
@@ -57,19 +68,7 @@ public class CreateWorkingRota extends HttpServlet {
         if (!(maxWorkingRota = weeks.isEmpty())) {
             week = weeks.get(0);
         }
-    }
 
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request  servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
         if (!maxWorkingRota) {
             String weekParam = request.getParameter("week");
             if (weekParam != null) {
@@ -82,7 +81,7 @@ public class CreateWorkingRota extends HttpServlet {
             request.setAttribute("vets", vets);
             request.setAttribute("weeks", weeks);
             request.setAttribute("weekDays", WEEKDAYS);
-            request.setAttribute("weekDates", generateWeekDates(week));
+            request.setAttribute("weekDates", weekDates = generateWeekDates(week));
         }
         request.setAttribute("maxWorkingRota", maxWorkingRota);
         request.getRequestDispatcher(CREATE_WORKING_ROTA + ".jsp").forward(request, response);
@@ -99,6 +98,20 @@ public class CreateWorkingRota extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        vets = vetFacade.findAll();
+        for (Vet vet : vets) {
+            for (String workingDay : vet.getWorkingDays()) {
+                LocalDate workingDate = LocalDate.parse(workingDay);
+                if (weeks.contains(workingDate)) {
+                    weeks.remove(workingDate);
+                    break;
+                }
+            }
+        }
+        if (!(maxWorkingRota = weeks.isEmpty())) {
+            week = weeks.get(0);
+        }
+
         if (!maxWorkingRota) {
             String weekParam = request.getParameter("week");
             if (weekParam != null) {
@@ -126,19 +139,54 @@ public class CreateWorkingRota extends HttpServlet {
                 }
             }
 
-            // TODO: check if there is at least 3 vets working on each day and at least 5 expertises are covered by those 3 vets
-            request.setAttribute("vets", vets);
-            request.setAttribute("weekDates", weeks);
+            request.setAttribute("weeks", weeks);
+            request.setAttribute("weekDays", WEEKDAYS);
+            request.setAttribute("weekDates", weekDates = generateWeekDates(week));
 
-            // Fetch the vet and update the working days
-            for (Map.Entry<String, List<String>> entry : vetWorkingDaysMap.entrySet()) {
-                String clinicUserId = entry.getKey();
-                Vet vet = vetFacade.find(clinicUserId);
-                if (vet != null) {
-                    vet.setWorkingDays(entry.getValue());
-                    vetFacade.edit(vet);
+            List<Vet> tempVets = new ArrayList<>();
+            vets.forEach(vet -> tempVets.add(SerializationUtils.clone(vet)));
+
+            Map<LocalDate, Set<String>> dateToExpertisesMap = new HashMap<>();
+            for (LocalDate weekDate : weekDates) {
+                Set<String> allExpertises = new HashSet<>();
+
+                for (Map.Entry<String, List<String>> entry : vetWorkingDaysMap.entrySet()) {
+                    String vetId = entry.getKey();
+                    List<String> vetWorkingDays = entry.getValue();
+
+                    // Check if the vet is working on the current day and add the expertises to the set
+                    if (vetWorkingDays.contains(weekDate.toString())) {
+                        tempVets.forEach(vet -> {
+                            if (vet.getClinicUserId().equals(vetId)) {
+                                vet.setWorkingDays(vetWorkingDays);
+                                vet.getExpertises().forEach(expertise -> allExpertises.add(expertise.getName()));
+                            }
+                        });
+                    }
+                }
+                dateToExpertisesMap.put(weekDate, allExpertises);
+            }
+
+            request.setAttribute("vets", tempVets);
+            request.setAttribute("dateToExpertisesMap", dateToExpertisesMap);
+            for (Map.Entry<LocalDate, Set<String>> entry : dateToExpertisesMap.entrySet()) {
+                Set<String> expertisesCovered = entry.getValue();
+                if (expertisesCovered.size() < 5) {
+                    request.getRequestDispatcher(CREATE_WORKING_ROTA + ".jsp").forward(request, response);
+                    return;
                 }
             }
+            for (Map.Entry<String, List<String>> vetWorkingDaysEntry : vetWorkingDaysMap.entrySet()) {
+                String vetId = vetWorkingDaysEntry.getKey();
+                List<String> vetWorkingDays = vetWorkingDaysEntry.getValue();
+                vets.forEach(vet -> {
+                    if (vet.getClinicUserId().equals(vetId)) {
+                        vet.getWorkingDays().addAll(vetWorkingDays);
+                        vetFacade.edit(vet);
+                    }
+                });
+            }
+            response.sendRedirect(request.getContextPath() + VIEW_WORKING_ROTA + "?week=" + week);
         }
     }
 

@@ -28,7 +28,7 @@ import static constant.UserRole.VET;
 @NoArgsConstructor
 public class Vet extends ClinicUser {
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Expertise> expertises = new ArrayList<>();
 
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
