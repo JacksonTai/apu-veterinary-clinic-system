@@ -6,30 +6,26 @@
 package controller.staff;
 
 import entity.ClinicUser;
-import entity.Customer;
+import entity.Expertise;
+import entity.Vet;
+import repository.ClinicUserFacade;
+import repository.ExpertiseFacade;
+import repository.VetFacade;
+import validator.ClinicUserValidator;
+import validator.CustomerValidator;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.*;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
-import static constant.EndpointConstant.*;
-import static constant.GlobalConstant.ISO_DATE_FORMAT;
-import static constant.UserRole.MANAGING_STAFF;
-import static constant.UserRole.RECEPTIONIST;
-import static constant.UserRole.VET;
-
-import javax.ejb.EJB;
-
-import org.mindrot.jbcrypt.BCrypt;
-import repository.ClinicUserFacade;
-import util.StringUtil;
-import validator.ClinicUserValidator;
-import validator.CustomerValidator;
+import static constant.EndpointConstant.UPDATE_STAFF;
+import static constant.EndpointConstant.VIEW_STAFF;
+import static constant.UserRole.*;
 
 /**
  *
@@ -39,10 +35,19 @@ import validator.CustomerValidator;
 public class UpdateStaff extends HttpServlet {
 
     @EJB
+    private VetFacade vetFacade;
+
+    @EJB
+    private ExpertiseFacade expertiseFacade;
+
+    @EJB
     private ClinicUserFacade clinicUserFacade;
 
-    List<String> roleList = new ArrayList<>(Arrays.asList(VET, RECEPTIONIST, MANAGING_STAFF));
-    String formType = "UPDATE";
+    private List<String> roleList = new ArrayList<>(Arrays.asList(VET, RECEPTIONIST, MANAGING_STAFF));
+    private List<Expertise> expertises = new ArrayList<>();
+    private String formType = "UPDATE";
+    private Vet vet;
+    private boolean isVet;
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -61,6 +66,12 @@ public class UpdateStaff extends HttpServlet {
         if (staff == null) {
             response.sendRedirect(request.getContextPath() + VIEW_STAFF + ".jsp");
             return;
+        }
+        request.setAttribute("expertises", expertises = expertiseFacade.findAll());
+        isVet = staff.getUserRole().equals(VET);
+        if (isVet) {
+            vet = (Vet) staff;
+            request.setAttribute("selectedExpertises", vet.getExpertises());
         }
         request.setAttribute("staff", staff);
         request.getRequestDispatcher(UPDATE_STAFF + ".jsp").forward(request, response);
@@ -91,6 +102,25 @@ public class UpdateStaff extends HttpServlet {
         String fullName = request.getParameter("fullName").trim();
         String email = request.getParameter("email").trim().toLowerCase();
 
+        List<Expertise> selectedExpertises = new ArrayList<>();
+        if (isVet) {
+            request.setAttribute("expertises", expertises);
+
+            // Get the selected expertises
+            Enumeration<String> parameterNames = request.getParameterNames();
+            while (parameterNames.hasMoreElements()) {
+                String paramName = parameterNames.nextElement();
+                if (paramName.startsWith("expertise_")) {
+                    String expertiseId = paramName.substring("expertise_".length());
+                    expertises.stream()
+                            .filter(expertise -> expertise.getExpertiseId().equals(expertiseId))
+                            .findFirst()
+                            .ifPresent(selectedExpertises::add);
+                }
+            }
+            request.setAttribute("selectedExpertises", selectedExpertises);
+        }
+
         ClinicUserValidator clinicUserValidator = new ClinicUserValidator(clinicUserFacade);
         Map<String, String> errorMessages = new HashMap<>();
         if (!email.equals(existingStaff.getEmail())) {
@@ -107,9 +137,16 @@ public class UpdateStaff extends HttpServlet {
             String redirectUrl = UPDATE_STAFF + ".jsp?id=" + existingStaff.getClinicUserId();
             request.getRequestDispatcher(redirectUrl).forward(request, response);
         } else {
-            existingStaff.setEmail(email);
-            existingStaff.setFullName(fullName);
-            clinicUserFacade.edit(existingStaff);
+            if (isVet) {
+                vet.setEmail(email);
+                vet.setFullName(fullName);
+                vet.setExpertises(selectedExpertises);
+                vetFacade.edit(vet);
+            } else {
+                existingStaff.setEmail(email);
+                existingStaff.setFullName(fullName);
+                clinicUserFacade.edit(existingStaff);
+            }
             response.sendRedirect(request.getContextPath() + VIEW_STAFF + "?id=" + existingStaff.getClinicUserId());
         }
     }
