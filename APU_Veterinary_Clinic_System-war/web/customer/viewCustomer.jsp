@@ -112,7 +112,7 @@
             </c:when>
             <c:otherwise>
                 <div class="w-100 mx-auto overflow-x-auto">
-                    <%@ include file="/shared/component/pet/table.jsp" %>
+                    <%@ include file="/pet/shared/petTable.jsp" %>
                 </div>
             </c:otherwise>
         </c:choose>

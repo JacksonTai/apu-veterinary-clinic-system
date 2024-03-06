@@ -23,8 +23,7 @@ import java.util.*;
 
 import static constant.EndpointConstant.*;
 import static constant.GlobalConstant.WEEKDAYS;
-import static util.DateUtil.generateWeekDates;
-import static util.DateUtil.getNextFourMondaysDates;
+import static util.DateUtil.*;
 
 /**
  * @author Jackson Tai
@@ -40,7 +39,7 @@ public class CreateWorkingRota extends HttpServlet {
 
     private static List<Vet> vets = new ArrayList<>();
     private static LocalDate week;
-    private static final List<LocalDate> weeks = getNextFourMondaysDates();
+    private static final List<LocalDate> weeks = getNextWeekMondayDates(4);
     private static List<LocalDate> weekDates = new ArrayList<>();
     private static boolean maxWorkingRota;
 
@@ -55,20 +54,7 @@ public class CreateWorkingRota extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        vets = vetFacade.findAll();
-        for (Vet vet : vets) {
-            for (String workingDay : vet.getWorkingDays()) {
-                LocalDate workingDate = LocalDate.parse(workingDay);
-                if (weeks.contains(workingDate)) {
-                    weeks.remove(workingDate);
-                    break;
-                }
-            }
-        }
-        if (!(maxWorkingRota = weeks.isEmpty())) {
-            week = weeks.get(0);
-        }
-
+        updateWeeksAndWeekDate();
         if (!maxWorkingRota) {
             String weekParam = request.getParameter("week");
             if (weekParam != null) {
@@ -98,20 +84,7 @@ public class CreateWorkingRota extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        vets = vetFacade.findAll();
-        for (Vet vet : vets) {
-            for (String workingDay : vet.getWorkingDays()) {
-                LocalDate workingDate = LocalDate.parse(workingDay);
-                if (weeks.contains(workingDate)) {
-                    weeks.remove(workingDate);
-                    break;
-                }
-            }
-        }
-        if (!(maxWorkingRota = weeks.isEmpty())) {
-            week = weeks.get(0);
-        }
-
+        updateWeeksAndWeekDate();
         if (!maxWorkingRota) {
             String weekParam = request.getParameter("week");
             if (weekParam != null) {
@@ -187,6 +160,22 @@ public class CreateWorkingRota extends HttpServlet {
                 });
             }
             response.sendRedirect(request.getContextPath() + VIEW_WORKING_ROTA + "?week=" + week);
+        }
+    }
+
+    private void updateWeeksAndWeekDate() {
+        vets = vetFacade.findAll();
+        for (Vet vet : vets) {
+            for (String workingDay : vet.getWorkingDays()) {
+                LocalDate workingDate = LocalDate.parse(workingDay);
+                if (weeks.contains(workingDate)) {
+                    weeks.remove(workingDate);
+                    break;
+                }
+            }
+        }
+        if (!(maxWorkingRota = weeks.isEmpty())) {
+            week = weeks.get(0);
         }
     }
 

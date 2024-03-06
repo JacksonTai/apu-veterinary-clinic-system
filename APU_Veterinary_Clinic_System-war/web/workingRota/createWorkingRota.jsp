@@ -77,9 +77,7 @@
                     <th scope="col" class="text-center">Vet</th>
                     <c:forEach var="day" begin="0" end="6">
                         <th scope="col" class="text-center">
-                            <div>
-                                    ${weekDays[day]}
-                                <br>
+                            <div>${weekDays[day]}<br>
                                 <span class="fw-light">
                                         ${StringUtil.convertDateFormat(weekDates[day], DMY_SLASH_DATE_FORMAT)}
                                 </span>
@@ -109,7 +107,6 @@
                     <th class="text-center">Expertises Covered:</th>
                     <c:forEach items="${weekDates}" var="weekDate">
                         <td class="text-center">
-
                             <c:set var="expertises" value="${dateToExpertisesMap[weekDate]}"/>
                             <c:if test="${not empty expertises}">
                                 <c:if test="${expertises.size() < 5}">
@@ -137,7 +134,6 @@
             <button type="submit" class="btn btn-primary">Confirm</button>
         </div>
     </form>
-
 </main>
 <%@ include file="/shared/component/footer.jsp" %>
 </body>

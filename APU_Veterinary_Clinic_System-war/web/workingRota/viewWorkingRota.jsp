@@ -52,9 +52,7 @@
             <tr>
                 <th scope="col" class="text-center">Vet</th>
                 <c:forEach var="day" begin="0" end="6">
-                    <th scope="col" class="text-center">
-                            ${weekDays[day]}
-                        <br>
+                    <th scope="col" class="text-center">${weekDays[day]}<br>
                         <span class="fw-light">
                                 ${StringUtil.convertDateFormat(weekDates[day], DMY_SLASH_DATE_FORMAT)}
                         </span>

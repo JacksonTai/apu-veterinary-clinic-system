@@ -6,6 +6,7 @@
 package entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import static constant.UserRole.VET;
  *
  * @author Jackson Tai
  */
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @NamedQueries({
         @NamedQuery(name = "Vet.findAllByExpertiseId",

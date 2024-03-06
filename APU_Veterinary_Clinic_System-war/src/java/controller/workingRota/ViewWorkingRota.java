@@ -20,8 +20,7 @@ import java.util.*;
 
 import static constant.EndpointConstant.VIEW_WORKING_ROTA;
 import static constant.GlobalConstant.WEEKDAYS;
-import static util.DateUtil.generateWeekDates;
-import static util.DateUtil.getNextFourMondaysDates;
+import static util.DateUtil.*;
 
 /**
  * @author Jackson Tai
@@ -32,7 +31,7 @@ public class ViewWorkingRota extends HttpServlet {
     @EJB
     private VetFacade vetFacade;
 
-    private static final List<LocalDate> weeks = getNextFourMondaysDates();
+    private static final List<LocalDate> weeks = getThisAndNextWeekMondaysDates(4);
     private LocalDate week = weeks.get(0);
 
     /**

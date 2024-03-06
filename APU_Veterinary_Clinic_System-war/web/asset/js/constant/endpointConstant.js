@@ -9,6 +9,7 @@ const endpoints = {
   "VIEW_CUSTOMER": CUSTOMER + "/viewCustomer",
   "VIEW_CUSTOMERS": CUSTOMER + "/viewCustomers",
   "DELETE_CUSTOMER": CUSTOMER + "/deleteCustomer",
+  "SEARCH_CUSTOMER": CUSTOMER + "/searchCustomer",
   "VIEW_PET": PET + "/viewPet",
   "DELETE_PET": PET + "/deletePet",
   "VIEW_EXPERTISE": EXPERTISE + "/viewExpertise",

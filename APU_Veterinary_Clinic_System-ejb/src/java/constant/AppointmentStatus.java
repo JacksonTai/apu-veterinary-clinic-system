@@ -8,21 +8,13 @@ package constant;
 import lombok.Getter;
 
 /**
- *
  * @author Jackson Tai
  */
-@Getter
-public enum AppointmentStatus {
-    SCHEDULED("Scheduled"),
-    CONFIRMED("Confirmed"),
-    CANCELLED("Cancelled"),
-    IN_PROGRESS("In progress"),
-    COMPLETED("Completed");
+public class AppointmentStatus {
 
-    private final String description;
-
-    AppointmentStatus(String description) {
-        this.description = description;
-    }
+    public static final String SCHEDULED = "Scheduled";
+    public static final String CANCELLED = "Cancelled";
+    public static final String COMPLETED = "Completed";
+    public static final String ONGOING = "Ongoing";
 
 }

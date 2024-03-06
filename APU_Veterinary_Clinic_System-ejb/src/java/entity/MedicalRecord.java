@@ -31,11 +31,11 @@ public class MedicalRecord implements Serializable {
     private String diagnosis;
 
     @Column(name = "PRONOGSIS")
-    private String pronogsis;
+    private String prognosis;
 
-    public MedicalRecord(String diagnosis, String pronogsis) {
+    public MedicalRecord(String diagnosis, String prognosis) {
         this.diagnosis = diagnosis;
-        this.pronogsis = pronogsis;
+        this.prognosis = prognosis;
     }
 
 }

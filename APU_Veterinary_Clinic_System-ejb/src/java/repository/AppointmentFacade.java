@@ -6,12 +6,16 @@
 package repository;
 
 import entity.Appointment;
+import entity.ClinicUser;
+import entity.Customer;
+import entity.Vet;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Optional;
 
 /**
- *
  * @author Jackson Tai
  */
 @Stateless
@@ -28,5 +32,13 @@ public class AppointmentFacade extends AbstractFacade<Appointment> {
     public AppointmentFacade() {
         super(Appointment.class);
     }
-    
+
+    public Optional<Appointment> findByDateAndCustomerAndPetAndVetAndStatus(String date, String customerId,
+                                                                            String petId, String vetId, String status) {
+        String[] paramNames = {"date", "customerId", "petId", "vetId", "status"};
+        String[] paramValues = {date, customerId, petId, vetId, status};
+        return findResultByAttributes("Appointment.findByDateAndCustomerAndPetAndVetAndStatus", paramNames,
+                paramValues);
+    }
+
 }

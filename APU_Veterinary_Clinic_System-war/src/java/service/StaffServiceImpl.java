@@ -5,13 +5,18 @@ import entity.ClinicUser;
 import entity.ManagingStaff;
 import entity.Receptionist;
 import entity.Vet;
-import model.CreateStaffResponseModel;
+import model.staff.CreateStaffResponseModel;
+import model.staff.SearchStaffResponseModel;
 import org.mindrot.jbcrypt.BCrypt;
 import repository.ClinicUserFacade;
 import validator.ClinicUserValidator;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+import java.util.Optional;
+
+import static constant.i18n.En.EMPTY_SEARCH_INPUT_MESSAGE;
+import static constant.i18n.En.STAFF_NOT_FOUND_MESSAGE;
 
 public class StaffServiceImpl implements StaffService {
 
@@ -56,6 +61,26 @@ public class StaffServiceImpl implements StaffService {
                 response.setClinicUser(clinicUser);
                 response.setStatusCode(HttpServletResponse.SC_CREATED);
             }
+        }
+        return response;
+    }
+
+    @Override
+    public SearchStaffResponseModel searchStaff(String input) {
+        SearchStaffResponseModel response = new SearchStaffResponseModel();
+        if (input.trim().isEmpty()) {
+            response.setStatusCode(HttpServletResponse.SC_BAD_REQUEST);
+            response.setMessage(EMPTY_SEARCH_INPUT_MESSAGE);
+            return response;
+        }
+
+        Optional<ClinicUser> staff = clinicUserFacade.findByIdOrFullNameOrEmail(input);
+        if (staff.isPresent()) {
+            response.setClinicUser(staff.get());
+            response.setStatusCode(HttpServletResponse.SC_OK);
+        } else {
+            response.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
+            response.setMessage(STAFF_NOT_FOUND_MESSAGE);
         }
         return response;
     }

@@ -5,7 +5,7 @@
  */
 package controller.staff;
 
-import model.CreateStaffResponseModel;
+import model.staff.CreateStaffResponseModel;
 import repository.ClinicUserFacade;
 import service.StaffService;
 import service.StaffServiceImpl;

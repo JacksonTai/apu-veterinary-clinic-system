@@ -53,15 +53,15 @@ public class UpdateProfile extends HttpServlet {
     @EJB
     private ClinicUserFacade clinicUserFacade;
 
-    private MakerChecker mc;
-    private ClinicUser clinicUser;
-    private ClinicUser mcClinicUser;
-    private Vet vet;
-    private Vet mcVet;
-    private boolean pendingMcExist;
-    private boolean isVet;
-    private List<Expertise> expertises = new ArrayList<>();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private static MakerChecker mc;
+    private static ClinicUser clinicUser;
+    private static ClinicUser mcClinicUser;
+    private static Vet vet;
+    private static Vet mcVet;
+    private static boolean pendingMcExist;
+    private static boolean isVet;
+    private static List<Expertise> expertises = new ArrayList<>();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -135,7 +135,7 @@ public class UpdateProfile extends HttpServlet {
 
         request.setAttribute("pendingMcExist", pendingMcExist);
         if (isVet) {
-            request.setAttribute("expertises", expertises);
+            request.setAttribute("expertises", expertises = expertiseFacade.findAll());
 
             // Get the selected expertises
             Enumeration<String> parameterNames = request.getParameterNames();

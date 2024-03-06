@@ -34,7 +34,7 @@ public class EndpointConstant {
     public static final String STAFF_REGISTER = STAFF + "/register";
 
     public static final String VIEW_APPOINTMENT = APPOINTMENT + "/viewAppointment";
-    public static final String DELETE_APPOINTMENT = APPOINTMENT + "/deleteAppointment";
+    public static final String VIEW_APPOINTMENTS = APPOINTMENT + "/viewAppointments";
     public static final String CREATE_APPOINTMENT = APPOINTMENT + "/createAppointment";
     public static final String UPDATE_APPOINTMENT = APPOINTMENT + "/updateAppointment";
 
@@ -43,6 +43,7 @@ public class EndpointConstant {
     public static final String UPDATE_CUSTOMER = CUSTOMER + "/updateCustomer";
     public static final String DELETE_CUSTOMER = CUSTOMER + "/deleteCustomer";
     public static final String CREATE_CUSTOMER = CUSTOMER + "/createCustomer";
+    public static final String SEARCH_CUSTOMER = CUSTOMER + "/searchCustomer";
 
     public static final String VIEW_PET = PET + "/viewPet";
     public static final String VIEW_PETS = PET + "/viewPets";
@@ -69,6 +70,6 @@ public class EndpointConstant {
     public static final String VIEW_STAFF_APPROVALS = STAFF_APPROVAL + "/viewStaffApprovals";
     public static final String UPDATE_STAFF_APPROVAL = STAFF_APPROVAL + "/updateStaffApproval";
 
-    public static final String CUSTOMER_REPORT = "/report";
+    public static final String CUSTOMER_REPORT = REPORT + "/customerReport";
 
 }
