@@ -1,27 +1,36 @@
-INSERT INTO APP.CLINIC_USER (CLINIC_USER_ID, USER_ROLE, EMAIL, PASSWORD, FULL_NAME)
-VALUES ('1401', 'Receptionist', 'alvintan@avcs.com', '$2a$10$xoW5zI0co7IIqLtZP.Rn/uK7j7YACJyn4vEdJXk3x/lccKJYGGexS',
-        'Alvin Tan'),
-       ('1801', 'Managing Staff', 'jacksontai@avcs.com', '$2a$10$eRLwib1NlfDzgToHuRsvruv8Dy9jryYLE.Xe2JUBnhbwc3EW.3uxi',
-        'Jackson Tai'),
-       ('1851', 'Vet', 'emilylim@avcs.com', '$2a$10$5/nd6Q2cbm5mVWv8f/Hak.1PG/LdjKtOPdajGjbD/KRNJvTdBrDK.',
-        'Emily Lim'),
-       ('1901', 'Vet', 'muhamadali@avcs.com', '$2a$10$Pviufkq7oUi.ar21DJs71Oqp6Gg.HAD8.cTMmiFcbIU71IJUCvnxG',
-        'Muhamad Ali'),
-       ('1951', 'Receptionist', 'christinlooi@avcs.com', '$2a$10$KvLYSAfOOr4nGVU65nu4/uMKothOMG83vifyqwM5M5HrIiVYySLT2',
-        'Christin Looi'),
-       ('2501', 'Vet', 'christopher@avcs.com', '$2a$10$PSG2OvUNsDGoI8X8fW4ukehBnB1KlzIU73HIi1u1KADwCV2makQ9G',
-        'Christopher'),
-       ('2502', 'Vet', 'charlestee@avcs.com', '$2a$10$dwWEqGkwMNrZAYNNS77j0eSBvGIuzoZXTDsNWOUruF8s1iwgnIRAm',
-        'Charles Tee'),
-       ('2503', 'Vet', 'kelvintan@avcs.com', '$2a$10$Erco1qizExUz2dyvb7Q8/.PSzQ.hhOMAawSCOh1OdAKZpKwTF4waq',
-        'Kelvin Tan'),
-       ('2504', 'Vet', 'danialbinisnin@avcs.com', '$2a$10$GCC5E9rtQvmQajTSnMqaceTdG8NPVMkVuR0FijpiNd4446/yD4cim',
-        'Danial Bin Isnin'),
-       ('2505', 'Vet', 'emanueljosafat@avcs.com', '$2a$10$Qv6M4VCXSnTGZciWEvIpH.N3Vbwl/3cO0HPyolR/GwEB0xx4kqhCq',
-        'Emanuel Josafat'),
-       ('2506', 'Vet', 'amberkelly@avcs.com', '$2a$10$CluPgcGDfJLLx9Do4m37l.2wP88OT6x8gqT.i8kb4Y3ijg/RUUX7S',
-        'Amber Kelly'),
-       ('2507', 'Vet', 'zacharyyoung@avcs.com', '$2a$10$tFPcpkn4B4EzqxQo.2xTjOfOVhN/qzR2TpV3V8c9lZKOCDP559Bby',
-        'Zachary Young'),
-       ('2551', 'Vet', 'patricknelson@avcs.com', '$2a$10$kf6oXQ5SM6hVKfwgYUCtruJTNHErDx9SXAKNxRyVHsLov8p7y1VWS',
-        'Patrick Nelson');
+INSERT INTO APP.CLINIC_USER (CLINIC_USER_ID, USER_ROLE, EMAIL, FULL_NAME, PASSWORD, STATUS)
+VALUES ('1401', 'Receptionist', 'alvintan@avcs.com', 'Alvin Tan',
+        '$2a$10$xoW5zI0co7IIqLtZP.Rn/uK7j7YACJyn4vEdJXk3x/lccKJYGGexS', 'Approved');
+INSERT INTO APP.CLINIC_USER (CLINIC_USER_ID, USER_ROLE, EMAIL, FULL_NAME, PASSWORD, STATUS)
+VALUES ('1801', 'Managing Staff', 'jacksontai@avcs.com', 'Jackson Tai',
+        '$2a$10$eRLwib1NlfDzgToHuRsvruv8Dy9jryYLE.Xe2JUBnhbwc3EW.3uxi', 'Approved');
+INSERT INTO APP.CLINIC_USER (CLINIC_USER_ID, USER_ROLE, EMAIL, FULL_NAME, PASSWORD, STATUS)
+VALUES ('1851', 'Receptionist', 'emilylim@avcs.com', 'Emily Lim',
+        '$2a$10$5/nd6Q2cbm5mVWv8f/Hak.1PG/LdjKtOPdajGjbD/KRNJvTdBrDK.', 'Approved');
+INSERT INTO APP.CLINIC_USER (CLINIC_USER_ID, USER_ROLE, EMAIL, FULL_NAME, PASSWORD, STATUS)
+VALUES ('1901', 'Vet', 'muhamadali@avcs.com', 'Muhamad Ali',
+        '$2a$10$Pviufkq7oUi.ar21DJs71Oqp6Gg.HAD8.cTMmiFcbIU71IJUCvnxG', 'Approved');
+INSERT INTO APP.CLINIC_USER (CLINIC_USER_ID, USER_ROLE, EMAIL, FULL_NAME, PASSWORD, STATUS)
+VALUES ('1951', 'Vet', 'christinlooi@avcs.com', 'Christin Looi',
+        '$2a$10$KvLYSAfOOr4nGVU65nu4/uMKothOMG83vifyqwM5M5HrIiVYySLT2', 'Approved');
+INSERT INTO APP.CLINIC_USER (CLINIC_USER_ID, USER_ROLE, EMAIL, FULL_NAME, PASSWORD, STATUS)
+VALUES ('2501', 'Vet', 'christopher@avcs.com', 'Christopher',
+        '$2a$10$PSG2OvUNsDGoI8X8fW4ukehBnB1KlzIU73HIi1u1KADwCV2makQ9G', 'Approved');
+INSERT INTO APP.CLINIC_USER (CLINIC_USER_ID, USER_ROLE, EMAIL, FULL_NAME, PASSWORD, STATUS)
+VALUES ('2502', 'Vet', 'charlestee@avcs.com', 'Charles Tee',
+        '$2a$10$dwWEqGkwMNrZAYNNS77j0eSBvGIuzoZXTDsNWOUruF8s1iwgnIRAm', 'Approved');
+INSERT INTO APP.CLINIC_USER (CLINIC_USER_ID, USER_ROLE, EMAIL, FULL_NAME, PASSWORD, STATUS)
+VALUES ('2503', 'Vet', 'kelvintan@avcs.com', 'Kelvin Tan',
+        '$2a$10$Erco1qizExUz2dyvb7Q8/.PSzQ.hhOMAawSCOh1OdAKZpKwTF4waq', 'Approved');
+INSERT INTO APP.CLINIC_USER (CLINIC_USER_ID, USER_ROLE, EMAIL, FULL_NAME, PASSWORD, STATUS)
+VALUES ('2504', 'Vet', 'danialbinisnin@avcs.com', 'Danial Bin Isnin',
+        '$2a$10$GCC5E9rtQvmQajTSnMqaceTdG8NPVMkVuR0FijpiNd4446/yD4cim', 'Approved');
+INSERT INTO APP.CLINIC_USER (CLINIC_USER_ID, USER_ROLE, EMAIL, FULL_NAME, PASSWORD, STATUS)
+VALUES ('2505', 'Vet', 'emanueljosafat@avcs.com', 'Emanuel Josafat',
+        '$2a$10$Qv6M4VCXSnTGZciWEvIpH.N3Vbwl/3cO0HPyolR/GwEB0xx4kqhCq', 'Approved');
+INSERT INTO APP.CLINIC_USER (CLINIC_USER_ID, USER_ROLE, EMAIL, FULL_NAME, PASSWORD, STATUS)
+VALUES ('2506', 'Vet', 'amberkelly@avcs.com', 'Amber Kelly',
+        '$2a$10$CluPgcGDfJLLx9Do4m37l.2wP88OT6x8gqT.i8kb4Y3ijg/RUUX7S', 'Approved');
+INSERT INTO APP.CLINIC_USER (CLINIC_USER_ID, USER_ROLE, EMAIL, FULL_NAME, PASSWORD, STATUS)
+VALUES ('5351', 'Managing Staff', 'tifannygoh@avcs.com', 'Tiffany Goh',
+        '$2a$10$zfS2hdQhh9TXWVysMfMNDepxZQJcUo4Aa01bMZ0oM0UComjhAsKgq', 'Approved');

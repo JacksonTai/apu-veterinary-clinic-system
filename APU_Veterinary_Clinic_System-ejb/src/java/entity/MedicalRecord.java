@@ -27,15 +27,23 @@ public class MedicalRecord implements Serializable {
     @Column(name = "MEDICAL_RECORD_ID")
     private String medicalRecordId;
 
+    @Column(name = "MEDICAL_RECORD_DATE")
+    private String medicalRecordDate;
+
+    @OneToOne
+    @JoinColumn(name = "RECORDING_VET")
+    private Vet recordingVet;
+
     @Column(name = "DIAGNOSIS")
     private String diagnosis;
 
     @Column(name = "PRONOGSIS")
     private String prognosis;
 
-    public MedicalRecord(String diagnosis, String prognosis) {
+    public MedicalRecord(String medicalRecordDate, Vet recordingVet, String diagnosis, String prognosis) {
+        this.medicalRecordDate = medicalRecordDate;
+        this.recordingVet = recordingVet;
         this.diagnosis = diagnosis;
         this.prognosis = prognosis;
     }
-
 }

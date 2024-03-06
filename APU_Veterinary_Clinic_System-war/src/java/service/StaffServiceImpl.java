@@ -5,10 +5,12 @@ import entity.ClinicUser;
 import entity.ManagingStaff;
 import entity.Receptionist;
 import entity.Vet;
+import lombok.AllArgsConstructor;
 import model.staff.CreateStaffResponseModel;
 import model.staff.SearchStaffResponseModel;
 import org.mindrot.jbcrypt.BCrypt;
 import repository.ClinicUserFacade;
+import repository.MakerCheckerFacade;
 import validator.ClinicUserValidator;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,9 +20,11 @@ import java.util.Optional;
 import static constant.i18n.En.EMPTY_SEARCH_INPUT_MESSAGE;
 import static constant.i18n.En.STAFF_NOT_FOUND_MESSAGE;
 
+@AllArgsConstructor
 public class StaffServiceImpl implements StaffService {
 
     ClinicUserFacade clinicUserFacade;
+    MakerCheckerFacade makerCheckerFacade;
 
     public StaffServiceImpl(ClinicUserFacade clinicUserFacade) {
         this.clinicUserFacade = clinicUserFacade;

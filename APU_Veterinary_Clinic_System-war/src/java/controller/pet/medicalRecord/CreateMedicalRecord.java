@@ -5,23 +5,26 @@
  */
 package controller.pet.medicalRecord;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
+import entity.MedicalRecord;
+import entity.Pet;
+import entity.Vet;
+import repository.PetFacade;
+import validator.MedicalRecordValidator;
+
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
-import entity.MedicalRecord;
-import entity.Pet;
-import repository.PetFacade;
-import validator.MedicalRecordValidator;
-
-import static constant.EndpointConstant.*;
+import static constant.EndpointConstant.CREATE_PET_MEDICAL_RECORD;
+import static constant.EndpointConstant.VIEW_PET;
 import static constant.i18n.En.PET_NOT_FOUND_MESSAGE;
 
 /**
@@ -59,6 +62,9 @@ public class CreateMedicalRecord extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        HttpSession session = request.getSession(false);
+        Vet vet = (Vet) session.getAttribute("clinicUser");
+
         String petId = request.getParameter("id");
         Pet existingPet = petFacade.find(petId);
         if (existingPet == null) {
@@ -69,8 +75,8 @@ public class CreateMedicalRecord extends HttpServlet {
 
         String diagnosis = request.getParameter("diagnosis").trim();
         String prognosis = request.getParameter("prognosis").trim();
+        MedicalRecord medicalRecord = new MedicalRecord(LocalDate.now().toString(), vet, diagnosis, prognosis);
 
-        MedicalRecord medicalRecord = new MedicalRecord(diagnosis, prognosis);
         MedicalRecordValidator medicalRecordValidator = new MedicalRecordValidator();
         Map<String, String> errorMessages = new HashMap<>(medicalRecordValidator.validate(medicalRecord));
         if (!errorMessages.isEmpty()) {

@@ -5,6 +5,7 @@
  */
 package controller.pet;
 
+import constant.AppointmentStatus;
 import entity.ClinicUser;
 import entity.Pet;
 import repository.CustomerFacade;
@@ -29,6 +30,7 @@ import static constant.EndpointConstant.VIEW_PET;
 import static constant.EndpointConstant.VIEW_PETS;
 import static constant.UserRole.VET;
 import static constant.i18n.En.PET_NOT_FOUND_MESSAGE;
+import repository.ClinicUserFacade;
 import static util.StringUtil.toTitleCase;
 
 /**
@@ -36,6 +38,9 @@ import static util.StringUtil.toTitleCase;
  */
 @WebServlet(name = "ViewPet", urlPatterns = {VIEW_PET})
 public class ViewPet extends HttpServlet {
+
+    @EJB
+    private ClinicUserFacade clinicUserFacade;
 
     @EJB
     private CustomerFacade customerFacade;
@@ -78,8 +83,9 @@ public class ViewPet extends HttpServlet {
         String namedQuery = null;
         LinkedHashMap<String, String> queryParams = new LinkedHashMap<>();
         if (isVet) {
-            namedQuery = "Pet.findByAppointmentVetId";
+            namedQuery = "Pet.findByAppointmentVetIdAndStatus";
             queryParams.put("vetId", clinicUser.getClinicUserId());
+            queryParams.put("status", AppointmentStatus.COMPLETED);
         }
 
         PaginationUtil.applyPagination(PaginationConfig.<Pet>builder()

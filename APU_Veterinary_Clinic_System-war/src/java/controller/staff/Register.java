@@ -25,12 +25,16 @@ import static constant.EndpointConstant.REGISTRATION_SUCCESS;
 import static constant.EndpointConstant.STAFF_REGISTER;
 import static constant.UserRole.RECEPTIONIST;
 import static constant.UserRole.VET;
+import repository.MakerCheckerFacade;
 
 /**
  * @author Jackson Tai
  */
 @WebServlet(name = "Staff Register", urlPatterns = {STAFF_REGISTER})
 public class Register extends HttpServlet {
+
+    @EJB
+    private MakerCheckerFacade makerCheckerFacade;
 
     @EJB
     private ClinicUserFacade clinicUserFacade;

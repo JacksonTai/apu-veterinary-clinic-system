@@ -101,7 +101,7 @@
                 </div>
             </c:if>
         </c:if>
-        <h2 class="mt-5 mb-3">Pet Owned</h2>
+        <h2 class="mt-5 mb-3 text-center">Pet Owned</h2>
         <c:choose>
             <c:when test="${empty pets}">
                 <div class="d-flex flex-column align-items-center justify-content-center">

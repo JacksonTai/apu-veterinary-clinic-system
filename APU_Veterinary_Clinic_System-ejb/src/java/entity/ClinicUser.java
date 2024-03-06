@@ -55,6 +55,9 @@ public class ClinicUser implements Serializable {
     @Column(name = "USER_ROLE")
     private String userRole;
 
+    @Column(name = "STATUS")
+    private String status;
+
     public ClinicUser(String email, String password, String fullName) {
         this.email = email;
         this.password = password;

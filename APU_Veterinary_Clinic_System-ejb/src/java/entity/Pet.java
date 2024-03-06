@@ -24,6 +24,12 @@ import javax.persistence.*;
         @NamedQuery(name = "Pet.countByAppointmentVetId",
                 query = "SELECT COUNT(p) FROM Pet p WHERE EXISTS (SELECT a FROM Appointment a WHERE " +
                         "a.pet = p AND a.assignedVet.clinicUserId = :vetId)"),
+        @NamedQuery(name = "Pet.findByAppointmentVetIdAndStatus",
+                query = "SELECT p FROM Pet p WHERE EXISTS (SELECT a FROM Appointment a WHERE " +
+                        "a.pet = p AND a.assignedVet.clinicUserId = :vetId AND a.appointmentStatus = :status)"),
+        @NamedQuery(name = "Pet.countByAppointmentVetIdAndStatus",
+                query = "SELECT COUNT(p) FROM Pet p WHERE EXISTS (SELECT a FROM Appointment a WHERE " +
+                        "a.pet = p AND a.assignedVet.clinicUserId = :vetId AND a.appointmentStatus = :status)"),
 })
 @Data
 @NoArgsConstructor
