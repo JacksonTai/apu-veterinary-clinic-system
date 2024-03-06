@@ -94,38 +94,6 @@
                 </div>
             </c:if>
         </c:if>
-        <h2 class="mt-5 mb-3">Medical Records</h2>
-        <c:choose>
-            <c:when test="${empty pets}">
-                <div class="d-flex flex-column align-items-center justify-content-center">
-                    <img src="${pageContext.request.contextPath}/asset/img/noRecord.png" alt="No Record Illustration"
-                         width="25%">
-                    <p class="text-center fs-5">The pet does not have any medical records yet</p>
-                </div>
-            </c:when>
-            <c:otherwise>
-                <div class="w-100 mx-auto overflow-x-auto">
-                    <table class="table table-bordered w-100 my-2">
-                        <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Diagnosis</th>
-                            <th scope="col">Prognosis</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach items="${medicalRecords}" var="medicalRecord">
-                            <tr>
-                                <td>${StringUtil.requireNonNullElse(medicalRecord.medicalRecordId, DASH)}</td>
-                                <td>${StringUtil.requireNonNullElse(medicalRecord.diagnosis, DASH)}</td>
-                                <td>${StringUtil.requireNonNullElse(medicalRecord.prognosis, DASH)}</td>
-                            </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
-            </c:otherwise>
-        </c:choose>
     </c:if>
 </main>
 <%@ include file="/shared/component/footer.jsp" %>

@@ -28,7 +28,6 @@
     <c:if test="${empty notFoundMessage}">
         <form action="<c:url value='<%= EndpointConstant.UPDATE_PET %>'/>" method="POST" class="my-2 mx-auto"
               style="max-width: 30rem;">
-            <input type="hidden" name="formSubmitted" value="true">
             <input type="hidden" name="id" value="${pet.petId ? pet.petId : param.id}">
             <div class="mb-3">
                 <label for="species" class="form-label">Species:</label>

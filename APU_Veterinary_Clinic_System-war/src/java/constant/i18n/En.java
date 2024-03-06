@@ -52,7 +52,8 @@ public class En {
 
     public static final String DUPLICATE_EXPERTISE_NAME_MESSAGE = "This expertise already exists.";
     public static final String DUPLICATE_APPOINTMENT = "The same appointment has been scheduled.";
-    public static final String EMPTY_EXPERTISE_SELECTION = "At least 1 expertise is required to be selected";
+    public static final String EMPTY_DIAGNOSIS_MESSAGE = "Diagnosis cannot be empty.";
+    public static final String EMPTY_PROGNOSIS_MESSAGE = "Prognosis cannot be empty.";
     public static final String EMPTY_VET_SELECTION = "Please select the vet.";
     public static final String EMPTY_APPOINTMENT_STATUS_MESSAGE = "Appointment status is required.";
     public static final String INVALID_APPOINTMENT_STATUS_MESSAGE = "Appointment status is invalid.";

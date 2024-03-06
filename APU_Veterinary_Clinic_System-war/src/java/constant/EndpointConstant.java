@@ -21,6 +21,8 @@ public class EndpointConstant {
     public static final String APPROVAL = "/approval";
     public static final String EXPERTISE = "/expertise";
     public static final String STAFF_APPROVAL = STAFF + APPROVAL;
+    public static final String MEDICAL_RECORD = "/medicalRecord";
+    public static final String PET_MEDICAL_RECORD = PET + MEDICAL_RECORD;
 
     public static final String LOGOUT = "/logout";
     public static final String REGISTRATION_SUCCESS = "/registrationSuccess";
@@ -69,6 +71,8 @@ public class EndpointConstant {
     public static final String VIEW_STAFF_APPROVAL = STAFF_APPROVAL + "/viewStaffApproval";
     public static final String VIEW_STAFF_APPROVALS = STAFF_APPROVAL + "/viewStaffApprovals";
     public static final String UPDATE_STAFF_APPROVAL = STAFF_APPROVAL + "/updateStaffApproval";
+
+    public static final String CREATE_PET_MEDICAL_RECORD = PET_MEDICAL_RECORD + "/createMedicalRecord";
 
     public static final String CUSTOMER_REPORT = REPORT + "/customerReport";
 

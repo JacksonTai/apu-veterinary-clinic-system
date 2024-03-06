@@ -14,10 +14,17 @@ import java.util.List;
 import javax.persistence.*;
 
 /**
- *
  * @author Jackson Tai
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Pet.findByAppointmentVetId",
+                query = "SELECT p FROM Pet p WHERE EXISTS (SELECT a FROM Appointment a WHERE " +
+                        "a.pet = p AND a.assignedVet.clinicUserId = :vetId)"),
+        @NamedQuery(name = "Pet.countByAppointmentVetId",
+                query = "SELECT COUNT(p) FROM Pet p WHERE EXISTS (SELECT a FROM Appointment a WHERE " +
+                        "a.pet = p AND a.assignedVet.clinicUserId = :vetId)"),
+})
 @Data
 @NoArgsConstructor
 public class Pet implements Serializable {
