@@ -6,6 +6,7 @@
 package controller.appointment;
 
 import entity.Appointment;
+import entity.ClinicUser;
 import repository.AppointmentFacade;
 import util.pagination.PaginationConfig;
 import util.pagination.PaginationUtil;
@@ -16,12 +17,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import static constant.AppointmentStatus.SCHEDULED;
 import static constant.EndpointConstant.VIEW_APPOINTMENT;
 import static constant.EndpointConstant.VIEW_APPOINTMENTS;
+import static constant.UserRole.VET;
 import static constant.i18n.En.RECORD_NOT_FOUND_MESSAGE;
 import static util.StringUtil.toTitleCase;
 
@@ -59,8 +62,18 @@ public class ViewAppointment extends HttpServlet {
         }
 
         String status = request.getParameter("status");
+
+        String namedQuery = "Appointment.findByStatus";
         LinkedHashMap<String, String> queryParams = new LinkedHashMap<>();
         queryParams.put("appointmentStatus", toTitleCase(status == null || status.isEmpty() ? SCHEDULED : status));
+
+        HttpSession session = request.getSession(false);
+        ClinicUser clinicUser = (ClinicUser) session.getAttribute("clinicUser");
+        if (clinicUser.getUserRole().equals(VET)) {
+            namedQuery = "Appointment.findByStatusAndVetId";
+            queryParams.put("vetId", clinicUser.getClinicUserId());
+        }
+
         PaginationUtil.applyPagination(PaginationConfig.<Appointment>builder()
                 .request(request)
                 .response(response)
@@ -68,7 +81,7 @@ public class ViewAppointment extends HttpServlet {
                 .viewPageEndpoint(VIEW_APPOINTMENT + "?status=" + status)
                 .viewJspPath(VIEW_APPOINTMENTS)
                 .facade(appointmentFacade)
-                .namedQuery("Appointment.findByStatus")
+                .namedQuery(namedQuery)
                 .queryParams(queryParams)
                 .build());
     }

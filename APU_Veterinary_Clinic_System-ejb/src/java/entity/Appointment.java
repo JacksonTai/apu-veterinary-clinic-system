@@ -22,6 +22,11 @@ import java.io.Serializable;
                 query = "SELECT a FROM Appointment a WHERE a.appointmentStatus = :appointmentStatus"),
         @NamedQuery(name = "Appointment.countByStatus",
                 query = "SELECT COUNT(a) FROM Appointment a WHERE a.appointmentStatus = :appointmentStatus"),
+        @NamedQuery(name = "Appointment.findByStatusAndVetId",
+                query = "SELECT a FROM Appointment a WHERE a.appointmentStatus = :appointmentStatus AND " +
+                        "a.assignedVet.clinicUserId = :vetId"),
+        @NamedQuery(name = "Appointment.countByStatusAndVetId", query = "SELECT COUNT(a) FROM Appointment a WHERE " +
+                "a.appointmentStatus = :appointmentStatus AND a.assignedVet.clinicUserId = :vetId"),
         @NamedQuery(name = "Appointment.findByDateAndCustomerAndPetAndVetAndStatus",
                 query = "SELECT a FROM Appointment a WHERE a.appointmentDate = :date AND " +
                         "a.customer.customerId = :customerId AND a.pet.petId = :petId AND " +
