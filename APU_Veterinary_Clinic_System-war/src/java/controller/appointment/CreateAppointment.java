@@ -146,8 +146,9 @@ public class CreateAppointment extends HttpServlet {
             for (LocalDate date : weekDates) {
                 List<Vet> availableVets = new ArrayList<>();
                 for (Vet vet : vets) {
-                    if (vet.getWorkingDays().contains(date.toString()) && !selectedExpertises.isEmpty() &&
-                            new HashSet<>(vet.getExpertises()).containsAll(selectedExpertises)) {
+                    if ((vet.getWorkingDays().contains(date.toString()) && !selectedExpertises.isEmpty() &&
+                            new HashSet<>(vet.getExpertises()).containsAll(selectedExpertises)) ||
+                            (selectedExpertises.isEmpty() && vet.getWorkingDays().contains(date.toString()))) {
                         availableVets.add(vet);
                     }
                 }
@@ -164,9 +165,6 @@ public class CreateAppointment extends HttpServlet {
             session.setAttribute(APPOINTMENT_DETAILS, appointmentDetailModel);
 
             Map<String, String> errorMessages = new HashMap<>();
-            if (selectedExpertises.isEmpty()) {
-                errorMessages.put("expertisesError", EMPTY_EXPERTISE_SELECTION);
-            }
             if (customerDetails == null || customerDetails.trim().isEmpty()) {
                 errorMessages.put("customerDetailsError", EMPTY_CUSTOMER_DETAILS_MESSAGE);
             } else if ((customerFacade.findByIdOrFullNameOrEmailOrPhoneNumber(customerDetails.trim()).isPresent() &&

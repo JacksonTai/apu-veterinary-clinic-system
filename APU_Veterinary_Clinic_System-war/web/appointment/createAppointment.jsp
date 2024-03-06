@@ -125,10 +125,7 @@
                     </select>
                 </div>
                 <div class="mb-3 w-100">
-                    <label class="form-label">Expertises needed:</label>
-                    <span class="d-block mb-1" style="color: red;">
-                            ${not empty expertisesError ? expertisesError : ''}
-                    </span>
+                    <label class="form-label">Expertises needed (Optional):</label>
                     <div class="btn-group d-flex flex-wrap" role="group"
                          aria-label="Basic checkbox toggle button group">
                         <c:forEach items="${expertises}" var="expertise">
