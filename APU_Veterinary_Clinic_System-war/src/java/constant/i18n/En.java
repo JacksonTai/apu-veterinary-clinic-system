@@ -54,6 +54,8 @@ public class En {
     public static final String DUPLICATE_APPOINTMENT = "The same appointment has been scheduled.";
     public static final String EMPTY_EXPERTISE_SELECTION = "At least 1 expertise is required to be selected";
     public static final String EMPTY_VET_SELECTION = "Please select the vet.";
+    public static final String EMPTY_APPOINTMENT_STATUS_MESSAGE = "Appointment status is required.";
+    public static final String INVALID_APPOINTMENT_STATUS_MESSAGE = "Appointment status is invalid.";
     public static final String ERROR_DELETING_EXPERTISE = "Error occurred while trying to delete the expertise.";
     public static final String ERROR_UPDATING_PROFILE = "Error occurred while trying to update profile.";
     public static final String ERROR_UPDATING_APPROVAL = "Error occurred while trying to updating the approval.";
