@@ -21,7 +21,7 @@
                 <a href="<c:url value='<%= EndpointConstant.VIEW_APPOINTMENT %>'/>">Appointment</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="<c:url value='<%= EndpointConstant.VIEW_CUSTOMER %>'/>?id=${
+                <a href="<c:url value='<%= EndpointConstant.VIEW_APPOINTMENT %>'/>?id=${
             appointment.appointmentId ? appointment.appointmentId : param.id}">View</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">Update</li>
