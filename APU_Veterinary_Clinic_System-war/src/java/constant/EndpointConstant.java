@@ -12,6 +12,7 @@ public class EndpointConstant {
 
     // Sub-path
     public static final String PET = "/pet";
+    public static final String ASSET = "/asset";
     public static final String STAFF = "/staff";
     public static final String CUSTOMER = "/customer";
     public static final String APPOINTMENT = "/appointment";
@@ -24,6 +25,7 @@ public class EndpointConstant {
     public static final String MEDICAL_RECORD = "/medicalRecord";
     public static final String PET_MEDICAL_RECORD = PET + MEDICAL_RECORD;
 
+    public static final String WAR_ROOT = "/APU_Veterinary_Clinic_System-war";
     public static final String LOGOUT = "/logout";
     public static final String REGISTRATION_SUCCESS = "/registrationSuccess";
 

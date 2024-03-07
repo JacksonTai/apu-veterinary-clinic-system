@@ -1,7 +1,6 @@
 package filter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import entity.ClinicUser;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -9,41 +8,84 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.*;
 
 import static constant.EndpointConstant.*;
+import static constant.UserRole.*;
+import static constant.UserRole.MANAGING_STAFF;
 
-//
-@WebFilter(filterName = "SessionAuthFilter", urlPatterns = {
-        STAFF_HOME,
-        PROFILE + "/*",
-        APPOINTMENT + "/*",
-        STAFF + "/*/*",
-        PET + "/*",
-        CUSTOMER + "/*",
-        WORKING_ROTA + "/*"
-})
+@WebFilter(filterName = "SessionAuthFilter", urlPatterns = "/*")
 public class SessionAuthFilter implements Filter {
 
-    private static final Logger logger = LoggerFactory.getLogger(SessionAuthFilter.class);
+    private Map<String, Set<String>> roleToEndpointMap;
+    private List<String> excludedUris;
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
+    public void init(FilterConfig filterConfig) {
+        excludedUris = Arrays.asList(STAFF_LOGIN, STAFF_REGISTER);
+        roleToEndpointMap = new HashMap<>();
+        roleToEndpointMap.put(VET, new HashSet<>(Arrays.asList(STAFF_HOME, APPOINTMENT, CUSTOMER, PET, PROFILE, STAFF)));
+        roleToEndpointMap.put(RECEPTIONIST, new HashSet<>(Arrays.asList(STAFF_HOME, APPOINTMENT, CUSTOMER, PET, PROFILE, STAFF)));
+        roleToEndpointMap.put(MANAGING_STAFF, new HashSet<>(Arrays.asList(STAFF_HOME, PROFILE, REPORT, STAFF, WORKING_ROTA, EXPERTISE)));
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
+
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
+        HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         HttpSession session = httpRequest.getSession(false);
 
-        if (session != null && session.getAttribute("clinicUser") != null) {
+        String requestURI = httpRequest.getRequestURI();
+        String normalizedURI = requestURI.replace(WAR_ROOT, "");
+        boolean isLoggedIn = session != null && session.getAttribute("clinicUser") != null;
+
+        // Ignore http requests for assets
+        if (normalizedURI.startsWith(ASSET)) {
             filterChain.doFilter(servletRequest, servletResponse);
-        } else {
-            logger.warn("Unauthorized access attempt for request to {} from unauthenticated user. Redirecting...",
-                    httpRequest.getRequestURI());
-            ((HttpServletResponse) servletResponse).sendRedirect(httpRequest.getContextPath() + STAFF_LOGIN);
+            return;
         }
+
+        if (isExcludedURI(normalizedURI)) {
+            if (isLoggedIn) {
+                httpResponse.sendRedirect(httpRequest.getContextPath() + STAFF_HOME);
+                return;
+            }
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
+        if (isLoggedIn) {
+            ClinicUser user = (ClinicUser) session.getAttribute("clinicUser");
+            String userRole = user.getUserRole();
+            if (isAuthorized(normalizedURI, userRole)) {
+                filterChain.doFilter(servletRequest, servletResponse);
+            } else {
+                httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+            }
+        } else {
+            if (isProtectedURI(normalizedURI)) {
+                httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+            } else {
+                filterChain.doFilter(servletRequest, servletResponse);
+            }
+        }
+    }
+
+    private boolean isAuthorized(String normalizedURI, String userRole) {
+        return roleToEndpointMap.get(userRole).stream().anyMatch(endpoint -> normalizedURI.startsWith(endpoint) ||
+                normalizedURI.startsWith(LOGOUT));
+    }
+
+    private boolean isExcludedURI(String normalizedURI) {
+        return excludedUris.stream().anyMatch(excludedUri -> normalizedURI.startsWith(excludedUri) ||
+                normalizedURI.equals("/"));
+    }
+
+    private boolean isProtectedURI(String normalizedURI) {
+        return roleToEndpointMap.values().stream()
+                .anyMatch(endpoints -> endpoints.stream().anyMatch(normalizedURI::startsWith));
     }
 
     @Override
