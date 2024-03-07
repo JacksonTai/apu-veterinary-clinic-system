@@ -12,9 +12,16 @@ import java.io.IOException;
 
 import static constant.EndpointConstant.*;
 
-//, PET + "/*", CUSTOMER + "/*", WORKING_ROTA + "/*"
+//
 @WebFilter(filterName = "SessionAuthFilter", urlPatterns = {
-        STAFF_HOME, PROFILE + "/*", APPOINTMENT + "/*" + STAFF + "/*/*"})
+        STAFF_HOME,
+        PROFILE + "/*",
+        APPOINTMENT + "/*",
+        STAFF + "/*/*",
+        PET + "/*",
+        CUSTOMER + "/*",
+        WORKING_ROTA + "/*"
+})
 public class SessionAuthFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(SessionAuthFilter.class);
@@ -25,14 +32,16 @@ public class SessionAuthFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpSession session = httpRequest.getSession(false);
 
         if (session != null && session.getAttribute("clinicUser") != null) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
-            logger.warn("Unauthorized access attempt for request to {} from unauthenticated user. Redirecting...", httpRequest.getRequestURI());
+            logger.warn("Unauthorized access attempt for request to {} from unauthenticated user. Redirecting...",
+                    httpRequest.getRequestURI());
             ((HttpServletResponse) servletResponse).sendRedirect(httpRequest.getContextPath() + STAFF_LOGIN);
         }
     }
