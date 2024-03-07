@@ -10,7 +10,12 @@ const successCallback = (data) => {
 };
 
 const errorCallback = (error) => {
-    console.error(errorMessage, error);
+    Swal.fire({
+        title: errorMessage,
+        icon: "error"
+    }).then(() => {
+        window.location.href = `${contextPath}${endpoints.VIEW_STAFF_APPROVAL}`;
+    });
 };
 
 const handleButtonClick = (actionValue) => {

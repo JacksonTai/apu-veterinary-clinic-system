@@ -24,6 +24,7 @@ import static constant.UserRole.VET;
 @NamedQueries({
         @NamedQuery(name = "Vet.findAllByExpertiseId",
                 query = "SELECT v FROM Vet v JOIN v.expertises e WHERE e.expertiseId = :expertiseId"),
+        @NamedQuery(name = "Vet.findByStatus", query = "SELECT v FROM Vet v WHERE v.status = :status"),
 })
 @Data
 @DiscriminatorValue(VET)

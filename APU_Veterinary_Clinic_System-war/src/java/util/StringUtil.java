@@ -1,31 +1,12 @@
 package util;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static constant.GlobalConstant.DMY_SLASH_DATE_FORMAT;
-
 public class StringUtil {
-
-    public static String getCommaSeparatedString(String[] values) {
-        StringBuilder builder = new StringBuilder();
-        for (String value : values) {
-            builder.append(value).append(",");
-        }
-        builder.deleteCharAt(builder.length() - 1);
-        return builder.toString();
-    }
 
     public static boolean containsExcessiveWhitespace(String input) {
         int consecutiveSpaces = 0;
@@ -40,39 +21,6 @@ public class StringUtil {
             }
         }
         return false;
-    }
-
-    public static boolean containsNumeric(String input) {
-        return containsCharacter(input, Character::isDigit);
-    }
-
-    public static boolean containsAlphabetic(String input) {
-        return containsCharacter(input, Character::isLetter);
-    }
-
-    public static boolean containsWhitespace(String input) {
-        return containsCharacter(input, Character::isWhitespace);
-    }
-
-    public static boolean containsUpperCase(String input) {
-        return containsCharacter(input, Character::isUpperCase);
-    }
-
-    public static boolean containsLowerCase(String input) {
-        return containsCharacter(input, Character::isLowerCase);
-    }
-
-    public static boolean containsCharacter(String input, Predicate<Character> condition) {
-        for (int i = 0; i < input.length(); i++) {
-            if (condition.test(input.charAt(i))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static String toDateFormat(final Date date, final String format) {
-        return date == null ? null : new SimpleDateFormat(format).format(date);
     }
 
     public static String convertDateFormat(String date, String format) {
@@ -92,16 +40,15 @@ public class StringUtil {
             return input;
         }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(Character.toUpperCase(input.charAt(0)));
-        for (int i = 1; i < input.length(); i++) {
-            char ch = input.charAt(i);
-            // Add space before consecutive uppercase letters (except the first word)
-            if (Character.isUpperCase(ch) && i > 1 && !Character.isUpperCase(input.charAt(i - 1))) {
-                sb.append(' ');
-            }
-            sb.append(ch);
+        // Transform based on case and presence of camelCase
+        if (input.toUpperCase().equals(input) || input.toLowerCase().equals(input)) {
+            // Purely uppercase or lowercase
+            return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+        } else {
+            // Handle camelCase
+            return Arrays.stream(input.split("(?=[A-Z])"))
+                    .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+                    .collect(Collectors.joining(" "));
         }
-        return sb.toString();
     }
 }

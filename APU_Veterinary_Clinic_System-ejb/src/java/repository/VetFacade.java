@@ -10,11 +10,11 @@ import entity.Vet;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 /**
- *
  * @author Jackson Tai
  */
 @Stateless
@@ -34,6 +34,11 @@ public class VetFacade extends AbstractFacade<Vet> {
 
     public Optional<List<Vet>> findAllByExpertiseId(String expertiseId) {
         return findResultsByAttribute("Vet.findAllByExpertiseId", "expertiseId", expertiseId);
+    }
+
+    public List<Vet> findByStatus(String status) {
+        return findResultsByAttribute("Vet.findByStatus", "status", status)
+                .orElse(new ArrayList<>());
     }
 
 }

@@ -5,10 +5,10 @@
  */
 package controller.staff;
 
+import constant.ClinicUserStatus;
 import entity.ClinicUser;
 import entity.Expertise;
 import entity.Vet;
-import org.apache.commons.lang3.text.WordUtils;
 import repository.ClinicUserFacade;
 import repository.ManagingStaffFacade;
 import repository.ReceptionistFacade;
@@ -75,7 +75,7 @@ public class ViewStaff extends HttpServlet {
             request.setAttribute("isOwnProfile", loggedInStaff.getClinicUserId().equals(staffId));
 
             ClinicUser staff = clinicUserFacade.find(staffId);
-            if (staff == null) {
+            if (staff == null || !staff.getStatus().equals(ClinicUserStatus.APPROVED)) {
                 request.setAttribute("notFoundMessage", RECORD_NOT_FOUND_MESSAGE);
             } else {
                 request.setAttribute("staff", staff);
@@ -96,6 +96,7 @@ public class ViewStaff extends HttpServlet {
         String role = request.getParameter("role");
         LinkedHashMap<String, String> queryParams = new LinkedHashMap<>();
         queryParams.put("userRole", toTitleCase(role == null || role.isEmpty() ? "vet" : role));
+        queryParams.put("status", ClinicUserStatus.APPROVED);
         PaginationUtil.applyPagination(PaginationConfig.<ClinicUser>builder()
                 .request(request)
                 .response(response)
@@ -103,7 +104,7 @@ public class ViewStaff extends HttpServlet {
                 .viewPageEndpoint(VIEW_STAFF + "?role=" + role)
                 .viewJspPath(VIEW_STAFFS)
                 .facade(clinicUserFacade)
-                .namedQuery("ClinicUser.findByUserRole")
+                .namedQuery("ClinicUser.findByUserRoleAndStatus")
                 .queryParams(queryParams)
                 .build());
     }

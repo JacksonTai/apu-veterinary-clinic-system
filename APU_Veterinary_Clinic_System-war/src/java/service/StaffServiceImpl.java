@@ -1,11 +1,12 @@
 package service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import constant.ClinicUserStatus;
+import constant.MakerCheckerConstant;
 import constant.UserRole;
-import entity.ClinicUser;
-import entity.ManagingStaff;
-import entity.Receptionist;
-import entity.Vet;
+import entity.*;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import model.staff.CreateStaffResponseModel;
 import model.staff.SearchStaffResponseModel;
 import org.mindrot.jbcrypt.BCrypt;
@@ -23,14 +24,16 @@ import static constant.i18n.En.STAFF_NOT_FOUND_MESSAGE;
 @AllArgsConstructor
 public class StaffServiceImpl implements StaffService {
 
-    ClinicUserFacade clinicUserFacade;
-    MakerCheckerFacade makerCheckerFacade;
+    private ClinicUserFacade clinicUserFacade;
+    private MakerCheckerFacade makerCheckerFacade;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public StaffServiceImpl(ClinicUserFacade clinicUserFacade) {
         this.clinicUserFacade = clinicUserFacade;
     }
 
     @Override
+    @SneakyThrows
     public CreateStaffResponseModel createStaff(String fullName, String email, String password, String userRole) {
 
         CreateStaffResponseModel response = new CreateStaffResponseModel();
@@ -61,7 +64,22 @@ public class StaffServiceImpl implements StaffService {
             } else {
                 String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
                 clinicUser.setPassword(hashedPassword);
+                clinicUser.setStatus(ClinicUserStatus.PENDING_APPROVAL);
                 clinicUserFacade.create(clinicUser);
+
+                // MakerChecker
+                ClinicUser createdClinicUser = clinicUserFacade.findByFullName(clinicUser.getFullName());
+                try {
+                    String currentValue = objectMapper.writeValueAsString(createdClinicUser);
+                    createdClinicUser.setStatus(ClinicUserStatus.APPROVED);
+                    String newValue = objectMapper.writeValueAsString(createdClinicUser);
+                    makerCheckerFacade.create(new MakerChecker(createdClinicUser.getClinicUserId(), null,
+                            MakerCheckerConstant.Module.ACCOUNT.toString(),
+                            MakerCheckerConstant.ActionType.CREATE.toString(), currentValue, newValue,
+                            MakerCheckerConstant.Status.PENDING.toString()));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 response.setClinicUser(clinicUser);
                 response.setStatusCode(HttpServletResponse.SC_CREATED);
             }

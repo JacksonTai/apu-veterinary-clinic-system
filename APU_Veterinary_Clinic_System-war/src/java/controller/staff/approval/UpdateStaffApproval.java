@@ -5,10 +5,12 @@
  */
 package controller.staff.approval;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import constant.MakeChecker;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
+import constant.ClinicUserStatus;
+import constant.MakerCheckerConstant;
 import entity.ClinicUser;
-import entity.MakerChecker;
 import entity.Vet;
 import lombok.SneakyThrows;
 import repository.ClinicUserFacade;
@@ -67,7 +69,7 @@ public class UpdateStaffApproval extends HttpServlet {
         String mcId = request.getParameter("mcId");
 
         if (approvalAction != null && mcId != null) {
-            MakerChecker mc = makerCheckerFacade.find(mcId);
+            entity.MakerChecker mc = makerCheckerFacade.find(mcId);
 
             if (mc != null) {
                 String message;
@@ -82,12 +84,19 @@ public class UpdateStaffApproval extends HttpServlet {
                             maker = objectMapper.readValue(mc.getNewValue(), ClinicUser.class);
                             clinicUserFacade.edit(maker);
                         }
-                        message = String.valueOf(MakeChecker.Status.APPROVED);
+                        message = String.valueOf(MakerCheckerConstant.Status.APPROVED);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 } else if (approvalAction.equals("reject")) {
-                    message = String.valueOf(MakeChecker.Status.REJECTED);
+                    if (mc.getModule().equals(MakerCheckerConstant.Module.ACCOUNT.toString()) &&
+                            mc.getActionType().equals(MakerCheckerConstant.ActionType.CREATE.toString())) {
+                        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+                        ClinicUser newValue = objectMapper.readValue(mc.getNewValue(), ClinicUser.class);
+                        newValue.setStatus(ClinicUserStatus.REJECTED);
+                        clinicUserFacade.edit(newValue);
+                    }
+                    message = String.valueOf(MakerCheckerConstant.Status.REJECTED);
                 } else {
                     sendJsonResponse(response, HttpServletResponse.SC_BAD_REQUEST,
                             "{\"error\":\"" + ERROR_UPDATING_APPROVAL + "\"}");

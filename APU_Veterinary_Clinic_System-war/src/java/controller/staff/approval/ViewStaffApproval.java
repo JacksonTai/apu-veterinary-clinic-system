@@ -93,7 +93,6 @@ public class ViewStaffApproval extends HttpServlet {
                                 .collect(Collectors.toList());
                         request.setAttribute("newExpertises", StringUtil.requireNonNullElse(
                                 StringUtil.getConcatenatedString(newExpertises, ","), DASH));
-
                     } else {
                         currentMakerValue = objectMapper.readValue(mc.getCurrentValue(), ClinicUser.class);
                         newMakerValue = objectMapper.readValue(mc.getNewValue(), ClinicUser.class);
@@ -102,6 +101,7 @@ public class ViewStaffApproval extends HttpServlet {
                     request.setAttribute("newMakerValue", newMakerValue);
                     request.setAttribute("staffApproval", mc);
                     request.setAttribute("isOwnApproval", staff.getClinicUserId().equals(mc.getMakerId()));
+                    request.setAttribute("isOwnApproval", false);
                     if (mc.getCheckerId() != null) {
                         ClinicUser checker = clinicUserFacade.find(mc.getCheckerId());
                         if (checker != null) {

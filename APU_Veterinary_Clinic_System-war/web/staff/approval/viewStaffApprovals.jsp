@@ -80,8 +80,8 @@
                                 ${DASH}
                             </c:if>
                         </td>
-                        <td>${StringUtil.requireNonNullElse(staffApproval.module, DASH)}</td>
-                        <td>${StringUtil.requireNonNullElse(staffApproval.actionType, DASH)}</td>
+                        <td>${StringUtil.requireNonNullElse(StringUtil.toTitleCase(staffApproval.module), DASH)}</td>
+                        <td>${StringUtil.requireNonNullElse(StringUtil.toTitleCase(staffApproval.actionType), DASH)}</td>
                         <td>
                             <a class="btn btn-light btn-sm"
                                href="<c:url value='<%= EndpointConstant.VIEW_STAFF_APPROVAL %>'/>?id=${staffApproval.makerCheckerId}"

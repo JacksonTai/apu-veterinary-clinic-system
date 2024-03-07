@@ -1,5 +1,6 @@
 package validator;
 
+import constant.ClinicUserStatus;
 import constant.GlobalConstant;
 import constant.i18n.En;
 import entity.ClinicUser;
@@ -93,7 +94,8 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
 
     public ClinicUser authenticateClinicUser(String email, String password) {
         ClinicUser clinicUser = clinicUserFacade.findByEmail(email.trim().toLowerCase());
-        return clinicUser != null && BCrypt.checkpw(password, clinicUser.getPassword()) ? clinicUser : null;
+        return clinicUser != null && !clinicUser.getStatus().equals(ClinicUserStatus.REJECTED) &&
+                BCrypt.checkpw(password, clinicUser.getPassword()) ? clinicUser : null;
     }
 
     public Map<String, String> validateClinicUserDetails(ClinicUser clinicUser) {

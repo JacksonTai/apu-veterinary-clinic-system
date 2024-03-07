@@ -6,9 +6,8 @@
 package controller.expertise;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import constant.MakeChecker;
+import constant.MakerCheckerConstant;
 import entity.Expertise;
-import entity.MakerChecker;
 import entity.Vet;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
@@ -65,15 +64,15 @@ public class DeleteExpertise extends HttpServlet {
             }
 
             // check if there is pending mc request with the current and new value having this expertise and reject them
-            MakerChecker mc = makerCheckerFacade.findByStatusAndModuleAndActionType(
-                    MakeChecker.Status.PENDING.toString(), MakeChecker.Module.PROFILE.toString(),
-                    MakeChecker.ActionType.UPDATE.toString());
+            entity.MakerChecker mc = makerCheckerFacade.findByStatusAndModuleAndActionType(
+                    MakerCheckerConstant.Status.PENDING.toString(), MakerCheckerConstant.Module.PROFILE.toString(),
+                    MakerCheckerConstant.ActionType.UPDATE.toString());
             if (mc != null) {
                 try {
                     Vet currVet = objectMapper.readValue(mc.getCurrentValue(), Vet.class);
                     Vet newVet = objectMapper.readValue(mc.getNewValue(), Vet.class);
                     if (currVet.getExpertises().contains(expertise) || newVet.getExpertises().contains(expertise)) {
-                        mc.setStatus(MakeChecker.Status.REJECTED.toString());
+                        mc.setStatus(MakerCheckerConstant.Status.REJECTED.toString());
                         makerCheckerFacade.edit(mc);
                     }
                 } catch (Exception e) {

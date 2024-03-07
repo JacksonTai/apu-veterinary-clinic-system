@@ -5,6 +5,7 @@
  */
 package controller.staff;
 
+import constant.ClinicUserStatus;
 import entity.ClinicUser;
 import repository.ClinicUserFacade;
 import validator.ClinicUserValidator;
@@ -22,6 +23,7 @@ import java.util.Map;
 import static constant.EndpointConstant.STAFF_HOME;
 import static constant.EndpointConstant.STAFF_LOGIN;
 import static constant.i18n.En.INVALID_CREDENTIAL_MESSAGE;
+import static constant.i18n.En.PENDING_ACCOUNT_APPROVAL_MESSAGE;
 
 /**
  * @author Jackson Tai
@@ -73,9 +75,14 @@ public class Login extends HttpServlet {
         ClinicUser clinicUser = clinicUserValidator.authenticateClinicUser(email, password);
         if (clinicUser == null) {
             request.setAttribute("invalidCredentialError", INVALID_CREDENTIAL_MESSAGE);
+        } else if (!clinicUser.getStatus().equals(ClinicUserStatus.APPROVED)) {
+            request.setAttribute("invalidCredentialError", PENDING_ACCOUNT_APPROVAL_MESSAGE);
+        }
+        if (request.getAttribute("invalidCredentialError") != null) {
             request.getRequestDispatcher(STAFF_LOGIN + ".jsp").forward(request, response);
             return;
         }
+
         HttpSession session = request.getSession();
         session.setAttribute("clinicUser", clinicUser);
         response.sendRedirect(request.getContextPath() + STAFF_HOME);

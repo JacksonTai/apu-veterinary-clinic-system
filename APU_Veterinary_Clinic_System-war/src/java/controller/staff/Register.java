@@ -47,7 +47,7 @@ public class Register extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        staffService = new StaffServiceImpl(clinicUserFacade);
+        staffService = new StaffServiceImpl(clinicUserFacade, makerCheckerFacade);
     }
 
     /**

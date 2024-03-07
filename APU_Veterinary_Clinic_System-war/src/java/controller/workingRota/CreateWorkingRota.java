@@ -5,6 +5,7 @@
  */
 package controller.workingRota;
 
+import constant.ClinicUserStatus;
 import entity.Expertise;
 import entity.Vet;
 import org.apache.commons.lang3.SerializationUtils;
@@ -164,7 +165,7 @@ public class CreateWorkingRota extends HttpServlet {
     }
 
     private void updateWeeksAndWeekDate() {
-        vets = vetFacade.findAll();
+        vets = vetFacade.findByStatus(ClinicUserStatus.APPROVED);
         for (Vet vet : vets) {
             for (String workingDay : vet.getWorkingDays()) {
                 LocalDate workingDate = LocalDate.parse(workingDay);

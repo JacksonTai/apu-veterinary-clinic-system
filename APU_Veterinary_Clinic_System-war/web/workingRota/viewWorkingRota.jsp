@@ -36,64 +36,73 @@
             Create Working Rota
         </a>
     </div>
-    <div class="w-100 mx-auto overflow-x-auto">
-        <table class="table w-100 my-4 mx-auto">
-            <colgroup>
-                <col span="1" style="width: 3rem;">
-                <col span="1" style="width: 7rem;">
-                <col span="1" style="width: 7rem;">
-                <col span="1" style="width: 7rem;">
-                <col span="1" style="width: 7rem;">
-                <col span="1" style="width: 7rem;">
-                <col span="1" style="width: 7rem;">
-                <col span="1" style="width: 7rem;">
-            </colgroup>
-            <thead>
-            <tr>
-                <th scope="col" class="text-center">Vet</th>
-                <c:forEach var="day" begin="0" end="6">
-                    <th scope="col" class="text-center">${weekDays[day]}<br>
-                        <span class="fw-light">
-                                ${StringUtil.convertDateFormat(weekDates[day], DMY_SLASH_DATE_FORMAT)}
-                        </span>
-                    </th>
-                </c:forEach>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${vets}" var="vet" varStatus="rowNum">
+    <c:if test="${empty vets}">
+        <div class="d-flex flex-column align-items-center justify-content-center">
+            <img src="${pageContext.request.contextPath}/asset/img/noRecord.png" alt="No Record Illustration"
+                 width="35%">
+            <h2 class="text-center">There are no vets to view working rota currently</h2>
+        </div>
+    </c:if>
+    <c:if test="${not empty vets}">
+        <div class="w-100 mx-auto overflow-x-auto">
+            <table class="table w-100 my-4 mx-auto">
+                <colgroup>
+                    <col span="1" style="width: 3rem;">
+                    <col span="1" style="width: 7rem;">
+                    <col span="1" style="width: 7rem;">
+                    <col span="1" style="width: 7rem;">
+                    <col span="1" style="width: 7rem;">
+                    <col span="1" style="width: 7rem;">
+                    <col span="1" style="width: 7rem;">
+                    <col span="1" style="width: 7rem;">
+                </colgroup>
+                <thead>
                 <tr>
-                    <td>
-                        <a href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>?id=${vet.clinicUserId}"
-                           target="_blank" role="button" class="d-block mx-auto text-center">${vet.fullName}</a>
-                    </td>
+                    <th scope="col" class="text-center">Vet</th>
+                    <c:forEach var="day" begin="0" end="6">
+                        <th scope="col" class="text-center">${weekDays[day]}<br>
+                            <span class="fw-light">
+                                    ${StringUtil.convertDateFormat(weekDates[day], DMY_SLASH_DATE_FORMAT)}
+                            </span>
+                        </th>
+                    </c:forEach>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${vets}" var="vet" varStatus="rowNum">
+                    <tr>
+                        <td>
+                            <a href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>?id=${vet.clinicUserId}"
+                               target="_blank" role="button" class="d-block mx-auto text-center">${vet.fullName}</a>
+                        </td>
+                        <c:forEach items="${weekDates}" var="weekDate">
+                            <td class="text-center pe-none">
+                                <input type="checkbox" class="largeCheckbox"
+                                    ${vet.workingDays.contains(weekDate.toString()) ? 'checked' : ''}>
+                            </td>
+                        </c:forEach>
+                    </tr>
+                </c:forEach>
+                <tr>
+                    <th class="text-center">Expertises Covered:</th>
                     <c:forEach items="${weekDates}" var="weekDate">
-                        <td class="text-center pe-none">
-                            <input type="checkbox" class="largeCheckbox"
-                                ${vet.workingDays.contains(weekDate.toString()) ? 'checked' : ''}>
+                        <td class="text-center">
+                            <c:set var="expertises" value="${dateToExpertisesMap[weekDate]}"/>
+                            <c:if test="${not empty expertises}">
+                                <c:forEach items="${expertises}" var="expertise">
+                                    <div class="badge text-bg-light text-wrap mb-1 lh-base w-100">${expertise}</div>
+                                </c:forEach>
+                            </c:if>
+                            <c:if test="${empty expertises}">
+                                -
+                            </c:if>
                         </td>
                     </c:forEach>
                 </tr>
-            </c:forEach>
-            <tr>
-                <th class="text-center">Expertises Covered:</th>
-                <c:forEach items="${weekDates}" var="weekDate">
-                    <td class="text-center">
-                        <c:set var="expertises" value="${dateToExpertisesMap[weekDate]}"/>
-                        <c:if test="${not empty expertises}">
-                            <c:forEach items="${expertises}" var="expertise">
-                                <div class="badge text-bg-light text-wrap mb-1 lh-base w-100">${expertise}</div>
-                            </c:forEach>
-                        </c:if>
-                        <c:if test="${empty expertises}">
-                            -
-                        </c:if>
-                    </td>
-                </c:forEach>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+                </tbody>
+            </table>
+        </div>
+    </c:if>
 </main>
 <%@ include file="/shared/component/footer.jsp" %>
 </body>

@@ -1,9 +1,10 @@
 package constant;
 
-public class MakeChecker {
+public class MakerCheckerConstant {
 
     public enum Module {
-        PROFILE
+        PROFILE,
+        ACCOUNT
     }
 
     public enum ActionType {

@@ -17,10 +17,10 @@
     <div>
         <img src="${pageContext.request.contextPath}/asset/img/logo.png" alt="Registration success"
              class="d-block mx-auto">
-        <h1 class="text-center">Registration Success!</h1>
+        <h1 class="text-center">Registration Success</h1>
+        <p class="fs-4 text-center">Your account will be approved soon!</p>
         <div class="mx-auto d-flex justify-content-center">
-            <a class="btn btn-light me-2" href="${pageContext.request.contextPath}" role="button">Home</a>
-            <a class="btn btn-light" href="<c:url value='<%= EndpointConstant.STAFF_LOGIN %>'/>" role="button">Login</a>
+            <a class="btn btn-light" href="${pageContext.request.contextPath}" role="button">Home</a>
         </div>
     </div>
 </main>

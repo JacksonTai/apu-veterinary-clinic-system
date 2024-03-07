@@ -5,6 +5,7 @@
  */
 package controller.workingRota;
 
+import constant.ClinicUserStatus;
 import entity.Vet;
 import repository.VetFacade;
 
@@ -54,7 +55,7 @@ public class ViewWorkingRota extends HttpServlet {
             }
         }
 
-        List<Vet> vets = vetFacade.findAll();
+        List<Vet> vets = vetFacade.findByStatus(ClinicUserStatus.APPROVED);
         List<LocalDate> weekDates = generateWeekDates(week);
 
         request.setAttribute("vets", vets);

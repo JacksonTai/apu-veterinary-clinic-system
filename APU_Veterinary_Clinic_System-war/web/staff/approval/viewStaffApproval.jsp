@@ -74,15 +74,15 @@
                 </tr>
                 <tr>
                     <th scope="row">Module:</th>
-                    <td>${StringUtil.requireNonNullElse(staffApproval.module, DASH)}</td>
+                    <td>${StringUtil.requireNonNullElse(StringUtil.toTitleCase(staffApproval.module), DASH)}</td>
                 </tr>
                 <tr>
                     <th scope="row">Action Type:</th>
-                    <td>${StringUtil.requireNonNullElse(staffApproval.actionType, DASH)}</td>
+                    <td>${StringUtil.requireNonNullElse(StringUtil.toTitleCase(staffApproval.actionType), DASH)}</td>
                 </tr>
                 <tr>
                     <th scope="row">Status:</th>
-                    <td>${StringUtil.requireNonNullElse(staffApproval.status, DASH)}</td>
+                    <td>${StringUtil.requireNonNullElse(StringUtil.toTitleCase(staffApproval.status), DASH)}</td>
                 </tr>
                 </tbody>
             </table>
@@ -97,17 +97,42 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">Full Name:</th>
-                    <td>${StringUtil.requireNonNullElse(currentMakerValue.fullName, DASH)}</td>
-                    <td>${StringUtil.requireNonNullElse(newMakerValue.fullName, DASH)}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Email:</th>
-                    <td>${StringUtil.requireNonNullElse(currentMakerValue.email, DASH)}</td>
-                    <td>${StringUtil.requireNonNullElse(newMakerValue.email, DASH)}</td>
-                </tr>
-                <c:if test="${not empty currentExpertises and not empty newExpertises}">
+                <c:if test="${not empty currentMakerValue.clinicUserId or not empty newMakerValue.clinicUserId}">
+                    <tr>
+                        <th scope="row">ID:</th>
+                        <td>${StringUtil.requireNonNullElse(currentMakerValue.clinicUserId, DASH)}</td>
+                        <td>${StringUtil.requireNonNullElse(newMakerValue.clinicUserId, DASH)}</td>
+                    </tr>
+                </c:if>
+                <c:if test="${not empty currentMakerValue.fullName or not empty newMakerValue.fullName}">
+                    <tr>
+                        <th scope="row">Full Name:</th>
+                        <td>${StringUtil.requireNonNullElse(currentMakerValue.fullName, DASH)}</td>
+                        <td>${StringUtil.requireNonNullElse(newMakerValue.fullName, DASH)}</td>
+                    </tr>
+                </c:if>
+                <c:if test="${not empty currentMakerValue.email or not empty newMakerValue.email}">
+                    <tr>
+                        <th scope="row">Email:</th>
+                        <td>${StringUtil.requireNonNullElse(currentMakerValue.email, DASH)}</td>
+                        <td>${StringUtil.requireNonNullElse(newMakerValue.email, DASH)}</td>
+                    </tr>
+                </c:if>
+                <c:if test="${not empty currentMakerValue.userRole or not empty newMakerValue.userRole}">
+                    <tr>
+                        <th scope="row">User Role:</th>
+                        <td>${StringUtil.requireNonNullElse(currentMakerValue.userRole, DASH)}</td>
+                        <td>${StringUtil.requireNonNullElse(newMakerValue.userRole, DASH)}</td>
+                    </tr>
+                </c:if>
+                <c:if test="${not empty currentMakerValue.status or not empty newMakerValue.status}">
+                    <tr>
+                        <th scope="row">Account Status:</th>
+                        <td>${StringUtil.requireNonNullElse(currentMakerValue.status, DASH)}</td>
+                        <td>${StringUtil.requireNonNullElse(newMakerValue.status, DASH)}</td>
+                    </tr>
+                </c:if>
+                <c:if test="${not empty currentMakerValue.expertises or not empty newMakerValue.expertises}">
                     <tr>
                         <th scope="row">Expertises:</th>
                         <td>${StringUtil.requireNonNullElse(currentExpertises, DASH)}</td>

@@ -6,7 +6,7 @@
 package controller.profile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import constant.MakeChecker;
+import constant.MakerCheckerConstant;
 import entity.ClinicUser;
 import entity.Expertise;
 import entity.MakerChecker;
@@ -53,7 +53,7 @@ public class UpdateProfile extends HttpServlet {
     @EJB
     private ClinicUserFacade clinicUserFacade;
 
-    private static MakerChecker mc;
+    private static entity.MakerChecker mc;
     private static ClinicUser clinicUser;
     private static ClinicUser mcClinicUser;
     private static Vet vet;
@@ -81,8 +81,8 @@ public class UpdateProfile extends HttpServlet {
 
         isVet = clinicUser.getUserRole().equals(VET);
         mc = makerCheckerFacade.findByMakerIdAndStatusAndModuleAndActionType(clinicUser.getClinicUserId(),
-                MakeChecker.Status.PENDING.toString(), MakeChecker.Module.PROFILE.toString(),
-                MakeChecker.ActionType.UPDATE.toString());
+                MakerCheckerConstant.Status.PENDING.toString(), MakerCheckerConstant.Module.PROFILE.toString(),
+                MakerCheckerConstant.ActionType.UPDATE.toString());
 
         request.setAttribute("pendingMcExist", pendingMcExist = mc != null);
 
@@ -231,9 +231,10 @@ public class UpdateProfile extends HttpServlet {
                 makerCheckerFacade.edit(mc);
             }
             if (!pendingMcExist) {
-                makerCheckerFacade.create(new MakerChecker(this.clinicUser.getClinicUserId(), null,
-                        MakeChecker.Module.PROFILE.toString(), MakeChecker.ActionType.UPDATE.toString(), currentValue,
-                        newValue, MakeChecker.Status.PENDING.toString()));
+                makerCheckerFacade.create(new MakerChecker(clinicUser.getClinicUserId(), null,
+                        MakerCheckerConstant.Module.PROFILE.toString(),
+                        MakerCheckerConstant.ActionType.UPDATE.toString(), currentValue, newValue,
+                        MakerCheckerConstant.Status.PENDING.toString()));
             }
         } catch (Exception e) {
             logger.error(ERROR_UPDATING_PROFILE, e);
