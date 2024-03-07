@@ -6,7 +6,6 @@
 package controller.workingRota;
 
 import constant.ClinicUserStatus;
-import entity.Expertise;
 import entity.Vet;
 import org.apache.commons.lang3.SerializationUtils;
 import repository.ClinicUserFacade;

@@ -100,7 +100,7 @@
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a class="dropdown-item"
-                                           href="<c:url value='<%= EndpointConstant.STAFF_REGISTER %>'/>">
+                                           href="<c:url value='<%= EndpointConstant.VIEW_STAFF_REPORT %>'/>">
                                             Staff
                                         </a>
                                     </li>

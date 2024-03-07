@@ -10,6 +10,7 @@ import entity.ClinicUser;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.Optional;
 
 /**
@@ -47,4 +48,10 @@ public class ClinicUserFacade extends AbstractFacade<ClinicUser> {
         return findResultByAttribute("ClinicUser.findByIdOrFullNameOrEmail", "input", input);
     }
 
+    public long getCountByUserRoleAndStatus(String userRole, String status) {
+        TypedQuery<Long> query = em.createNamedQuery("ClinicUser.countByUserRoleAndStatus", Long.class);
+        query.setParameter("userRole", userRole);
+        query.setParameter("status", status);
+        return query.getSingleResult();
+    }
 }

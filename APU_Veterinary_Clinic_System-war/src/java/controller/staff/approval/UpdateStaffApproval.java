@@ -7,7 +7,6 @@ package controller.staff.approval;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import constant.ClinicUserStatus;
 import constant.MakerCheckerConstant;
 import entity.ClinicUser;
