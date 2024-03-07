@@ -15,7 +15,7 @@
 <%@ include file="/shared/component/header.jsp" %>
 <main class="w-75 my-2 mx-auto overflow-x-auto">
     <h1 class="text-center">Customer Report</h1>
-    <div class="d-flex justify-content-center align-items-center flex-column flex-md-row">
+    <div class="d-flex justify-content-center align-items-center flex-column flex-lg-row">
         <div class="d-flex flex-column">
             <div class="shadow p-5 bg-white rounded d-flex justify-content-center align-items-center m-3">
                 <div class="text-center">
@@ -46,12 +46,12 @@
             <h2 class="fs-4 fw-normal">
                 <u>Average</u>
             </h2>
-            <div class="mb-5">
+            <div class="mb-5 text-center">
                 <h3 class="fs-5 fw-normal">Customer Age</h3>
                 <p class="fw-light">The average customers' age based on date of birth.</p>
                 <p class="text-center fs-1 mb-5">${averageAge}</p>
             </div>
-            <div class="mb-5">
+            <div class="mb-5 text-center">
                 <h3 class="fs-5 fw-normal">Customer's Pet Count</h3>
                 <p class="fw-light">The average number of pet owned by customers.</p>
                 <p class="text-center fs-1 mb-5">${averagePetOwned}</p>

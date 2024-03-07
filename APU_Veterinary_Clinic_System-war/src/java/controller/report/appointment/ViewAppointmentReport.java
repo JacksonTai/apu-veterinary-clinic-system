@@ -6,47 +6,29 @@
 package controller.report.appointment;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static constant.AppointmentStatus.*;
+import static constant.EndpointConstant.VIEW_APPOINTMENT_REPORT;
+import static constant.EndpointConstant.VIEW_CUSTOMER_REPORT;
+
+import javax.ejb.EJB;
+import repository.AppointmentFacade;
+
 /**
  *
  * @author Jackson Tai
  */
-@WebServlet(name = "ViewAppointmentReport", urlPatterns = {"/ViewAppointmentReport"})
+@WebServlet(name = "ViewAppointmentReport", urlPatterns = {VIEW_APPOINTMENT_REPORT})
 public class ViewAppointmentReport extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ViewAppointmentReport</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ViewAppointmentReport at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    @EJB
+    private AppointmentFacade appointmentFacade;
+    
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -58,21 +40,12 @@ public class ViewAppointmentReport extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+        request.setAttribute("totalAppointment", appointmentFacade.count());
+        request.setAttribute("totalScheduled", appointmentFacade.getCountByStatus(SCHEDULED));
+        request.setAttribute("totalCancelled", appointmentFacade.getCountByStatus(CANCELLED));
+        request.setAttribute("totalCompleted", appointmentFacade.getCountByStatus(COMPLETED));
+        request.setAttribute("totalOngoing", appointmentFacade.getCountByStatus(ONGOING));
+        request.getRequestDispatcher(VIEW_APPOINTMENT_REPORT + ".jsp").forward(request, response);
     }
 
     /**

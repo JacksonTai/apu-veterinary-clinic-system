@@ -112,7 +112,7 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item"
-                                           href="<c:url value='<%= EndpointConstant.STAFF_REGISTER %>'/>">
+                                           href="<c:url value='<%= EndpointConstant.VIEW_APPOINTMENT_REPORT %>'/>">
                                             Appointment
                                         </a>
                                     </li>

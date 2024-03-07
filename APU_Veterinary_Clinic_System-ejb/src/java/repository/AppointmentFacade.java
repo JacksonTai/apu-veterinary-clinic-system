@@ -13,6 +13,7 @@ import entity.Vet;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.Optional;
 
 /**
@@ -41,4 +42,9 @@ public class AppointmentFacade extends AbstractFacade<Appointment> {
                 paramValues);
     }
 
+    public long getCountByStatus(String status) {
+        TypedQuery<Long> query = em.createNamedQuery("Appointment.countByStatus", Long.class);
+        query.setParameter("appointmentStatus", status);
+        return query.getSingleResult();
+    }
 }
