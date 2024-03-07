@@ -30,6 +30,8 @@ import java.util.List;
                         "OR  LOWER(c.email) = LOWER(:input) OR c.phoneNumber = :input"),
         @NamedQuery(name = "Customer.findByPetId",
                 query = "SELECT c FROM Customer c JOIN c.pets p WHERE p.petId = :petId"),
+        @NamedQuery(name = "Customer.countByGender",
+                query = "SELECT COUNT(c) FROM Customer c WHERE LOWER(c.gender) = LOWER(:gender)"),
 })
 @Data
 @NoArgsConstructor

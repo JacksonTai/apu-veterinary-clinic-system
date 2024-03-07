@@ -10,6 +10,7 @@ import entity.Customer;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.Optional;
 
 /**
@@ -47,12 +48,17 @@ public class CustomerFacade extends AbstractFacade<Customer> {
         return findResultByAttribute("Customer.findByEmail", "email", email);
     }
 
-    // Note: Can be improved by using QueryDSL's BooleanBuilder in spring boot
     public Optional<Customer> findByIdOrFullNameOrEmailOrPhoneNumber(String input) {
         return findResultByAttribute("Customer.findByIdOrFullNameOrEmailOrPhoneNumber", "input", input);
     }
 
     public Optional<Customer> findByPetId(String petId) {
         return findResultByAttribute("Customer.findByPetId", "petId", petId);
+    }
+
+    public long getCountByGender(String gender) {
+        TypedQuery<Long> query = em.createNamedQuery("Customer.countByGender", Long.class);
+        query.setParameter("gender", gender.toLowerCase());
+        return query.getSingleResult();
     }
 }

@@ -100,26 +100,20 @@
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a class="dropdown-item"
-                                           href="<c:url value='<%= EndpointConstant.STAFF_LOGIN %>'/>">
-                                            Customer
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item"
                                            href="<c:url value='<%= EndpointConstant.STAFF_REGISTER %>'/>">
                                             Staff
                                         </a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item"
-                                           href="<c:url value='<%= EndpointConstant.STAFF_REGISTER %>'/>">
-                                            Appointment
+                                           href="<c:url value='<%= EndpointConstant.VIEW_CUSTOMER_REPORT %>'/>">
+                                            Customer
                                         </a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item"
                                            href="<c:url value='<%= EndpointConstant.STAFF_REGISTER %>'/>">
-                                            Pet
+                                            Appointment
                                         </a>
                                     </li>
                                 </ul>

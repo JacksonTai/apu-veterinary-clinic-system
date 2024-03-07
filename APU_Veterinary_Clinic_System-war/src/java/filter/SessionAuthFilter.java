@@ -26,7 +26,7 @@ public class SessionAuthFilter implements Filter {
         roleToEndpointMap = new HashMap<>();
         roleToEndpointMap.put(VET, new HashSet<>(Arrays.asList(STAFF_HOME, APPOINTMENT, CUSTOMER, PET, PROFILE, STAFF)));
         roleToEndpointMap.put(RECEPTIONIST, new HashSet<>(Arrays.asList(STAFF_HOME, APPOINTMENT, CUSTOMER, PET, PROFILE, STAFF)));
-        roleToEndpointMap.put(MANAGING_STAFF, new HashSet<>(Arrays.asList(STAFF_HOME, PROFILE, REPORT, STAFF, WORKING_ROTA, EXPERTISE)));
+        roleToEndpointMap.put(MANAGING_STAFF, new HashSet<>(Arrays.asList(STAFF_HOME, PROFILE, STAFF, WORKING_ROTA, EXPERTISE)));
     }
 
     @Override
@@ -62,7 +62,11 @@ public class SessionAuthFilter implements Filter {
             if (isAuthorized(normalizedURI, userRole)) {
                 filterChain.doFilter(servletRequest, servletResponse);
             } else {
-                httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+                if (isProtectedURI(normalizedURI)) {
+                    httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+                } else {
+                    filterChain.doFilter(servletRequest, servletResponse);
+                }
             }
         } else {
             if (isProtectedURI(normalizedURI)) {

@@ -5,7 +5,6 @@ package constant;/*
  */
 
 /**
- *
  * @author Jackson Tai
  */
 public class EndpointConstant {
@@ -55,6 +54,8 @@ public class EndpointConstant {
     public static final String CREATE_PET = PET + "/createPet";
     public static final String UPDATE_PET = PET + "/updatePet";
 
+    public static final String CREATE_PET_MEDICAL_RECORD = PET_MEDICAL_RECORD + "/createMedicalRecord";
+
     public static final String VIEW_WORKING_ROTA = WORKING_ROTA + "/viewWorkingRota";
     public static final String CREATE_WORKING_ROTA = WORKING_ROTA + "/createWorkingRota";
 
@@ -74,8 +75,7 @@ public class EndpointConstant {
     public static final String VIEW_STAFF_APPROVALS = STAFF_APPROVAL + "/viewStaffApprovals";
     public static final String UPDATE_STAFF_APPROVAL = STAFF_APPROVAL + "/updateStaffApproval";
 
-    public static final String CREATE_PET_MEDICAL_RECORD = PET_MEDICAL_RECORD + "/createMedicalRecord";
-
-    public static final String CUSTOMER_REPORT = REPORT + "/customerReport";
+    public static final String VIEW_CUSTOMER_REPORT = REPORT + CUSTOMER + "/viewCustomerReport";
+    public static final String VIEW_APPOINTMENT_REPORT = REPORT + APPOINTMENT + "/viewAppointmentReport";
 
 }

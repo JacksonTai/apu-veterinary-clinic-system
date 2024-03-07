@@ -26,7 +26,7 @@
                 <img src="${pageContext.request.contextPath}/asset/img/vetHome.png" alt="Home Illustration">
             </c:when>
         </c:choose>
-        <h2 class="fs-4 mt-2">Hi ${sessionScope.clinicUser.fullName}, Welcome Back!</h2>
+        <h1 class="fs-4 mt-2">Hi ${sessionScope.clinicUser.fullName}, Welcome Back!</h1>
     </div>
 </main>
 <%@ include file="/shared/component/footer.jsp" %>
