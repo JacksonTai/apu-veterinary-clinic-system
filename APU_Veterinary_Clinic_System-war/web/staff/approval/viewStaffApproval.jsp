@@ -132,7 +132,7 @@
                         <td>${StringUtil.requireNonNullElse(newMakerValue.status, DASH)}</td>
                     </tr>
                 </c:if>
-                <c:if test="${not empty currentMakerValue.expertises or not empty newMakerValue.expertises}">
+                <c:if test="${not empty currentExpertises and not empty newExpertises}">
                     <tr>
                         <th scope="row">Expertises:</th>
                         <td>${StringUtil.requireNonNullElse(currentExpertises, DASH)}</td>

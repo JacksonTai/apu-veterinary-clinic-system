@@ -32,6 +32,9 @@ public class StringUtil {
     }
 
     public static String getConcatenatedString(List<String> values, String separator) {
+        if (values == null || values.isEmpty()) {
+            return null;
+        }
         return String.join(separator + " ", values);
     }
 
