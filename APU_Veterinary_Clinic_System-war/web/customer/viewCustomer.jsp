@@ -62,11 +62,19 @@
                 </tr>
                 <tr>
                     <th scope="row">Email:</th>
-                    <td>${StringUtil.requireNonNullElse(customer.email, DASH)}</td>
+                    <td>
+                        <a href="mailto:${StringUtil.requireNonNullElse(customer.email, DASH)}">
+                                ${StringUtil.requireNonNullElse(customer.email, DASH)}
+                        </a>
+                    </td>
                 </tr>
                 <tr>
                     <th scope="row">Phone number:</th>
-                    <td>${StringUtil.requireNonNullElse(customer.phoneNumber, DASH)}</td>
+                    <td>
+                        <a href="tel:${StringUtil.requireNonNullElse(customer.phoneNumber, DASH)}">
+                                ${StringUtil.requireNonNullElse(customer.phoneNumber, DASH)}
+                        </a>
+                    </td>
                 </tr>
                 <tr>
                     <th scope="row">Gender:</th>

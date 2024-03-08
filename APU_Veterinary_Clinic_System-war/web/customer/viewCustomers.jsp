@@ -49,8 +49,16 @@
                         <tr>
                             <td>${StringUtil.requireNonNullElse(customer.customerId, DASH)}</td>
                             <td>${StringUtil.requireNonNullElse(customer.fullName, DASH)}</td>
-                            <td>${StringUtil.requireNonNullElse(customer.email, DASH)}</td>
-                            <td>${StringUtil.requireNonNullElse(customer.phoneNumber, DASH)}</td>
+                            <td>
+                                <a href="mailto:${StringUtil.requireNonNullElse(customer.email, DASH)}">
+                                        ${StringUtil.requireNonNullElse(customer.email, DASH)}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="tel:${StringUtil.requireNonNullElse(customer.phoneNumber, DASH)}">
+                                        ${StringUtil.requireNonNullElse(customer.phoneNumber, DASH)}
+                                </a>
+                            </td>
                             <td>${StringUtil.requireNonNullElse(customer.gender, DASH)}</td>
                             <td>${StringUtil.requireNonNullElse(
                                     StringUtil.convertDateFormat(customer.dateOfBirth, DMY_SLASH_DATE_FORMAT), DASH)}</td>
