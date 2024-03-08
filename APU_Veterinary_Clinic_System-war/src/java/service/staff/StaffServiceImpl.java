@@ -1,4 +1,4 @@
-package service;
+package service.staff;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import constant.ClinicUserStatus;

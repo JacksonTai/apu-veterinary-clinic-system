@@ -63,4 +63,7 @@ public class En {
     public static final String ERROR_UPDATING_APPROVAL = "Error occurred while trying to updating the approval.";
     public static final String NO_CHANGES_MESSAGE = "No changes are made.";
 
+    public static final String REGISTRATION_EMAIL_MESSAGE = "Your account is registered and pending for approval.";
+    public static final String REGISTRATION_SUCCESS_MESSAGE = "Registration Success";
+
 }

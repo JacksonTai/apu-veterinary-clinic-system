@@ -7,8 +7,10 @@ package controller.staff;
 
 import model.staff.CreateStaffResponseModel;
 import repository.ClinicUserFacade;
-import service.StaffService;
-import service.StaffServiceImpl;
+import repository.MakerCheckerFacade;
+import service.staff.StaffService;
+import service.staff.StaffServiceImpl;
+import service.emailNotification.EmailNotificationSenderService;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -25,7 +27,8 @@ import static constant.EndpointConstant.REGISTRATION_SUCCESS;
 import static constant.EndpointConstant.STAFF_REGISTER;
 import static constant.UserRole.RECEPTIONIST;
 import static constant.UserRole.VET;
-import repository.MakerCheckerFacade;
+import static constant.i18n.En.REGISTRATION_EMAIL_MESSAGE;
+import static constant.i18n.En.REGISTRATION_SUCCESS_MESSAGE;
 
 /**
  * @author Jackson Tai
@@ -88,6 +91,12 @@ public class Register extends HttpServlet {
         CreateStaffResponseModel createStaffResponse = staffService.createStaff(fullName, email, password, userRole);
 
         if (createStaffResponse.getStatusCode() == HttpServletResponse.SC_CREATED) {
+            EmailNotificationSenderService emailNotificationSenderService = new EmailNotificationSenderService();
+            emailNotificationSenderService.sendMail(createStaffResponse.getClinicUser().getEmail(),
+                    REGISTRATION_SUCCESS_MESSAGE, "Hi " + createStaffResponse.getClinicUser().getFullName() +
+                            ",\n\n" + REGISTRATION_EMAIL_MESSAGE +
+                            "\n" + "Account ID: " + createStaffResponse.getClinicUser().getClinicUserId() +
+                            "\n\nThank you.");
             response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS);
         } else {
             createStaffResponse.getErrorMessages().forEach(request::setAttribute);

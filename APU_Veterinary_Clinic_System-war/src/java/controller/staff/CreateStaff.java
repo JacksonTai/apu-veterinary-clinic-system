@@ -7,8 +7,8 @@ package controller.staff;
 
 import model.staff.CreateStaffResponseModel;
 import repository.ClinicUserFacade;
-import service.StaffService;
-import service.StaffServiceImpl;
+import service.staff.StaffService;
+import service.staff.StaffServiceImpl;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;

@@ -1,4 +1,4 @@
-package service;
+package service.staff;
 
 import model.staff.CreateStaffResponseModel;
 import model.staff.SearchStaffResponseModel;
