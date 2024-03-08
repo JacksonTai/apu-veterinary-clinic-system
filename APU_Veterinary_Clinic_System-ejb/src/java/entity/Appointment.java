@@ -68,7 +68,6 @@ public class Appointment implements Serializable {
         this.pet = pet;
     }
 
-
     public Appointment(String appointmentDate, Vet assignedVet, Customer customer, Pet pet) {
         this.appointmentDate = appointmentDate;
         this.appointmentStatus = AppointmentStatus.SCHEDULED;

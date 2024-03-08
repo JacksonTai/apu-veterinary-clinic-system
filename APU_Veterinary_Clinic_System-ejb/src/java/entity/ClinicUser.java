@@ -40,7 +40,6 @@ public class ClinicUser implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "CLINIC_USER_ID")
-    @Setter(AccessLevel.NONE)
     private String clinicUserId;
 
     @Column(name = "EMAIL")
