@@ -8,6 +8,7 @@ package controller.pet;
 import constant.AppointmentStatus;
 import entity.ClinicUser;
 import entity.Pet;
+import repository.ClinicUserFacade;
 import repository.CustomerFacade;
 import repository.PetFacade;
 import util.pagination.PaginationConfig;
@@ -25,13 +26,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
-import static constant.AppointmentStatus.SCHEDULED;
 import static constant.EndpointConstant.VIEW_PET;
 import static constant.EndpointConstant.VIEW_PETS;
 import static constant.UserRole.VET;
 import static constant.i18n.En.PET_NOT_FOUND_MESSAGE;
-import repository.ClinicUserFacade;
-import static util.StringUtil.toTitleCase;
 
 /**
  * @author Jackson Tai

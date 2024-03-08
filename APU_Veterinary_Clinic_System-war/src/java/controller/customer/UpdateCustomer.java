@@ -5,24 +5,24 @@
  */
 package controller.customer;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import javax.ejb.EJB;
-
 import entity.Customer;
 import repository.CustomerFacade;
 import util.StringUtil;
 import validator.CustomerValidator;
 
-import static constant.EndpointConstant.*;
-import static constant.GlobalConstant.*;
+import javax.ejb.EJB;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static constant.EndpointConstant.UPDATE_CUSTOMER;
+import static constant.EndpointConstant.VIEW_CUSTOMER;
+import static constant.GlobalConstant.ISO_DATE_FORMAT;
 
 /**
  * @author Jackson Tai

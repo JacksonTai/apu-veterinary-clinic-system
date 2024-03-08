@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-;
-
 public class CustomerValidator implements Validator<Customer> {
 
     @EJB

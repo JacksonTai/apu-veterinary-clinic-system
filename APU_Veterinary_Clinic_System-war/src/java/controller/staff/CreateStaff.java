@@ -21,10 +21,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static constant.EndpointConstant.*;
-import static constant.UserRole.MANAGING_STAFF;
-import static constant.UserRole.RECEPTIONIST;
-import static constant.UserRole.VET;
+import static constant.EndpointConstant.CREATE_STAFF;
+import static constant.EndpointConstant.VIEW_STAFF;
+import static constant.UserRole.*;
 
 /**
  * @author Jackson Tai

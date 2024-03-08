@@ -6,8 +6,8 @@
 package controller.profile;
 
 import entity.ClinicUser;
-import repository.ClinicUserFacade;
 import org.mindrot.jbcrypt.BCrypt;
+import repository.ClinicUserFacade;
 import validator.ClinicUserValidator;
 
 import javax.ejb.EJB;

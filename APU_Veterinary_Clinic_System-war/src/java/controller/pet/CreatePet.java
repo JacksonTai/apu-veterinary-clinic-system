@@ -7,26 +7,24 @@ package controller.pet;
 
 import entity.Customer;
 import entity.Pet;
+import repository.CustomerFacade;
+import repository.PetFacade;
+import validator.CustomerValidator;
+import validator.PetValidator;
+import validator.ValidationResponse;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.ejb.EJB;
-
-import repository.PetFacade;
-import validator.CustomerValidator;
-import validator.PetValidator;
-
-import static constant.EndpointConstant.*;
-
-import repository.CustomerFacade;
-import validator.ValidationResponse;
+import static constant.EndpointConstant.CREATE_PET;
+import static constant.EndpointConstant.VIEW_PET;
 
 /**
  * @author Jackson Tai

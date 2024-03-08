@@ -12,7 +12,6 @@ import java.util.*;
 
 import static constant.EndpointConstant.*;
 import static constant.UserRole.*;
-import static constant.UserRole.MANAGING_STAFF;
 
 @WebFilter(filterName = "SessionAuthFilter", urlPatterns = "/*")
 public class SessionAuthFilter implements Filter {

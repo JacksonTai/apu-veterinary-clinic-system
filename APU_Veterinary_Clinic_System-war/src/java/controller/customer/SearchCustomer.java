@@ -6,28 +6,22 @@
 package controller.customer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import entity.ClinicUser;
+import entity.Customer;
+import repository.CustomerFacade;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.Optional;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Optional;
 
 import static constant.EndpointConstant.SEARCH_CUSTOMER;
-
-import javax.ejb.EJB;
-
-import entity.Customer;
-import entity.Pet;
-import repository.CustomerFacade;
-
-import static constant.i18n.En.*;
+import static constant.i18n.En.CUSTOMER_NOT_FOUND_MESSAGE;
+import static constant.i18n.En.EMPTY_SEARCH_INPUT_MESSAGE;
 import static util.HttpUtil.sendJsonResponse;
 
 /**

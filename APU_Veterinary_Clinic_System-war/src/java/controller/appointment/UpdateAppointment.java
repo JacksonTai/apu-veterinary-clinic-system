@@ -6,27 +6,22 @@
 package controller.appointment;
 
 import entity.Appointment;
-import entity.Customer;
+import repository.AppointmentFacade;
+import validator.AppointmentValidator;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import static constant.EndpointConstant.*;
-import static constant.i18n.En.PET_NOT_FOUND_MESSAGE;
+import static constant.EndpointConstant.UPDATE_APPOINTMENT;
+import static constant.EndpointConstant.VIEW_APPOINTMENT;
 import static constant.i18n.En.RECORD_NOT_FOUND_MESSAGE;
-
-import javax.ejb.EJB;
-
-import repository.AppointmentFacade;
-import validator.AppointmentValidator;
-import validator.PetValidator;
 
 /**
  * @author Jackson Tai

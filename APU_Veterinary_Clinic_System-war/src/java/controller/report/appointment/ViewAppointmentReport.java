@@ -5,19 +5,18 @@
  */
 package controller.report.appointment;
 
-import java.io.IOException;
+import repository.AppointmentFacade;
+
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 import static constant.AppointmentStatus.*;
 import static constant.EndpointConstant.VIEW_APPOINTMENT_REPORT;
-import static constant.EndpointConstant.VIEW_CUSTOMER_REPORT;
-
-import javax.ejb.EJB;
-import repository.AppointmentFacade;
 
 /**
  *

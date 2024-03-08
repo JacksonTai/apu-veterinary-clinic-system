@@ -5,31 +5,25 @@
  */
 package controller.report.customer;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
+import entity.Customer;
+import repository.CustomerFacade;
+
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
-import static constant.EndpointConstant.CREATE_STAFF;
 import static constant.EndpointConstant.VIEW_CUSTOMER_REPORT;
 import static constant.GlobalConstant.ISO_DATE_FORMAT;
 import static util.BigDecimalUtil.round;
 import static util.DateUtil.parseDate;
-
-import javax.ejb.EJB;
-
-import entity.Customer;
-import repository.CustomerFacade;
-import util.BigDecimalUtil;
 
 /**
  * @author Jackson Tai

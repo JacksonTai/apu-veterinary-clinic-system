@@ -6,9 +6,6 @@
 package repository;
 
 import entity.Appointment;
-import entity.ClinicUser;
-import entity.Customer;
-import entity.Vet;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

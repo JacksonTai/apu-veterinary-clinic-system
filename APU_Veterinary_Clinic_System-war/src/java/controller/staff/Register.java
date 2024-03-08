@@ -8,9 +8,9 @@ package controller.staff;
 import model.staff.CreateStaffResponseModel;
 import repository.ClinicUserFacade;
 import repository.MakerCheckerFacade;
+import service.emailNotification.EmailNotificationSenderService;
 import service.staff.StaffService;
 import service.staff.StaffServiceImpl;
-import service.emailNotification.EmailNotificationSenderService;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;

@@ -9,10 +9,7 @@ import constant.AppointmentStatus;
 import entity.*;
 import model.appointment.createForm.AppointmentDetailModel;
 import model.appointment.createForm.AssignVetModel;
-import repository.AppointmentFacade;
-import repository.CustomerFacade;
-import repository.ExpertiseFacade;
-import repository.VetFacade;
+import repository.*;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -28,10 +25,8 @@ import java.util.*;
 import static constant.EndpointConstant.CREATE_APPOINTMENT;
 import static constant.EndpointConstant.VIEW_APPOINTMENT;
 import static constant.i18n.En.*;
-
-import repository.PetFacade;
-
-import static util.DateUtil.*;
+import static util.DateUtil.generateWeekDates;
+import static util.DateUtil.getNextWeekMondayDates;
 
 /**
  * @author Jackson Tai

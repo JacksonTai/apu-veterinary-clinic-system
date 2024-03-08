@@ -1,9 +1,6 @@
 package util.pagination;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import repository.AbstractFacade;
 
 import javax.servlet.http.HttpServletRequest;

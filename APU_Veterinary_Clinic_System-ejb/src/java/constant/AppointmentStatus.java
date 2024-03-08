@@ -5,8 +5,6 @@
  */
 package constant;
 
-import lombok.Getter;
-
 /**
  * @author Jackson Tai
  */

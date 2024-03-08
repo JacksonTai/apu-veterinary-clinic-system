@@ -5,28 +5,28 @@
  */
 package controller.pet;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import entity.Customer;
+import entity.Pet;
+import repository.CustomerFacade;
+import repository.PetFacade;
+import validator.CustomerValidator;
+import validator.PetValidator;
+import validator.ValidationResponse;
+
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
-import entity.Customer;
-import entity.Pet;
-import repository.PetFacade;
-import validator.CustomerValidator;
-import validator.PetValidator;
-
-import static constant.EndpointConstant.*;
-import static constant.i18n.En.*;
-
-import repository.CustomerFacade;
-import validator.ValidationResponse;
+import static constant.EndpointConstant.UPDATE_PET;
+import static constant.EndpointConstant.VIEW_PET;
+import static constant.i18n.En.PET_NOT_FOUND_MESSAGE;
 
 /**
  * @author Jackson Tai

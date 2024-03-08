@@ -5,33 +5,35 @@
  */
 package controller.staff.approval;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import static constant.EndpointConstant.*;
-import static constant.GlobalConstant.DASH;
-import static constant.UserRole.VET;
-import static constant.i18n.En.RECORD_NOT_FOUND_MESSAGE;
-import static util.StringUtil.toTitleCase;
-
-import javax.ejb.EJB;
-import javax.servlet.http.HttpSession;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import entity.*;
+import entity.ClinicUser;
+import entity.Expertise;
+import entity.MakerChecker;
+import entity.Vet;
 import lombok.SneakyThrows;
 import repository.ClinicUserFacade;
 import repository.MakerCheckerFacade;
 import util.StringUtil;
 import util.pagination.PaginationConfig;
 import util.pagination.PaginationUtil;
+
+import javax.ejb.EJB;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static constant.EndpointConstant.VIEW_STAFF_APPROVAL;
+import static constant.EndpointConstant.VIEW_STAFF_APPROVALS;
+import static constant.GlobalConstant.DASH;
+import static constant.UserRole.VET;
+import static constant.i18n.En.RECORD_NOT_FOUND_MESSAGE;
 
 /**
  * @author Jackson Tai

@@ -5,9 +5,6 @@ import repository.AbstractFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -26,10 +23,9 @@ public class PaginationUtil {
      *
      * @param <T>    The type of entity for which pagination is being applied.
      * @param config The {@link PaginationConfig} object containing all necessary configuration for pagination.
-     * @throws IOException If an I/O error occurs during redirection.
      */
     @SneakyThrows
-    public static <T> void applyPagination(PaginationConfig<T> config) throws IOException {
+    public static <T> void applyPagination(PaginationConfig<T> config) {
 
         int defaultPage = 1;
         int pageSize = 10;
