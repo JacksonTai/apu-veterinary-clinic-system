@@ -91,13 +91,12 @@ public class Register extends HttpServlet {
         CreateStaffResponseModel createStaffResponse = staffService.createStaff(fullName, email, password, userRole);
 
         if (createStaffResponse.getStatusCode() == HttpServletResponse.SC_CREATED) {
-            EmailNotificationSenderService emailNotificationSenderService = new EmailNotificationSenderService();
-            emailNotificationSenderService.sendMail(createStaffResponse.getClinicUser().getEmail(),
+            response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS);
+            EmailNotificationSenderService.sendMail(createStaffResponse.getClinicUser().getEmail(),
                     REGISTRATION_SUCCESS_MESSAGE, "Hi " + createStaffResponse.getClinicUser().getFullName() +
                             ",\n\n" + REGISTRATION_EMAIL_MESSAGE +
                             "\n" + "Account ID: " + createStaffResponse.getClinicUser().getClinicUserId() +
                             "\n\nThank you.");
-            response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS);
         } else {
             createStaffResponse.getErrorMessages().forEach(request::setAttribute);
             request.getRequestDispatcher(STAFF_REGISTER + ".jsp").forward(request, response);
