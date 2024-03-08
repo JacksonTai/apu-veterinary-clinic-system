@@ -13,7 +13,7 @@
 </div>
 <div class="mb-3">
     <label for="email" class="form-label">Email:</label>
-    <input type="text" class="form-control" id="email" name="email" placeholder="e.g. xxxx@avcs.com"
+    <input type="text" class="form-control" id="email" name="email" placeholder="e.g. xxxx@gmail.com"
            value="${formType eq 'UPDATE' ? (param.formSubmitted != null ? param.email : staff.email) :
                                             (not empty param.email ? param.email : '')}">
     <c:if test="${not empty emailError}">
