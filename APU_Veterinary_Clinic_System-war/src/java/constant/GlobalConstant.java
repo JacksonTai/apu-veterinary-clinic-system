@@ -2,7 +2,7 @@ package constant;
 
 public class GlobalConstant {
 
-    public static final String MY_PHONE_REGEX = "(\\+?6?01)[0|1|2|3|4|6|7|8|9]\\-*[0-9]{7,8}";
+    public static final String MY_PHONE_REGEX = "^01[0-9]{8,9}$";
     public static final String STAFF_EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@gmail\\.com$";
     public static final String CUSTOMER_EMAIL_REGEX = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
     public static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!.])(?=\\S+$).{8,}$";

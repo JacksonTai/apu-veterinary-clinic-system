@@ -33,7 +33,8 @@
         </div>
         <div class="mb-3">
             <label for="phoneNumber" class="form-label">Phone Number:</label>
-            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="E.g. +6012-3456789"
+            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
+                   placeholder="01xxxxxxxxx (Malaysian number)"
                    value="${not empty param.phoneNumber ? param.phoneNumber : ''}">
             <c:if test="${not empty phoneNumberError}">
                 <span style="color: red;">${phoneNumberError}</span>
