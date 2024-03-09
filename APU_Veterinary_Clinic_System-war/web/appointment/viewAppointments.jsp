@@ -17,10 +17,15 @@
 <%@ include file="/shared/component/header.jsp" %>
 <main class="w-75 my-2 mx-auto overflow-x-auto">
     <h1 class="text-center">Appointment</h1>
-    <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-primary" href="<c:url value='<%= EndpointConstant.CREATE_APPOINTMENT %>'/>" role="button">
-            Create Appointment</a>
-    </div>
+    <c:if test="${not empty sessionScope.clinicUser}">
+        <c:if test="${sessionScope.clinicUser.userRole eq RECEPTIONIST}">
+            <div class="d-flex justify-content-end mb-3">
+                <a class="btn btn-primary" href="<c:url value='<%= EndpointConstant.CREATE_APPOINTMENT %>'/>"
+                   role="button">
+                    Create Appointment</a>
+            </div>
+        </c:if>
+    </c:if>
     <c:set var="status" value="${param.status == null ? 'scheduled' : param.status}"/>
     <ul class="nav nav-tabs">
         <li class="nav-item">
