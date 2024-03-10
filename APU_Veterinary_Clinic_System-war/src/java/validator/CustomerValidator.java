@@ -27,7 +27,7 @@ public class CustomerValidator implements Validator<Customer> {
     public Map<String, String> validate(Customer customer) {
         Map<String, String> errorMessages = new HashMap<>();
         errorMessages.putAll(validateFullName(customer.getFullName()));
-        errorMessages.putAll(validateFullName(customer.getFullName()));
+        errorMessages.putAll(validatePhoneNumber(customer.getPhoneNumber()));
         errorMessages.putAll(validateEmail(customer.getEmail()));
         errorMessages.putAll(validateGender(customer.getGender()));
         errorMessages.putAll(validateDateOfBirth(customer.getDateOfBirth()));
