@@ -36,7 +36,7 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
         email = email.trim().toLowerCase();
         if (email.isEmpty()) {
             errorMessages.put("emailError", En.EMPTY_EMAIL_MESSAGE);
-        } else if (!email.matches(GlobalConstant.STAFF_EMAIL_REGEX)) {
+        } else if (!email.matches(GlobalConstant.EMAIL_REGEX)) {
             errorMessages.put("emailError", En.INVALID_EMAIL_MESSAGE);
         }
         return errorMessages;

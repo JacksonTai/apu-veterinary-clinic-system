@@ -55,7 +55,8 @@ public class CustomerValidator implements Validator<Customer> {
         email = email.trim();
         if (email.isEmpty()) {
             errorMessages.put("emailError", En.EMPTY_EMAIL_MESSAGE);
-        } else if (!Pattern.matches(GlobalConstant.CUSTOMER_EMAIL_REGEX, email) || Pattern.matches(GlobalConstant.STAFF_EMAIL_REGEX, email)) {
+        } else if (!Pattern.matches(GlobalConstant.EMAIL_REGEX, email) ||
+                Pattern.matches(GlobalConstant.EMAIL_REGEX, email)) {
             errorMessages.put("emailError", En.INVALID_EMAIL_MESSAGE);
         }
         return errorMessages;

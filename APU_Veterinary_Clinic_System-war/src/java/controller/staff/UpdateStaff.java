@@ -124,18 +124,18 @@ public class UpdateStaff extends HttpServlet {
         ClinicUserValidator clinicUserValidator = new ClinicUserValidator(clinicUserFacade);
         Map<String, String> errorMessages = new HashMap<>();
         if (!email.equals(existingStaff.getEmail())) {
-            errorMessages.putAll(CustomerValidator.validateEmail(email));
+            errorMessages.putAll(ClinicUserValidator.validateEmail(email));
             errorMessages.putAll(clinicUserValidator.validateDuplicateEmail(email));
         }
         if (!fullName.equals(existingStaff.getFullName())) {
-            errorMessages.putAll(CustomerValidator.validateFullName(fullName));
+            errorMessages.putAll(ClinicUserValidator.validateFullName(fullName));
             errorMessages.putAll(clinicUserValidator.validateDuplicateFullName(fullName));
         }
 
         if (!errorMessages.isEmpty()) {
             errorMessages.forEach(request::setAttribute);
-            String redirectUrl = UPDATE_STAFF + ".jsp?id=" + existingStaff.getClinicUserId();
-            request.getRequestDispatcher(redirectUrl).forward(request, response);
+            request.setAttribute("staff", existingStaff);
+            request.getRequestDispatcher(UPDATE_STAFF + ".jsp").forward(request, response);
         } else {
             if (isVet) {
                 vet.setEmail(email);

@@ -29,6 +29,7 @@
     <form action="<c:url value='<%= EndpointConstant.UPDATE_STAFF %>'/>" method="POST" class="my-2 mx-auto"
           style="max-width: 30rem;">
         <%@ include file="shared/staffFormGroup.jsp" %>
+        ${staff.userRole}
         <c:if test="${staff.userRole eq VET}">
             <div class="mb-3">
                 <label class="form-label">Expertises:</label>
