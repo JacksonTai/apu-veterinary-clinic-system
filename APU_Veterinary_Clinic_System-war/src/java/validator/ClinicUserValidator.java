@@ -93,9 +93,9 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
     }
 
     public ClinicUser authenticateClinicUser(String email, String password) {
-        ClinicUser clinicUser = clinicUserFacade.findByEmail(email.trim().toLowerCase());
-        return clinicUser != null && !clinicUser.getStatus().equals(ClinicUserStatus.REJECTED) &&
-                BCrypt.checkpw(password, clinicUser.getPassword()) ? clinicUser : null;
+        ClinicUser clinicUser = clinicUserFacade.findByEmailAndStatus(email.trim().toLowerCase(),
+                ClinicUserStatus.APPROVED);
+        return clinicUser != null && BCrypt.checkpw(password, clinicUser.getPassword()) ? clinicUser : null;
     }
 
     public Map<String, String> validateClinicUserDetails(ClinicUser clinicUser) {
@@ -107,7 +107,8 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
 
     public Map<String, String> validateDuplicateEmail(String email) {
         Map<String, String> errorMessages = new HashMap<>();
-        ClinicUser existingClinicUser = clinicUserFacade.findByEmail(email.trim().toLowerCase());
+        ClinicUser existingClinicUser = clinicUserFacade.findByEmailAndStatus(email.trim().toLowerCase(),
+                ClinicUserStatus.APPROVED);
         if (existingClinicUser != null) {
             errorMessages.put("emailError", En.DUPLICATE_EMAIL_MESSAGE);
         }
@@ -116,7 +117,8 @@ public class ClinicUserValidator implements Validator<ClinicUser> {
 
     public Map<String, String> validateDuplicateFullName(String fullName) {
         Map<String, String> errorMessages = new HashMap<>();
-        ClinicUser existingClinicUser = clinicUserFacade.findByFullName(fullName.trim().toLowerCase());
+        ClinicUser existingClinicUser = clinicUserFacade.findByFullNameAndStatus(fullName.trim().toLowerCase(),
+                ClinicUserStatus.APPROVED);
         if (existingClinicUser != null) {
             errorMessages.put("fullNameError", En.DUPLICATE_FULL_NAME_MESSAGE);
         }

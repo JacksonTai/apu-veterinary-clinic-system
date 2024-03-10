@@ -31,17 +31,27 @@ public class ClinicUserFacade extends AbstractFacade<ClinicUser> {
         super(ClinicUser.class);
     }
 
-    public ClinicUser findByEmail(String email) {
-        return findResultByAttribute("ClinicUser.findByEmail", "email", email).orElse(null);
-    }
-
-    public ClinicUser findByFullName(String fullName) {
-        return findResultByAttribute("ClinicUser.findByFullName", "fullName", fullName)
+    public ClinicUser findByEmailAndStatus(String email, String status) {
+        String[] attributes = {"email", "status"};
+        String[] values = {email, status};
+        return findResultByAttributes("ClinicUser.findByEmailAndStatus", attributes, values)
                 .orElse(null);
     }
 
-    public Optional<ClinicUser> findByIdOrFullNameOrEmail(String input) {
-        return findResultByAttribute("ClinicUser.findByIdOrFullNameOrEmail", "input", input);
+    public ClinicUser findByFullNameAndStatus(String fullName, String status) {
+        String[] attributes = {"fullName", "status"};
+        String[] values = {fullName, status};
+        return findResultByAttributes("ClinicUser.findByFullNameAndStatus", attributes, values)
+                .orElse(null);
+    }
+
+    public Optional<ClinicUser> findByIdOrFullNameOrEmailAndStatus(String input, String status) {
+        String[] attributes = {"input", "status"};
+        String[] values = {input, status};
+        System.out.println("ClinicUser.findByIdOrFullNameOrEmailAndStatus");
+        System.out.println("input: " + input);
+        System.out.println("status: " + status);
+        return findResultByAttributes("ClinicUser.findByIdOrFullNameOrEmailAndStatus", attributes, values);
     }
 
     public long getCountByStatus(String status) {

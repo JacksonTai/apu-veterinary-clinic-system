@@ -8,7 +8,6 @@ import entity.*;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import model.staff.CreateStaffResponseModel;
-import model.staff.SearchStaffResponseModel;
 import org.mindrot.jbcrypt.BCrypt;
 import repository.ClinicUserFacade;
 import repository.MakerCheckerFacade;
@@ -16,10 +15,6 @@ import validator.ClinicUserValidator;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
-import java.util.Optional;
-
-import static constant.i18n.En.EMPTY_SEARCH_INPUT_MESSAGE;
-import static constant.i18n.En.STAFF_NOT_FOUND_MESSAGE;
 
 @AllArgsConstructor
 public class StaffServiceImpl implements StaffService {
@@ -88,29 +83,9 @@ public class StaffServiceImpl implements StaffService {
                 clinicUser.setPassword(hashedPassword);
                 clinicUser.setStatus(ClinicUserStatus.APPROVED);
                 clinicUserFacade.create(clinicUser);
-                response.setClinicUser(clinicUserFacade.findByFullName(fullName));
+                response.setClinicUser(clinicUserFacade.findByFullNameAndStatus(fullName, ClinicUserStatus.APPROVED));
                 response.setStatusCode(HttpServletResponse.SC_CREATED);
             }
-        }
-        return response;
-    }
-
-    @Override
-    public SearchStaffResponseModel searchStaff(String input) {
-        SearchStaffResponseModel response = new SearchStaffResponseModel();
-        if (input.trim().isEmpty()) {
-            response.setStatusCode(HttpServletResponse.SC_BAD_REQUEST);
-            response.setMessage(EMPTY_SEARCH_INPUT_MESSAGE);
-            return response;
-        }
-
-        Optional<ClinicUser> staff = clinicUserFacade.findByIdOrFullNameOrEmail(input);
-        if (staff.isPresent()) {
-            response.setClinicUser(staff.get());
-            response.setStatusCode(HttpServletResponse.SC_OK);
-        } else {
-            response.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
-            response.setMessage(STAFF_NOT_FOUND_MESSAGE);
         }
         return response;
     }

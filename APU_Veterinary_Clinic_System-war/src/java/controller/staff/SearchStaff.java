@@ -5,6 +5,7 @@
  */
 package controller.staff;
 
+import constant.ClinicUserStatus;
 import entity.ClinicUser;
 import repository.ClinicUserFacade;
 
@@ -52,8 +53,10 @@ public class SearchStaff extends HttpServlet {
             return;
         }
 
-        Optional<ClinicUser> staff = clinicUserFacade.findByIdOrFullNameOrEmail(input);
+        Optional<ClinicUser> staff = clinicUserFacade.findByIdOrFullNameOrEmailAndStatus(input,
+                ClinicUserStatus.APPROVED);
         if (staff.isPresent()) {
+            System.out.println("staff: " + staff.get());
             ClinicUser user = staff.get();
             sendJsonResponse(response, HttpServletResponse.SC_OK,
                     String.format("{\"id\":\"%s\", \"fullName\":\"%s\"}",

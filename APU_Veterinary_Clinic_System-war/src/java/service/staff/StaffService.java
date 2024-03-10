@@ -9,5 +9,4 @@ public interface StaffService {
     CreateStaffResponseModel createStaff(String fullName, String email, String password, String userRole,
                                          boolean isMakerCheckerEnabled);
 
-    SearchStaffResponseModel searchStaff(String input);
 }
