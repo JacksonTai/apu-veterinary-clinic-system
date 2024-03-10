@@ -85,7 +85,8 @@ public class CreateStaff extends HttpServlet {
         if (createStaffResponse.getStatusCode() == HttpServletResponse.SC_CREATED) {
             response.sendRedirect(request.getContextPath() + VIEW_STAFF + "?id=" +
                     createStaffResponse.getClinicUser().getClinicUserId());
-        } else {
+        }
+        if (createStaffResponse.getStatusCode() == HttpServletResponse.SC_BAD_REQUEST) {
             createStaffResponse.getErrorMessages().forEach(request::setAttribute);
             request.getRequestDispatcher(CREATE_STAFF + ".jsp").forward(request, response);
         }

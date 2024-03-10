@@ -8,7 +8,7 @@ package controller.staff;
 import model.staff.CreateStaffResponseModel;
 import repository.ClinicUserFacade;
 import repository.MakerCheckerFacade;
-import service.emailNotification.EmailNotificationSenderService;
+import service.emailNotification.EmailNotificationService;
 import service.staff.StaffService;
 import service.staff.StaffServiceImpl;
 
@@ -88,11 +88,12 @@ public class Register extends HttpServlet {
         String password = request.getParameter("password").trim();
         String userRole = request.getParameter("userRole").trim();
 
-        CreateStaffResponseModel createStaffResponse = staffService.createStaff(fullName, email, password, userRole);
+        CreateStaffResponseModel createStaffResponse = staffService.createStaff(fullName, email, password, userRole,
+                true);
 
         if (createStaffResponse.getStatusCode() == HttpServletResponse.SC_CREATED) {
             response.sendRedirect(request.getContextPath() + REGISTRATION_SUCCESS);
-            EmailNotificationSenderService.sendMail(createStaffResponse.getClinicUser().getEmail(),
+            EmailNotificationService.sendMail(createStaffResponse.getClinicUser().getEmail(),
                     REGISTRATION_SUCCESS_MESSAGE, "Hi " + createStaffResponse.getClinicUser().getFullName() +
                             ",\n\n" + REGISTRATION_EMAIL_MESSAGE +
                             "\n" + "Account ID: " + createStaffResponse.getClinicUser().getClinicUserId() +

@@ -10,9 +10,9 @@ import java.util.Properties;
 
 import static config.ApplicationProperty.*;
 
-public class EmailNotificationSenderService {
+public class EmailNotificationService {
 
-    private static final Logger logger = LoggerFactory.getLogger(EmailNotificationSenderService.class);
+    private static final Logger logger = LoggerFactory.getLogger(EmailNotificationService.class);
 
     public static void sendMail(String receiverEmail, String subject, String message) {
 

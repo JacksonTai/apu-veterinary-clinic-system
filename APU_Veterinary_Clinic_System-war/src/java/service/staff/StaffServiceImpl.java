@@ -34,6 +34,28 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     @SneakyThrows
+    public CreateStaffResponseModel createStaff(String fullName, String email, String password, String userRole,
+                                                boolean isMakerCheckerEnabled) {
+        CreateStaffResponseModel response = createStaff(fullName, email, password, userRole);
+
+        if (isMakerCheckerEnabled && response.getStatusCode() == HttpServletResponse.SC_CREATED) {
+            ClinicUser createdClinicUser = response.getClinicUser();
+            createdClinicUser.setStatus(ClinicUserStatus.PENDING_APPROVAL);
+            clinicUserFacade.edit(createdClinicUser);
+            String currentValue = objectMapper.writeValueAsString(createdClinicUser);
+            createdClinicUser.setStatus(ClinicUserStatus.APPROVED);
+            String newValue = objectMapper.writeValueAsString(createdClinicUser);
+            makerCheckerFacade.create(new MakerChecker(createdClinicUser.getClinicUserId(), null,
+                    MakerCheckerConstant.Module.ACCOUNT.toString(),
+                    MakerCheckerConstant.ActionType.CREATE.toString(), currentValue, newValue,
+                    MakerCheckerConstant.Status.PENDING.toString()));
+            response.setClinicUser(createdClinicUser);
+            response.setStatusCode(HttpServletResponse.SC_CREATED);
+        }
+        return response;
+    }
+
+    @Override
     public CreateStaffResponseModel createStaff(String fullName, String email, String password, String userRole) {
 
         CreateStaffResponseModel response = new CreateStaffResponseModel();
@@ -64,23 +86,9 @@ public class StaffServiceImpl implements StaffService {
             } else {
                 String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
                 clinicUser.setPassword(hashedPassword);
-                clinicUser.setStatus(ClinicUserStatus.PENDING_APPROVAL);
+                clinicUser.setStatus(ClinicUserStatus.APPROVED);
                 clinicUserFacade.create(clinicUser);
-
-                // MakerChecker
-                ClinicUser createdClinicUser = clinicUserFacade.findByFullName(clinicUser.getFullName());
-                try {
-                    String currentValue = objectMapper.writeValueAsString(createdClinicUser);
-                    createdClinicUser.setStatus(ClinicUserStatus.APPROVED);
-                    String newValue = objectMapper.writeValueAsString(createdClinicUser);
-                    makerCheckerFacade.create(new MakerChecker(createdClinicUser.getClinicUserId(), null,
-                            MakerCheckerConstant.Module.ACCOUNT.toString(),
-                            MakerCheckerConstant.ActionType.CREATE.toString(), currentValue, newValue,
-                            MakerCheckerConstant.Status.PENDING.toString()));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                response.setClinicUser(clinicUser);
+                response.setClinicUser(clinicUserFacade.findByFullName(fullName));
                 response.setStatusCode(HttpServletResponse.SC_CREATED);
             }
         }
