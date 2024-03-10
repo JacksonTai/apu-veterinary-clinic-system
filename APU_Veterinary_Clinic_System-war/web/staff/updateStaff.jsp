@@ -19,6 +19,10 @@
             <li class="breadcrumb-item">
                 <a href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>">Staff</a>
             </li>
+            <li class="breadcrumb-item">
+                <a href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>?id=${staff.clinicUserId ?
+               staff.clinicUserId : param.id}">View</a>
+            </li>
             <li class="breadcrumb-item active" aria-current="page">Update</li>
         </ol>
     </nav>
@@ -48,7 +52,8 @@
         </c:if>
         <div class="mx-auto d-flex justify-content-center">
             <a class="btn btn-light d-block me-2"
-               href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>" role="button">Cancel</a>
+               href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>?id=${staff.clinicUserId ?
+               staff.clinicUserId : param.id}" role="button">Cancel</a>
             <button type="submit" class="btn btn-primary">Confirm</button>
         </div>
     </form>
