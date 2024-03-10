@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 import static constant.EndpointConstant.VIEW_PROFILE;
 import static constant.GlobalConstant.DASH;
+import repository.ClinicUserFacade;
 
 /**
  * @author Jackson Tai
@@ -34,11 +35,14 @@ import static constant.GlobalConstant.DASH;
 public class ViewProfile extends HttpServlet {
 
     @EJB
+    private ClinicUserFacade clinicUserFacade;
+
+    @EJB
     private ExpertiseFacade expertiseFacade;
 
     @EJB
     private VetFacade vetFacade;
-
+    
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -52,6 +56,7 @@ public class ViewProfile extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         ClinicUser clinicUser = (ClinicUser) session.getAttribute("clinicUser");
+        clinicUser = clinicUserFacade.find(clinicUser.getClinicUserId());
         request.setAttribute("clinicUser", clinicUser);
         if (clinicUser.getUserRole().equals(UserRole.VET)) {
             Vet vet = vetFacade.find(clinicUser.getClinicUserId());

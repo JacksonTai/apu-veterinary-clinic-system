@@ -79,7 +79,7 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item"
-                                           href="<c:url value='<%= EndpointConstant.VIEW_STAFF_APPROVAL %>'/>?type=pending">
+                                           href="<c:url value='<%= EndpointConstant.VIEW_STAFF_APPROVAL %>'/>">
                                             Approval
                                         </a>
                                     </li>

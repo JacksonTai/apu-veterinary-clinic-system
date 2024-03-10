@@ -18,7 +18,7 @@
 <%@ include file="/shared/component/header.jsp" %>
 <main class="w-75 my-2 mx-auto overflow-x-auto">
     <h1 class="text-center">Staff Approval</h1>
-    <c:set var="type" value="${param.type == null ? 'vet' : param.type}"/>
+    <c:set var="type" value="${param.type == null ? 'pending' : param.type}"/>
     <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="nav-link ${type eq 'pending' ? 'active' : ''}" aria-current="page"

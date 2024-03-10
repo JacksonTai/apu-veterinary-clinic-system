@@ -119,9 +119,8 @@ public class ViewStaffApproval extends HttpServlet {
         }
 
         String status = request.getParameter("type");
-        status = (status == null || status.isEmpty() ? "pending" : status);
         LinkedHashMap<String, String> queryParams = new LinkedHashMap<>();
-        queryParams.put("status", status.toUpperCase());
+        queryParams.put("status", (status == null || status.isEmpty() ? "pending" : status).toUpperCase());
         PaginationUtil.applyPagination(PaginationConfig.<MakerChecker>builder()
                 .request(request)
                 .response(response)
