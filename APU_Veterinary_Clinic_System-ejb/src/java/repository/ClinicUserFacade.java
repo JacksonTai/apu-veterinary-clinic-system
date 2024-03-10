@@ -48,9 +48,6 @@ public class ClinicUserFacade extends AbstractFacade<ClinicUser> {
     public Optional<ClinicUser> findByIdOrFullNameOrEmailAndStatus(String input, String status) {
         String[] attributes = {"input", "status"};
         String[] values = {input, status};
-        System.out.println("ClinicUser.findByIdOrFullNameOrEmailAndStatus");
-        System.out.println("input: " + input);
-        System.out.println("status: " + status);
         return findResultByAttributes("ClinicUser.findByIdOrFullNameOrEmailAndStatus", attributes, values);
     }
 

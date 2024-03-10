@@ -56,7 +56,6 @@ public class SearchStaff extends HttpServlet {
         Optional<ClinicUser> staff = clinicUserFacade.findByIdOrFullNameOrEmailAndStatus(input,
                 ClinicUserStatus.APPROVED);
         if (staff.isPresent()) {
-            System.out.println("staff: " + staff.get());
             ClinicUser user = staff.get();
             sendJsonResponse(response, HttpServletResponse.SC_OK,
                     String.format("{\"id\":\"%s\", \"fullName\":\"%s\"}",
