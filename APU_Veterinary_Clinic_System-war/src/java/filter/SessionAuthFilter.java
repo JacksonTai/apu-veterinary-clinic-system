@@ -1,6 +1,7 @@
 package filter;
 
 import entity.ClinicUser;
+import repository.ClinicUserFacade;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -12,12 +13,19 @@ import java.util.*;
 
 import static constant.EndpointConstant.*;
 import static constant.UserRole.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 @WebFilter(filterName = "SessionAuthFilter", urlPatterns = "/*")
 public class SessionAuthFilter implements Filter {
 
+    ClinicUserFacade clinicUserFacade = lookupClinicUserFacadeBean();
     private Map<String, Set<String>> roleToEndpointMap;
     private List<String> excludedUris;
+    private static boolean isLoggedIn = false;
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -38,7 +46,15 @@ public class SessionAuthFilter implements Filter {
 
         String requestURI = httpRequest.getRequestURI();
         String normalizedURI = requestURI.replace(WAR_ROOT, "");
-        boolean isLoggedIn = session != null && session.getAttribute("clinicUser") != null;
+
+        ClinicUser clinicUser = null;
+        if (session == null) {
+            isLoggedIn = false;
+        }
+        if (session != null) {
+            clinicUser = (ClinicUser) session.getAttribute("clinicUser");
+            isLoggedIn = clinicUser != null && clinicUserFacade.find(clinicUser.getClinicUserId()) != null;
+        }
 
         // Ignore http requests for assets
         if (normalizedURI.startsWith(ASSET)) {
@@ -56,8 +72,7 @@ public class SessionAuthFilter implements Filter {
         }
 
         if (isLoggedIn) {
-            ClinicUser user = (ClinicUser) session.getAttribute("clinicUser");
-            String userRole = user.getUserRole();
+            String userRole = clinicUser.getUserRole();
             if (isAuthorized(normalizedURI, userRole)) {
                 filterChain.doFilter(servletRequest, servletResponse);
             } else {
@@ -94,6 +109,16 @@ public class SessionAuthFilter implements Filter {
     @Override
     public void destroy() {
 
+    }
+
+    private ClinicUserFacade lookupClinicUserFacadeBean() {
+        try {
+            Context c = new InitialContext();
+            return (ClinicUserFacade) c.lookup("java:global/APU_Veterinary_Clinic_System/APU_Veterinary_Clinic_System-ejb/ClinicUserFacade!repository.ClinicUserFacade");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
     }
 
 }

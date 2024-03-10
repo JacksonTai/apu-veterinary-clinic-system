@@ -31,10 +31,6 @@ public class ClinicUserFacade extends AbstractFacade<ClinicUser> {
         super(ClinicUser.class);
     }
 
-    public ClinicUser findByClinicUserId(String clinicUserID) {
-        return em.find(ClinicUser.class, clinicUserID);
-    }
-
     public ClinicUser findByEmail(String email) {
         return findResultByAttribute("ClinicUser.findByEmail", "email", email).orElse(null);
     }
