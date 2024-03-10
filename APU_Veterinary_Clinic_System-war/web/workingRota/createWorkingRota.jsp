@@ -68,6 +68,15 @@
             </div>
             <button type="submit" class="btn btn-primary align-self-end">Apply</button>
         </form>
+        <ul class="mt-3">
+            <c:if test="${not empty insufficientExpertiseError}">
+                <li style="color: red;">${insufficientExpertiseError}</li>
+            </c:if>
+            <c:if test="${not empty exact3VetsError}">
+                <li style="color: red;">${exact3VetsError}</li>
+            </c:if>
+        </ul>
+
         <form action="<c:url value='<%= EndpointConstant.CREATE_WORKING_ROTA %>'/>" method="POST">
             <div class="w-100 mx-auto overflow-x-auto">
                 <table class="table w-100 my-3 mx-auto">

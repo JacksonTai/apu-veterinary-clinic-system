@@ -24,6 +24,7 @@ import java.util.*;
 import static constant.EndpointConstant.CREATE_WORKING_ROTA;
 import static constant.EndpointConstant.VIEW_WORKING_ROTA;
 import static constant.GlobalConstant.WEEKDAYS;
+import static constant.i18n.En.*;
 import static util.DateUtil.generateWeekDates;
 import static util.DateUtil.getNextWeekMondayDates;
 
@@ -121,9 +122,12 @@ public class CreateWorkingRota extends HttpServlet {
             List<Vet> tempVets = new ArrayList<>();
             vets.forEach(vet -> tempVets.add(SerializationUtils.clone(vet)));
 
-            Map<LocalDate, Set<String>> dateToExpertisesMap = new HashMap<>();
+            Map<LocalDate, Set<String>> dateToExpertiseMap = new HashMap<>();
+            Map<LocalDate, Set<String>> dateToVetNameMap = new HashMap<>();
+
             for (LocalDate weekDate : weekDates) {
                 Set<String> allExpertises = new HashSet<>();
+                Set<String> allVetsName = new HashSet<>();
 
                 for (Map.Entry<String, List<String>> entry : vetWorkingDaysMap.entrySet()) {
                     String vetId = entry.getKey();
@@ -133,24 +137,40 @@ public class CreateWorkingRota extends HttpServlet {
                     if (vetWorkingDays.contains(weekDate.toString())) {
                         tempVets.forEach(vet -> {
                             if (vet.getClinicUserId().equals(vetId)) {
+                                allVetsName.add(vet.getFullName());
                                 vet.setWorkingDays(vetWorkingDays);
                                 vet.getExpertises().forEach(expertise -> allExpertises.add(expertise.getName()));
                             }
                         });
                     }
                 }
-                dateToExpertisesMap.put(weekDate, allExpertises);
+                dateToExpertiseMap.put(weekDate, allExpertises);
+                dateToVetNameMap.put(weekDate, allVetsName);
             }
-
             request.setAttribute("vets", tempVets);
-            request.setAttribute("dateToExpertisesMap", dateToExpertisesMap);
-            for (Map.Entry<LocalDate, Set<String>> entry : dateToExpertisesMap.entrySet()) {
+            request.setAttribute("dateToExpertisesMap", dateToExpertiseMap);
+
+            Map<String, String> errorMessages = new HashMap<>();
+            for (Map.Entry<LocalDate, Set<String>> entry : dateToExpertiseMap.entrySet()) {
                 Set<String> expertisesCovered = entry.getValue();
                 if (expertisesCovered.size() < 5) {
-                    request.getRequestDispatcher(CREATE_WORKING_ROTA + ".jsp").forward(request, response);
-                    return;
+                    errorMessages.put("insufficientExpertiseError", INSUFFICIENT_5_EXPERTISE);
+                    break;
                 }
             }
+            for (Map.Entry<LocalDate, Set<String>> entry : dateToVetNameMap.entrySet()) {
+                Set<String> vetNames = entry.getValue();
+                if (vetNames.size() != 3) {
+                    errorMessages.put("exact3VetsError", EXACT_3_VETS);
+                    break;
+                }
+            }
+            if (!errorMessages.isEmpty()) {
+                errorMessages.forEach(request::setAttribute);
+                request.getRequestDispatcher(CREATE_WORKING_ROTA + ".jsp").forward(request, response);
+                return;
+            }
+
             for (Map.Entry<String, List<String>> vetWorkingDaysEntry : vetWorkingDaysMap.entrySet()) {
                 String vetId = vetWorkingDaysEntry.getKey();
                 List<String> vetWorkingDays = vetWorkingDaysEntry.getValue();

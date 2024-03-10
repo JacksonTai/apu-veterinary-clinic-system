@@ -63,6 +63,9 @@ public class En {
     public static final String ERROR_UPDATING_APPROVAL = "Error occurred while trying to updating the approval.";
     public static final String NO_CHANGES_MESSAGE = "No changes are made.";
 
+    public static final String INSUFFICIENT_5_EXPERTISE = "Please ensure that each day has at least 5 expertises covered.";
+    public static final String EXACT_3_VETS = "Please ensure that each day has exactly 3 vets working.";
+
     public static final String REGISTRATION_EMAIL_MESSAGE = "Your account is registered and pending for approval.";
     public static final String REGISTRATION_SUCCESS_MESSAGE = "Registration Success";
 

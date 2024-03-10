@@ -12,7 +12,6 @@ import repository.ClinicUserFacade;
 import repository.ExpertiseFacade;
 import repository.VetFacade;
 import validator.ClinicUserValidator;
-import validator.CustomerValidator;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
