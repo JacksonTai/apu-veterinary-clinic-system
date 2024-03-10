@@ -5,6 +5,7 @@
  */
 package controller.customer;
 
+import entity.ClinicUser;
 import entity.Customer;
 import repository.CustomerFacade;
 import repository.PetFacade;
@@ -17,10 +18,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static constant.EndpointConstant.VIEW_CUSTOMER;
 import static constant.EndpointConstant.VIEW_CUSTOMERS;
+import static constant.UserRole.RECEPTIONIST;
 import static constant.i18n.En.CUSTOMER_NOT_FOUND_MESSAGE;
 
 /**
@@ -47,7 +50,10 @@ public class ViewCustomer extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        HttpSession session = request.getSession(false);
+        ClinicUser clinicUser = (ClinicUser) session.getAttribute("clinicUser");
         String customerId = request.getParameter("id");
+
         if (customerId != null && !customerId.isEmpty()) {
             Customer customer = customerFacade.find(customerId);
             if (customer == null) {
@@ -60,14 +66,18 @@ public class ViewCustomer extends HttpServlet {
             return;
         }
 
-        PaginationUtil.applyPagination(PaginationConfig.<Customer>builder()
-                .request(request)
-                .response(response)
-                .entityAttribute("customers")
-                .viewPageEndpoint(VIEW_CUSTOMER)
-                .viewJspPath(VIEW_CUSTOMERS)
-                .facade(customerFacade)
-                .build());
+        if (clinicUser.getUserRole().equals(RECEPTIONIST)) {
+            PaginationUtil.applyPagination(PaginationConfig.<Customer>builder()
+                    .request(request)
+                    .response(response)
+                    .entityAttribute("customers")
+                    .viewPageEndpoint(VIEW_CUSTOMER)
+                    .viewJspPath(VIEW_CUSTOMERS)
+                    .facade(customerFacade)
+                    .build());
+        } else {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        }
     }
 
     /**

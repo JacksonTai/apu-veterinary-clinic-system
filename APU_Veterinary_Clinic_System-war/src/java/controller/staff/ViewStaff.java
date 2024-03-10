@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 import static constant.EndpointConstant.VIEW_STAFF;
 import static constant.EndpointConstant.VIEW_STAFFS;
 import static constant.GlobalConstant.DASH;
-import static constant.UserRole.VET;
+import static constant.UserRole.*;
 import static constant.i18n.En.RECORD_NOT_FOUND_MESSAGE;
 import static util.StringUtil.toTitleCase;
 
@@ -67,11 +67,11 @@ public class ViewStaff extends HttpServlet {
             throws ServletException, IOException {
 
         String staffId = request.getParameter("id");
+        HttpSession session = request.getSession(false);
+        ClinicUser loggedInStaff = (ClinicUser) session.getAttribute("clinicUser");
 
         if (staffId != null && !staffId.isEmpty()) {
 
-            HttpSession session = request.getSession(false);
-            ClinicUser loggedInStaff = (ClinicUser) session.getAttribute("clinicUser");
             request.setAttribute("isOwnProfile", loggedInStaff.getClinicUserId().equals(staffId));
 
             ClinicUser staff = clinicUserFacade.find(staffId);
@@ -93,20 +93,24 @@ public class ViewStaff extends HttpServlet {
             return;
         }
 
-        String role = request.getParameter("role");
-        LinkedHashMap<String, String> queryParams = new LinkedHashMap<>();
-        queryParams.put("userRole", toTitleCase(role == null || role.isEmpty() ? "vet" : role));
-        queryParams.put("status", ClinicUserStatus.APPROVED);
-        PaginationUtil.applyPagination(PaginationConfig.<ClinicUser>builder()
-                .request(request)
-                .response(response)
-                .entityAttribute("staffs")
-                .viewPageEndpoint(VIEW_STAFF + "?role=" + role)
-                .viewJspPath(VIEW_STAFFS)
-                .facade(clinicUserFacade)
-                .namedQuery("ClinicUser.findByUserRoleAndStatus")
-                .queryParams(queryParams)
-                .build());
+        if (loggedInStaff.getUserRole().equals(MANAGING_STAFF)) {
+            String role = request.getParameter("role");
+            LinkedHashMap<String, String> queryParams = new LinkedHashMap<>();
+            queryParams.put("userRole", toTitleCase(role == null || role.isEmpty() ? "vet" : role));
+            queryParams.put("status", ClinicUserStatus.APPROVED);
+            PaginationUtil.applyPagination(PaginationConfig.<ClinicUser>builder()
+                    .request(request)
+                    .response(response)
+                    .entityAttribute("staffs")
+                    .viewPageEndpoint(VIEW_STAFF + "?role=" + role)
+                    .viewJspPath(VIEW_STAFFS)
+                    .facade(clinicUserFacade)
+                    .namedQuery("ClinicUser.findByUserRoleAndStatus")
+                    .queryParams(queryParams)
+                    .build());
+        } else {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        }
     }
 
     /**

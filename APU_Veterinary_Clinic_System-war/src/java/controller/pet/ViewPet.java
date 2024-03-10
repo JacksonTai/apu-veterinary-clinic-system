@@ -28,7 +28,7 @@ import java.util.Optional;
 
 import static constant.EndpointConstant.VIEW_PET;
 import static constant.EndpointConstant.VIEW_PETS;
-import static constant.UserRole.VET;
+import static constant.UserRole.*;
 import static constant.i18n.En.PET_NOT_FOUND_MESSAGE;
 
 /**
@@ -57,6 +57,7 @@ public class ViewPet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         HttpSession session = request.getSession(false);
         ClinicUser clinicUser = (ClinicUser) session.getAttribute("clinicUser");
         boolean isVet = clinicUser.getUserRole().equals(VET);
@@ -67,7 +68,7 @@ public class ViewPet extends HttpServlet {
 
             // Avoid other vet from viewing other vet's appointment pet
             Optional<List<Pet>> pets = petFacade.findByAppointmentVetId(clinicUser.getClinicUserId());
-            if (pet == null || (isVet && pets.isPresent() && !pets.get().contains(pet))){
+            if (pet == null || (isVet && pets.isPresent() && !pets.get().contains(pet))) {
                 request.setAttribute("notFoundMessage", PET_NOT_FOUND_MESSAGE);
             } else {
                 request.setAttribute("pet", pet);
@@ -96,6 +97,7 @@ public class ViewPet extends HttpServlet {
                 .namedQuery(namedQuery)
                 .queryParams(queryParams)
                 .build());
+
     }
 
     /**

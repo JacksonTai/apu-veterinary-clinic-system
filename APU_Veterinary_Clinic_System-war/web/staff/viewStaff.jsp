@@ -22,14 +22,18 @@
 <%@ include file="/shared/component/header.jsp" %>
 <main class="w-75 my-2 mx-auto overflow-x-auto">
     <h1 class="text-center">View Staff</h1>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>">Staff</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">View</li>
-        </ol>
-    </nav>
+    <c:if test="${not empty sessionScope.clinicUser}">
+        <c:if test="${sessionScope.clinicUser.userRole eq MANAGING_STAFF}">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="<c:url value='<%= EndpointConstant.VIEW_STAFF %>'/>">Staff</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">View</li>
+                </ol>
+            </nav>
+        </c:if>
+    </c:if>
     <c:if test="${not empty notFoundMessage}">
         <%@ include file="/shared/component/notFound.jsp" %>
     </c:if>
@@ -72,20 +76,25 @@
                 </tbody>
             </table>
         </div>
-        <c:if test="${not empty isOwnProfile and isOwnProfile eq false}">
-            <div class="mx-auto d-flex justify-content-end">
-                <a class="btn btn-secondary me-2"
-                   href="<c:url value='<%= EndpointConstant.UPDATE_STAFF %>'/>?id=${staff.clinicUserId}"
-                   role="button">Update
-                </a>
-                <a class="btn btn-danger" onclick="confirmDelete({
-                        entityId: '${staff.clinicUserId}',
-                        entityName: 'staff',
-                        deleteEndpoint: endpoints.DELETE_STAFF,
-                        successRedirectEndpoint: endpoints.VIEW_STAFF
-                        })" role="button">Delete
-                </a>
-            </div>
+        <c:if test="${not empty sessionScope.clinicUser}">
+            <c:if test="${sessionScope.clinicUser.userRole eq MANAGING_STAFF}">
+                <c:if test="${not empty isOwnProfile and isOwnProfile eq false}">
+
+                    <div class="mx-auto d-flex justify-content-end">
+                        <a class="btn btn-secondary me-2"
+                           href="<c:url value='<%= EndpointConstant.UPDATE_STAFF %>'/>?id=${staff.clinicUserId}"
+                           role="button">Update
+                        </a>
+                        <a class="btn btn-danger" onclick="confirmDelete({
+                                entityId: '${staff.clinicUserId}',
+                                entityName: 'staff',
+                                deleteEndpoint: endpoints.DELETE_STAFF,
+                                successRedirectEndpoint: endpoints.VIEW_STAFF
+                                })" role="button">Delete
+                        </a>
+                    </div>
+                </c:if>
+            </c:if>
         </c:if>
     </c:if>
 </main>
