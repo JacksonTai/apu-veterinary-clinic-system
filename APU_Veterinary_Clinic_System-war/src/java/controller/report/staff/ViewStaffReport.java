@@ -39,7 +39,7 @@ public class ViewStaffReport extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("totalStaff", clinicUserFacade.count());
+        request.setAttribute("totalStaff", clinicUserFacade.getCountByStatus(APPROVED));
         request.setAttribute("totalVet", clinicUserFacade.getCountByUserRoleAndStatus(VET, APPROVED));
         request.setAttribute("totalReceptionist", clinicUserFacade.getCountByUserRoleAndStatus(RECEPTIONIST, APPROVED));
         request.setAttribute("totalManagingStaff", clinicUserFacade.getCountByUserRoleAndStatus(MANAGING_STAFF, APPROVED));

@@ -25,6 +25,8 @@ import java.io.Serializable;
         @NamedQuery(name = "ClinicUser.findByIdOrFullNameOrEmail",
                 query = "SELECT c FROM ClinicUser c WHERE c.clinicUserId = :input OR " +
                         "LOWER(c.fullName) = LOWER(:input) OR LOWER(c.email) = LOWER(:input)"),
+        @NamedQuery(name = "ClinicUser.countByStatus",
+                query = "SELECT COUNT(c) FROM ClinicUser c WHERE c.status = :status"),
         @NamedQuery(name = "ClinicUser.findByUserRoleAndStatus",
                 query = "SELECT c FROM ClinicUser c WHERE c.userRole = :userRole AND c.status = :status"),
         @NamedQuery(name = "ClinicUser.countByUserRoleAndStatus",

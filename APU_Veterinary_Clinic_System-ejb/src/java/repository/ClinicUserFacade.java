@@ -44,6 +44,12 @@ public class ClinicUserFacade extends AbstractFacade<ClinicUser> {
         return findResultByAttribute("ClinicUser.findByIdOrFullNameOrEmail", "input", input);
     }
 
+    public long getCountByStatus(String status) {
+        TypedQuery<Long> query = em.createNamedQuery("ClinicUser.countByStatus", Long.class);
+        query.setParameter("status", status);
+        return query.getSingleResult();
+    }
+
     public long getCountByUserRoleAndStatus(String userRole, String status) {
         TypedQuery<Long> query = em.createNamedQuery("ClinicUser.countByUserRoleAndStatus", Long.class);
         query.setParameter("userRole", userRole);
