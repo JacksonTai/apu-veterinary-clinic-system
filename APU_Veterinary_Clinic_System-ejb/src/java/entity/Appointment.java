@@ -32,7 +32,9 @@ import java.io.Serializable;
                         "a.customer.customerId = :customerId AND a.pet.petId = :petId AND " +
                         "a.assignedVet.clinicUserId = :vetId AND a.appointmentStatus = :status"),
         @NamedQuery(name = "Appointment.findAllByCustomer", query = "SELECT a FROM Appointment a WHERE " +
-                "a.customer.customerId = :customerId")
+                "a.customer.customerId = :customerId"),
+        @NamedQuery(name = "Appointment.findAllByPetId", query = "SELECT a FROM Appointment a WHERE " +
+                "a.pet.petId = :petId")
 })
 @Data
 @NoArgsConstructor

@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static constant.EndpointConstant.DELETE_PET;
+import repository.AppointmentFacade;
 
 /**
  *
@@ -29,11 +30,14 @@ import static constant.EndpointConstant.DELETE_PET;
 public class DeletePet extends HttpServlet {
 
     @EJB
+    private AppointmentFacade appointmentFacade;
+
+    @EJB
     private CustomerFacade customerFacade;
 
     @EJB
     private PetFacade petFacade;
-
+    
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
 
@@ -46,6 +50,9 @@ public class DeletePet extends HttpServlet {
         }
 
         if (pet != null) {
+            appointmentFacade.findAllByPetId(petId).forEach(appointment -> {
+                appointmentFacade.remove(appointment);
+            });
             petFacade.remove(pet);
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         } else {

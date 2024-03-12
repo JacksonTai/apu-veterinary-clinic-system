@@ -6,6 +6,7 @@
 package repository;
 
 import entity.Appointment;
+import entity.Pet;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -41,8 +42,13 @@ public class AppointmentFacade extends AbstractFacade<Appointment> {
                 paramValues);
     }
 
-    public List<Appointment> findAllByCustomer (String customerId) {
+    public List<Appointment> findAllByCustomerId(String customerId) {
         return findResultsByAttribute("Appointment.findAllByCustomer", "customerId", customerId)
+                .orElse(new ArrayList<>());
+    }
+
+    public List<Appointment> findAllByPetId(String petId) {
+        return findResultsByAttribute("Appointment.findAllByPetId", "petId", petId)
                 .orElse(new ArrayList<>());
     }
 
