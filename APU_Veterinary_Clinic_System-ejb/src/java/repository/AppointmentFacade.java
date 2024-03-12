@@ -11,6 +11,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,6 +39,11 @@ public class AppointmentFacade extends AbstractFacade<Appointment> {
         String[] paramValues = {date, customerId, petId, vetId, status};
         return findResultByAttributes("Appointment.findByDateAndCustomerAndPetAndVetAndStatus", paramNames,
                 paramValues);
+    }
+
+    public List<Appointment> findAllByCustomer (String customerId) {
+        return findResultsByAttribute("Appointment.findAllByCustomer", "customerId", customerId)
+                .orElse(new ArrayList<>());
     }
 
     public long getCountByStatus(String status) {

@@ -31,6 +31,8 @@ import java.io.Serializable;
                 query = "SELECT a FROM Appointment a WHERE a.appointmentDate = :date AND " +
                         "a.customer.customerId = :customerId AND a.pet.petId = :petId AND " +
                         "a.assignedVet.clinicUserId = :vetId AND a.appointmentStatus = :status"),
+        @NamedQuery(name = "Appointment.findAllByCustomer", query = "SELECT a FROM Appointment a WHERE " +
+                "a.customer.customerId = :customerId")
 })
 @Data
 @NoArgsConstructor

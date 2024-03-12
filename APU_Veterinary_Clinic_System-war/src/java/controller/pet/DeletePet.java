@@ -35,8 +35,7 @@ public class DeletePet extends HttpServlet {
     private PetFacade petFacade;
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
 
         String petId = request.getParameter("id");
         Pet pet = petFacade.find(petId);

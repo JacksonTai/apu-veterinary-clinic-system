@@ -29,8 +29,7 @@ public class DeleteStaff extends HttpServlet {
     private ClinicUserFacade clinicUserFacade;
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
 
         String staffId = request.getParameter("id");
         ClinicUser staff = clinicUserFacade.find(staffId);

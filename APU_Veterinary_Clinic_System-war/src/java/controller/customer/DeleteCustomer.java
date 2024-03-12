@@ -5,6 +5,7 @@
  */
 package controller.customer;
 
+import constant.AppointmentStatus;
 import entity.Customer;
 import repository.CustomerFacade;
 
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static constant.EndpointConstant.DELETE_CUSTOMER;
+import repository.AppointmentFacade;
 
 /**
  * @author Jackson Tai
@@ -25,16 +27,21 @@ import static constant.EndpointConstant.DELETE_CUSTOMER;
 public class DeleteCustomer extends HttpServlet {
 
     @EJB
+    private AppointmentFacade appointmentFacade;
+
+    @EJB
     private CustomerFacade customerFacade;
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
 
         String customerId = request.getParameter("id");
         Customer customer = customerFacade.find(customerId);
 
         if (customer != null) {
+            appointmentFacade.findAllByCustomer(customerId).forEach(appointment -> {
+                appointmentFacade.remove(appointment);
+            });
             customerFacade.remove(customer);
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         } else {
