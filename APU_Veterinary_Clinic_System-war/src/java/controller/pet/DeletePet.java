@@ -7,20 +7,18 @@ package controller.pet;
 
 import entity.Customer;
 import entity.Pet;
+import repository.AppointmentFacade;
 import repository.CustomerFacade;
 import repository.PetFacade;
 
 import javax.ejb.EJB;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Optional;
 
 import static constant.EndpointConstant.DELETE_PET;
-import repository.AppointmentFacade;
 
 /**
  *

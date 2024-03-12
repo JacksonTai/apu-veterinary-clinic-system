@@ -52,6 +52,11 @@ public class AppointmentFacade extends AbstractFacade<Appointment> {
                 .orElse(new ArrayList<>());
     }
 
+    public List<Appointment> findAllByVetId(String vetId) {
+        return findResultsByAttribute("Appointment.findAllByVetId", "vetId", vetId)
+                .orElse(new ArrayList<>());
+    }
+
     public long getCountByStatus(String status) {
         TypedQuery<Long> query = em.createNamedQuery("Appointment.countByStatus", Long.class);
         query.setParameter("appointmentStatus", status);

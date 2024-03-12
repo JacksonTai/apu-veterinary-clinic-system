@@ -34,7 +34,9 @@ import java.io.Serializable;
         @NamedQuery(name = "Appointment.findAllByCustomer", query = "SELECT a FROM Appointment a WHERE " +
                 "a.customer.customerId = :customerId"),
         @NamedQuery(name = "Appointment.findAllByPetId", query = "SELECT a FROM Appointment a WHERE " +
-                "a.pet.petId = :petId")
+                "a.pet.petId = :petId"),
+        @NamedQuery(name = "Appointment.findAllByVetId", query = "SELECT a FROM Appointment a WHERE " +
+                "a.assignedVet.clinicUserId = :vetId"),
 })
 @Data
 @NoArgsConstructor

@@ -6,15 +6,14 @@
 package controller.staff;
 
 import entity.ClinicUser;
+import repository.AppointmentFacade;
 import repository.ClinicUserFacade;
 
 import javax.ejb.EJB;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 import static constant.EndpointConstant.DELETE_STAFF;
 
@@ -26,14 +25,20 @@ import static constant.EndpointConstant.DELETE_STAFF;
 public class DeleteStaff extends HttpServlet {
 
     @EJB
-    private ClinicUserFacade clinicUserFacade;
+    private AppointmentFacade appointmentFacade;
 
+    @EJB
+    private ClinicUserFacade clinicUserFacade;
+    
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
 
         String staffId = request.getParameter("id");
         ClinicUser staff = clinicUserFacade.find(staffId);
         if (staff != null) {
+            appointmentFacade.findAllByVetId(staffId).forEach(appointment -> {
+                appointmentFacade.remove(appointment);
+            });
             clinicUserFacade.remove(staff);
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         } else {
